@@ -140,11 +140,9 @@ class AdminAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _handleMenuAction(BuildContext context, String action) {
     switch (action) {
       case 'profile':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('الملف الشخصي')),
-        );
-        // TODO: Navigate to profile
+        Navigator.pushNamed(context, '/admin/profile');
         break;
+
       case 'settings':
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('الإعدادات')),

@@ -1,100 +1,217 @@
+// lib/presentation/providers/auth_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/repositories/mosque_repository.dart';
-import '../../data/models/mosque.dart';
-import 'supabase_providers.dart'; // Import the dedicated Supabase provider
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import '../../data/repositories/auth_repository.dart';
+import '../../data/models/admin_user.dart';
+import 'supabase_providers.dart';
 
-// ============ Repository Providers ============
+// ============================================
+// REPOSITORY PROVIDER
+// ============================================
 
-/// Provider for MosqueRepository
-/// Depends on supabaseServiceProvider from supabase_providers.dart
-final mosqueRepositoryProvider = Provider<MosqueRepository>((ref) {
+/// Provider for AuthRepository
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final supabaseService = ref.watch(supabaseServiceProvider);
-  return MosqueRepository(supabaseService);
+  return AuthRepository(supabaseService);
 });
 
-// ============ Data Providers ============
+// ============================================
+// AUTH STATE PROVIDER
+// ============================================
 
-/// Provider for all mosques
-/// Returns a Future<List<Mosque>> that automatically refreshes when invalidated
-final allMosquesProvider = FutureProvider<List<Mosque>>((ref) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getAllMosques();
-});
+/// Authentication state
+class AuthState {
+  final AdminUser? user;
+  final bool isLoading;
+  final String? error;
+  final bool isAuthenticated;
 
-/// Provider for a single mosque by ID
-/// This is a "family" provider - it takes a parameter (the ID)
-/// Usage: ref.watch(mosqueByIdProvider(1))
-final mosqueByIdProvider = FutureProvider.family<Mosque?, int>((ref, id) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getMosqueById(id);
-});
-
-/// Provider for mosques filtered by governorate
-/// Usage: ref.watch(mosquesByGovernorateProvider('القدس'))
-final mosquesByGovernorateProvider =
-FutureProvider.family<List<Mosque>, String>((ref, governorate) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getMosquesByGovernorate(governorate);
-});
-
-/// Provider for mosques filtered by type
-/// Usage: ref.watch(mosquesByTypeProvider(MosqueType.jamia))
-final mosquesByTypeProvider =
-FutureProvider.family<List<Mosque>, MosqueType>((ref, type) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getMosquesByType(type);
-});
-
-/// Provider for mosque search
-/// Usage: ref.watch(mosquesSearchProvider('الأقصى'))
-final mosquesSearchProvider =
-FutureProvider.family<List<Mosque>, String>((ref, query) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.searchMosques(query);
-});
-
-/// Provider for nearby mosques
-/// Takes a custom object with latitude, longitude, and radius
-class NearbyMosquesParams {
-  final double latitude;
-  final double longitude;
-  final double radiusKm;
-
-  const NearbyMosquesParams({
-    required this.latitude,
-    required this.longitude,
-    this.radiusKm = 5.0,
+  const AuthState({
+    this.user,
+    this.isLoading = false,
+    this.error,
+    this.isAuthenticated = false,
   });
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is NearbyMosquesParams &&
-              runtimeType == other.runtimeType &&
-              latitude == other.latitude &&
-              longitude == other.longitude &&
-              radiusKm == other.radiusKm;
-
-  @override
-  int get hashCode =>
-      latitude.hashCode ^ longitude.hashCode ^ radiusKm.hashCode;
+  AuthState copyWith({
+    AdminUser? user,
+    bool? isLoading,
+    String? error,
+    bool? isAuthenticated,
+    bool clearError = false,
+  }) {
+    return AuthState(
+      user: user ?? this.user,
+      isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : (error ?? this.error),
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+    );
+  }
 }
 
-/// Provider for nearby mosques
-/// Usage: ref.watch(nearbyMosquesProvider(NearbyMosquesParams(latitude: 31.9, longitude: 35.2)))
-final nearbyMosquesProvider =
-FutureProvider.family<List<Mosque>, NearbyMosquesParams>((ref, params) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getNearbyMosques(
-    params.latitude,
-    params.longitude,
-    radiusKm: params.radiusKm,
-  );
+/// Auth state notifier
+class AuthStateNotifier extends StateNotifier<AuthState> {
+  final AuthRepository _authRepository;
+
+  AuthStateNotifier(this._authRepository) : super(const AuthState()) {
+    _init();
+  }
+
+  /// Initialize - check if user is already logged in
+  Future<void> _init() async {
+    state = state.copyWith(isLoading: true);
+
+    try {
+      final user = await _authRepository.getCurrentUser();
+
+      if (user != null) {
+        state = state.copyWith(
+          user: user,
+          isAuthenticated: true,
+          isLoading: false,
+          clearError: true,
+        );
+      } else {
+        state = const AuthState();
+      }
+    } catch (e) {
+      state = const AuthState();
+    }
+
+    // Listen to auth state changes
+    _authRepository.authStateChanges.listen((authState) {
+      if (authState.event == supabase.AuthChangeEvent.signedOut) {
+        state = const AuthState();
+      }
+    });
+  }
+
+  /// Login
+  Future<void> login(String email, String password) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      final user = await _authRepository.login(email, password);
+
+      state = state.copyWith(
+        user: user,
+        isAuthenticated: true,
+        isLoading: false,
+        clearError: true,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceAll('Exception: ', ''),
+      );
+      rethrow;
+    }
+  }
+
+  /// Logout
+  Future<void> logout() async {
+    try {
+      await _authRepository.logout();
+      state = const AuthState();
+    } catch (e) {
+      // Even if logout fails, clear local state
+      state = const AuthState();
+    }
+  }
+
+  /// Reset password
+  Future<void> resetPassword(String email) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      await _authRepository.resetPassword(email);
+      state = state.copyWith(isLoading: false, clearError: true);
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceAll('Exception: ', ''),
+      );
+      rethrow;
+    }
+  }
+
+  // Add to lib/presentation/providers/auth_provider.dart
+
+  /// Update password
+  Future<void> updatePassword(String newPassword) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      await _authRepository.updatePassword(newPassword);
+
+      state = state.copyWith(isLoading: false, clearError: true);
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceAll('Exception: ', ''),
+      );
+      rethrow;
+    }
+  }
+
+  /// Update profile
+  Future<void> updateProfile({
+    String? name,
+    String? department,
+  }) async {
+    if (state.user == null) return;
+
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    try {
+      final updatedUser = await _authRepository.updateProfile(
+        userId: state.user!.id,
+        name: name,
+        department: department,
+      );
+
+      state = state.copyWith(
+        user: updatedUser,
+        isLoading: false,
+        clearError: true,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceAll('Exception: ', ''),
+      );
+      rethrow;
+    }
+  }
+
+  /// Clear error
+  void clearError() {
+    state = state.copyWith(clearError: true);
+  }
+}
+
+/// Auth state provider
+final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>(
+      (ref) => AuthStateNotifier(ref.watch(authRepositoryProvider)),
+);
+
+// ============================================
+// CONVENIENCE PROVIDERS
+// ============================================
+
+/// Current user provider
+final currentUserProvider = Provider<AdminUser?>((ref) {
+  return ref.watch(authStateProvider).user;
 });
 
-/// Provider for mosque statistics
-final mosqueStatisticsProvider =
-FutureProvider<Map<String, dynamic>>((ref) async {
-  final repository = ref.watch(mosqueRepositoryProvider);
-  return repository.getMosqueStatistics();
+/// Is authenticated provider
+final isAuthenticatedProvider = Provider<bool>((ref) {
+  return ref.watch(authStateProvider).isAuthenticated;
+});
+
+/// Is admin provider
+final isAdminProvider = Provider<bool>((ref) {
+  final user = ref.watch(currentUserProvider);
+  return user?.isAdmin ?? false;
 });

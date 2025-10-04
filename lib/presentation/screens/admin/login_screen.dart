@@ -1,7 +1,10 @@
+// lib/presentation/screens/admin/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:palestinian_ministry_endowments/core/services/storage_service.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../app/router.dart';
+import '../../providers/auth_provider.dart';
 
 class AdminLoginScreen extends ConsumerStatefulWidget {
   const AdminLoginScreen({super.key});
@@ -15,7 +18,6 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _isLoading = false;
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -28,6 +30,16 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    // Listen for successful login
+    ref.listen(authStateProvider, (previous, next) {
+      if (next.isAuthenticated && !next.isLoading) {
+        // Navigate to dashboard
+        AppRouter.pushAndClearStack(context, AppRouter.adminDashboard);
+      }
+    });
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -44,193 +56,213 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(AppConstants.paddingXL),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Logo and Title
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: AppColors.islamicGreen.withOpacity(0.1),
-                          shape: BoxShape.circle,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Logo
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.islamicGreen.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.admin_panel_settings,
+                            size: 40,
+                            color: AppColors.islamicGreen,
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.admin_panel_settings,
-                          size: 40,
-                          color: AppColors.islamicGreen,
+
+                        const SizedBox(height: 24),
+
+                        Text(
+                          'نظام الإدارة',
+                          style: AppTextStyles.headlineMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.islamicGreen,
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(height: 24),
+                        const SizedBox(height: 8),
 
-                      Text(
-                        'نظام الإدارة',
-                        style: AppTextStyles.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.islamicGreen,
+                        Text(
+                          'وزارة الأوقاف والشؤون الدينية',
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
 
-                      const SizedBox(height: 8),
+                        const SizedBox(height: 32),
 
-                      Text(
-                        'وزارة الأوقاف والشؤون الدينية',
-                        style: AppTextStyles.bodyLarge.copyWith(
-                          color: Colors.grey[600],
+                        // Email Field
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textDirection: TextDirection.ltr,
+                          decoration: const InputDecoration(
+                            labelText: 'البريد الإلكتروني',
+                            hintText: 'user@awqaf.ps',
+                            prefixIcon: Icon(Icons.email_outlined),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'يرجى إدخال البريد الإلكتروني';
+                            }
+                            if (!AppConstants.emailRegex.hasMatch(value!)) {
+                              return 'البريد الإلكتروني غير صحيح';
+                            }
+                            return null;
+                          },
                         ),
-                        textAlign: TextAlign.center,
-                      ),
 
-                      const SizedBox(height: 32),
+                        const SizedBox(height: 16),
 
-                      // Login Form
-                      Form(
-                        key: _formKey,
-                        child: Column(
+                        // Password Field
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          textDirection: TextDirection.ltr,
+                          decoration: InputDecoration(
+                            labelText: 'كلمة المرور',
+                            prefixIcon: const Icon(Icons.lock_outlined),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'يرجى إدخال كلمة المرور';
+                            }
+                            if (value!.length < 6) {
+                              return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Remember Me & Forgot Password
+                        Row(
                           children: [
-                            // Email Field
-                            TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              textDirection: TextDirection.ltr,
-                              decoration: const InputDecoration(
-                                labelText: 'البريد الإلكتروني',
-                                hintText: 'user@awqaf.ps',
-                                prefixIcon: Icon(Icons.email_outlined),
-                              ),
-                              validator: (value) {
-                                if (value?.isEmpty ?? true) {
-                                  return 'يرجى إدخال البريد الإلكتروني';
-                                }
-                                if (!AppConstants.emailRegex.hasMatch(value!)) {
-                                  return 'البريد الإلكتروني غير صحيح';
-                                }
-                                return null;
+                            Checkbox(
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  _rememberMe = value ?? false;
+                                });
                               },
                             ),
+                            const Text('تذكرني'),
 
-                            const SizedBox(height: 16),
+                            const Spacer(),
 
-                            // Password Field
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: _obscurePassword,
-                              textDirection: TextDirection.ltr,
-                              decoration: InputDecoration(
-                                labelText: 'كلمة المرور',
-                                prefixIcon: const Icon(Icons.lock_outlined),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscurePassword
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value?.isEmpty ?? true) {
-                                  return 'يرجى إدخال كلمة المرور';
-                                }
-                                if (value!.length < 6) {
-                                  return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                                }
-                                return null;
-                              },
+                            TextButton(
+                              onPressed: _showForgotPasswordDialog,
+                              child: const Text('نسيت كلمة المرور؟'),
                             ),
+                          ],
+                        ),
 
-                            const SizedBox(height: 16),
-
-                            // Remember Me
-                            Row(
+                        // Error Message
+                        if (authState.error != null) ...[
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade50,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.red.shade200),
+                            ),
+                            child: Row(
                               children: [
-                                Checkbox(
-                                  value: _rememberMe,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _rememberMe = value ?? false;
-                                    });
-                                  },
-                                ),
-                                const Text('تذكرني'),
-
-                                const Spacer(),
-
-                                TextButton(
-                                  onPressed: _showForgotPasswordDialog,
-                                  child: const Text('نسيت كلمة المرور؟'),
+                                const Icon(Icons.error_outline, color: Colors.red),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    authState.error!,
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
                                 ),
                               ],
                             ),
+                          ),
+                        ],
 
-                            const SizedBox(height: 24),
+                        const SizedBox(height: 24),
 
-                            // Login Button
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: _isLoading ? null : _handleLogin,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.islamicGreen,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                ),
-                                child: _isLoading
-                                    ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                                    : const Text(
-                                  'تسجيل الدخول',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                        // Login Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: authState.isLoading ? null : _handleLogin,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.islamicGreen,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: authState.isLoading
+                                ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                                : const Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Footer
+                        Text(
+                          'نظام آمن ومحمي',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: Colors.grey[500],
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.security,
+                              size: 16,
+                              color: Colors.grey[500],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'تشفير SSL 256 بت',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: Colors.grey[500],
                               ),
                             ),
                           ],
                         ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Footer
-                      Text(
-                        'نظام آمن ومحمي',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: Colors.grey[500],
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.security,
-                            size: 16,
-                            color: Colors.grey[500],
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'تشفير SSL 256 بت',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: Colors.grey[500],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -241,73 +273,108 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
     );
   }
 
+  /// Handle login button press
+// lib/presentation/screens/admin/login_screen.dart
+// Update the _handleLogin method:
+
   Future<void> _handleLogin() async {
+    // Validate form
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    // Clear previous errors
+    ref.read(authStateProvider.notifier).clearError();
+
+    // Save "Remember Me" preference
+    if (_rememberMe) {
+      await StorageService.instance.setBool('remember_me', true);
+    } else {
+      await StorageService.instance.setBool('remember_me', false);
+    }
 
     try {
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-
-      // For demo purposes, accept any valid email/password
-      final email = _emailController.text.trim();
-      final password = _passwordController.text;
-
-      if (email == 'admin@awqaf.ps' && password == 'admin123') {
-        // Success - navigate to dashboard
-        if (mounted) {
-          AppRouter.pushAndClearStack(context, AppRouter.adminDashboard);
-        }
-      } else {
-        // Invalid credentials
-        _showErrorDialog('بيانات الدخول غير صحيحة');
-      }
+      // Attempt login
+      await ref.read(authStateProvider.notifier).login(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
+      // Navigation is handled by the listener
     } catch (e) {
-      _showErrorDialog('حدث خطأ أثناء تسجيل الدخول');
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      // Error is already set in the state
     }
   }
-
+  /// Show forgot password dialog
   void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('استعادة كلمة المرور'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('يرجى التواصل مع مدير النظام لاستعادة كلمة المرور'),
-            SizedBox(height: 16),
-            Text('البريد الإلكتروني: admin@awqaf.ps'),
-            SizedBox(height: 8),
-            Text('الهاتف: +970-2-2406340'),
+            const Text(
+              'أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور',
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+              decoration: const InputDecoration(
+                labelText: 'البريد الإلكتروني',
+                prefixIcon: Icon(Icons.email),
+                hintText: 'user@awqaf.ps',
+              ),
+            ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('حسناً'),
+            child: const Text('إلغاء'),
           ),
-        ],
-      ),
-    );
-  }
+          ElevatedButton(
+            onPressed: () async {
+              if (emailController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('يرجى إدخال البريد الإلكتروني'),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                return;
+              }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('خطأ'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('حسناً'),
+              try {
+                await ref.read(authStateProvider.notifier).resetPassword(
+                  emailController.text.trim(),
+                );
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك'),
+                      backgroundColor: AppColors.success,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString().replaceAll('Exception: ', '')),
+                      backgroundColor: AppColors.error,
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.islamicGreen,
+            ),
+            child: const Text('إرسال'),
           ),
         ],
       ),

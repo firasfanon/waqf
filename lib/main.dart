@@ -1,11 +1,13 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:palestinian_ministry_endowments/app/router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/constants/app_constants.dart';
+import 'core/services/storage_service.dart';
+import 'app/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,10 @@ void main() async {
 }
 
 Future<void> _initializeServices() async {
-  // Initialize Supabase
+  // 1. Initialize Storage Service (Must be first!)
+  await StorageService.instance.init();
+
+  // 2. Initialize Supabase
   try {
     await Supabase.initialize(
       url: AppConstants.baseUrl,
@@ -35,7 +40,7 @@ Future<void> _initializeServices() async {
     debugPrint('Supabase initialization failed: $e');
   }
 
-  // TODO: Add storage and notification services when needed
+  // TODO: Add other services when needed (notifications, etc.)
 }
 
 void _configureSystemUI() {
@@ -107,7 +112,6 @@ class PalestinianMinistryApp extends ConsumerWidget {
       ),
       primaryColor: AppColors.islamicGreen,
       scaffoldBackgroundColor: AppColors.background,
-      // ... rest of your theme configuration remains the same
       useMaterial3: true,
     );
   }

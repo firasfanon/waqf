@@ -1,4 +1,8 @@
+// lib/app/router.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile_screen.dart';
 import '../presentation/screens/public/splash_screen.dart';
 import '../presentation/screens/public/home_screen.dart';
 import '../presentation/screens/public/news_screen.dart';
@@ -16,11 +20,12 @@ import '../presentation/screens/public/structure_screen.dart';
 import '../presentation/screens/public/former_ministers_screen.dart';
 import '../presentation/screens/public/contact_screen.dart';
 import '../presentation/screens/public/search_screen.dart';
-import '../presentation/screens/admin/login_screen.dart' hide SizedBox;
+import '../presentation/screens/admin/login_screen.dart';
 import '../presentation/screens/admin/admin_dashboard.dart';
 import '../presentation/screens/admin/waqf_lands_screen.dart';
 import '../presentation/screens/admin/cases_screen.dart';
 import '../presentation/screens/admin/documents_screen.dart';
+import '../presentation/providers/auth_provider.dart';
 import '../data/models/news_article.dart';
 
 class AppRouter {
@@ -49,10 +54,15 @@ class AppRouter {
   static const String adminWaqfLands = '/admin/waqf-lands';
   static const String adminCases = '/admin/cases';
   static const String adminDocuments = '/admin/documents';
+  static const String adminProfile = '/admin/profile';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-    // Public Routes
+    // ============================================
+    // PUBLIC ROUTES (No Authentication Required)
+    // ============================================
+
       case splash:
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
@@ -156,37 +166,63 @@ class AppRouter {
           settings: settings,
         );
 
-    // Admin Routes
+    // ============================================
+    // ADMIN ROUTES
+    // ============================================
+
+    // Admin Login (No Auth Required)
       case adminLogin:
         return MaterialPageRoute(
           builder: (_) => const AdminLoginScreen(),
           settings: settings,
         );
 
+    // Admin Dashboard (Auth Required) ✅
       case adminDashboard:
         return MaterialPageRoute(
-          builder: (_) => const AdminDashboardScreen(),
+          builder: (_) => const AuthGuardedRoute(
+            child: AdminDashboardScreen(),
+          ),
           settings: settings,
         );
 
+    // Waqf Lands Management (Auth Required) ✅
       case adminWaqfLands:
         return MaterialPageRoute(
-          builder: (_) => const WaqfLandsScreen(),
+          builder: (_) => const AuthGuardedRoute(
+            child: WaqfLandsScreen(),
+          ),
           settings: settings,
         );
 
+    // Cases Management (Auth Required) ✅
       case adminCases:
         return MaterialPageRoute(
-          builder: (_) => const CasesScreen(),
+          builder: (_) => const AuthGuardedRoute(
+            child: CasesScreen(),
+          ),
           settings: settings,
         );
 
+    // Documents Management (Auth Required) ✅
       case adminDocuments:
         return MaterialPageRoute(
-          builder: (_) => const DocumentsScreen(),
+          builder: (_) => const AuthGuardedRoute(
+            child: DocumentsScreen(),
+          ),
           settings: settings,
         );
 
+      case adminProfile:
+        return MaterialPageRoute(
+          builder: (_) => const AuthGuardedRoute(
+            child: ProfileScreen(),
+          ),
+          settings: settings,
+        );
+
+
+    // 404 - Route Not Found
       default:
         return MaterialPageRoute(
           builder: (_) => const NotFoundScreen(),
@@ -195,7 +231,11 @@ class AppRouter {
     }
   }
 
-  // Navigation helpers
+  // ============================================
+  // NAVIGATION HELPER METHODS
+  // ============================================
+
+  /// Navigate to a new route
   static Future<T?> push<T extends Object?>(
       BuildContext context,
       String routeName, {
@@ -208,6 +248,7 @@ class AppRouter {
     );
   }
 
+  /// Replace current route with new route
   static Future<T?> pushReplacement<T extends Object?, TO extends Object?>(
       BuildContext context,
       String routeName, {
@@ -220,6 +261,7 @@ class AppRouter {
     );
   }
 
+  /// Clear navigation stack and navigate to route
   static Future<T?> pushAndClearStack<T extends Object?>(
       BuildContext context,
       String routeName, {
@@ -233,38 +275,155 @@ class AppRouter {
     );
   }
 
+  /// Pop current route
   static void pop<T extends Object?>(BuildContext context, [T? result]) {
     Navigator.pop<T>(context, result);
   }
 
+  /// Check if navigation stack can pop
   static bool canPop(BuildContext context) {
     return Navigator.canPop(context);
   }
 
+  /// Pop until specific route
   static void popUntil(BuildContext context, String routeName) {
     Navigator.popUntil(context, ModalRoute.withName(routeName));
   }
 
-  // Route validation
+  // ============================================
+  // ROUTE VALIDATION METHODS
+  // ============================================
+
+  /// Check if route is public (no auth required)
   static bool isPublicRoute(String routeName) {
     const publicRoutes = [
-      splash, home, news, newsDetail, announcements, activities,
-      services, eservices, mosques, projects, about, minister,
-      visionMission, structure, formerMinisters, contact, search,
+      splash,
+      home,
+      news,
+      newsDetail,
+      announcements,
+      activities,
+      services,
+      eservices,
+      mosques,
+      projects,
+      about,
+      minister,
+      visionMission,
+      structure,
+      formerMinisters,
+      contact,
+      search,
     ];
     return publicRoutes.contains(routeName);
   }
 
+  /// Check if route is admin route
   static bool isAdminRoute(String routeName) {
     return routeName.startsWith('/admin');
   }
 
+  /// Check if route requires authentication
   static bool requiresAuth(String routeName) {
     return isAdminRoute(routeName) && routeName != adminLogin;
   }
 }
 
-// 404 Not Found Screen
+// ============================================
+// AUTH GUARDED ROUTE WRAPPER
+// ============================================
+
+/// Wrapper widget that protects routes requiring authentication
+///
+/// Usage:
+/// ```dart
+/// case adminDashboard:
+///   return MaterialPageRoute(
+///     builder: (_) => const AuthGuardedRoute(
+///       child: AdminDashboardScreen(),
+///     ),
+///   );
+/// ```
+class AuthGuardedRoute extends ConsumerStatefulWidget {
+  final Widget child;
+
+  const AuthGuardedRoute({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  ConsumerState<AuthGuardedRoute> createState() => _AuthGuardedRouteState();
+}
+
+class _AuthGuardedRouteState extends ConsumerState<AuthGuardedRoute> {
+  @override
+  void initState() {
+    super.initState();
+    // Check authentication on init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthentication();
+    });
+  }
+
+  void _checkAuthentication() {
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+
+    if (!isAuthenticated) {
+      // Redirect to login if not authenticated
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRouter.adminLogin,
+            (route) => false,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    // Listen for auth state changes
+    ref.listen(isAuthenticatedProvider, (previous, next) {
+      if (!next) {
+        // User logged out, redirect to login
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRouter.adminLogin,
+              (route) => false,
+        );
+      }
+    });
+
+    // Show loading while checking authentication
+    if (authState.isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: AppColors.islamicGreen,
+          ),
+        ),
+      );
+    }
+
+    // Show protected content if authenticated
+    if (authState.isAuthenticated) {
+      return widget.child;
+    }
+
+    // Show loading indicator while redirecting
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          color: AppColors.islamicGreen,
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================
+// 404 NOT FOUND SCREEN
+// ============================================
+
 class NotFoundScreen extends StatelessWidget {
   const NotFoundScreen({super.key});
 
@@ -273,6 +432,7 @@ class NotFoundScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('الصفحة غير موجودة'),
+        backgroundColor: AppColors.islamicGreen,
       ),
       body: Center(
         child: Column(
@@ -303,6 +463,13 @@ class NotFoundScreen extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () => AppRouter.pushReplacement(context, AppRouter.home),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.islamicGreen,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+              ),
               child: const Text('العودة للرئيسية'),
             ),
           ],
@@ -312,7 +479,11 @@ class NotFoundScreen extends StatelessWidget {
   }
 }
 
-// Route animations
+// ============================================
+// ROUTE ANIMATIONS (Optional - Already existed)
+// ============================================
+
+/// Slide transition for routes
 class SlidePageRoute<T> extends PageRouteBuilder<T> {
   final Widget child;
   final AxisDirection direction;
@@ -355,6 +526,7 @@ class SlidePageRoute<T> extends PageRouteBuilder<T> {
   );
 }
 
+/// Fade transition for routes
 class FadePageRoute<T> extends PageRouteBuilder<T> {
   final Widget child;
 
@@ -373,6 +545,7 @@ class FadePageRoute<T> extends PageRouteBuilder<T> {
   );
 }
 
+/// Scale transition for routes
 class ScalePageRoute<T> extends PageRouteBuilder<T> {
   final Widget child;
 

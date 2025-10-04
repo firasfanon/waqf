@@ -205,36 +205,86 @@ class MosqueRepository {
     }
   }
 
-  // Map Supabase JSON to Mosque object
+  /// Maps Supabase JSON to Mosque object
+  /// Handles null values gracefully to prevent type casting errors
   Mosque _mapToMosque(Map<String, dynamic> json) {
-    return Mosque(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      nameEn: json['name_en'] as String,
-      description: json['description'] as String,
-      type: MosqueType.values.firstWhere(
-            (e) => e.name == json['type'],
-        orElse: () => MosqueType.masjid,
-      ),
-      status: MosqueStatus.values.firstWhere(
-            (e) => e.name == json['status'],
-        orElse: () => MosqueStatus.active,
-      ),
-      location: MosqueLocation(
-        address: json['address'] as String,
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-      ),
-      imam: json['imam'] as String,
-      capacity: json['capacity'] as int,
-      hasWheelchairAccess: json['has_wheelchair_access'] as bool? ?? false,
-      hasAirConditioning: json['has_air_conditioning'] as bool? ?? false,
-      hasFemaleSection: json['has_female_section'] as bool? ?? false,
-      governorate: json['governorate'] as String,
-      district: json['district'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-    );
+    try {
+      // Debug: Print raw JSON to identify issues
+      print('📦 Mapping mosque: ${json['name']}');
+
+      return Mosque(
+        // Required numeric fields (Supabase always returns these)
+        id: (json['id'] as num).toInt(),
+
+        // String fields that might be null in database
+        name: json['name'] as String? ?? 'غير معروف',
+        nameEn: json['name_en'] as String? ?? '',  // ← FIX: Allow null
+        description: json['description'] as String? ?? '',  // ← FIX: Allow null
+
+        // Enum fields with safe parsing
+        type: _parseEnumFromString(
+          json['type'] as String?,
+          MosqueType.values,
+          MosqueType.masjid,
+        ),
+        status: _parseEnumFromString(
+          json['status'] as String?,
+          MosqueStatus.values,
+          MosqueStatus.active,
+        ),
+
+        // Location (assuming fields are flat in your table)
+        location: MosqueLocation(
+          address: json['address'] as String? ?? 'غير محدد',
+          addressEn: json['address_en'] as String? ?? '',  // ← FIX: Allow null
+          latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+          longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+          nearbyLandmarks: json['nearby_landmarks'] as String?,
+        ),
+
+        // Imam information
+        imam: json['imam'] as String? ?? 'غير محدد',
+        imamPhone: json['imam_phone'] as String?,  // Already nullable in model
+
+        // Numeric fields
+        capacity: (json['capacity'] as num?)?.toInt() ?? 0,
+        area: (json['area'] as num?)?.toDouble(),
+
+        // Boolean fields with sensible defaults
+        hasParkingSpace: json['has_parking_space'] as bool? ?? false,
+        hasWheelchairAccess: json['has_wheelchair_access'] as bool? ?? false,
+        hasAirConditioning: json['has_air_conditioning'] as bool? ?? false,
+        hasWuduArea: json['has_wudu_area'] as bool? ?? true,
+        hasFemaleSection: json['has_female_section'] as bool? ?? false,
+        hasLibrary: json['has_library'] as bool? ?? false,
+        hasEducationCenter: json['has_education_center'] as bool? ?? false,
+
+        // Array fields (handle PostgreSQL arrays and null)
+        services: _parseStringList(json['services']),
+        programs: _parseStringList(json['programs']),
+        gallery: _parseStringList(json['gallery']),
+
+        // Optional fields
+        imageUrl: json['image_url'] as String?,
+        establishedDate: json['established_date'] != null
+            ? DateTime.tryParse(json['established_date'] as String)
+            : null,
+        architect: json['architect'] as String?,
+
+        // Location metadata
+        governorate: json['governorate'] as String? ?? 'غير محدد',
+        district: json['district'] as String? ?? 'غير محدد',
+
+        // Timestamps (Supabase always provides these)
+        createdAt: DateTime.parse(json['created_at'] as String),
+        updatedAt: DateTime.parse(json['updated_at'] as String),
+      );
+    } catch (e, stackTrace) {
+      print('❌ Error mapping mosque: $e');
+      print('📦 Problematic JSON: $json');
+      print('📍 Stack trace: $stackTrace');
+      rethrow;  // Re-throw to see the error in the logs
+    }
   }
 
   // Calculate distance using Haversine formula
@@ -335,4 +385,66 @@ class MosqueRepository {
       ),
     ];
   }
+
+  /// Helper: Safely parse enum from string value
+  /// Returns default value if parsing fails or value is null
+  T _parseEnumFromString<T extends Enum>(
+      String? value,
+      List<T> enumValues,
+      T defaultValue,
+      ) {
+    if (value == null || value.isEmpty) {
+      return defaultValue;
+    }
+
+    try {
+      return enumValues.firstWhere(
+            (e) => e.name == value,
+        orElse: () => defaultValue,
+      );
+    } catch (e) {
+      print('⚠️ Unknown enum value "$value", using default: ${defaultValue.name}');
+      return defaultValue;
+    }
+  }
+
+  /// Helper: Safely parse string lists from various JSON formats
+  /// Handles: null, List<dynamic>, List<String>, PostgreSQL arrays
+  List<String> _parseStringList(dynamic value) {
+    if (value == null) {
+      return const [];
+    }
+
+    if (value is List) {
+      // Handle JSON array: ["item1", "item2"]
+      return value
+          .map((e) => e?.toString() ?? '')
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
+
+    if (value is String) {
+      // Handle PostgreSQL array format: {item1,item2,item3}
+      if (value.isEmpty) return const [];
+
+      if (value.startsWith('{') && value.endsWith('}')) {
+        final content = value.substring(1, value.length - 1);
+        if (content.isEmpty) return const [];
+
+        return content
+            .split(',')
+            .map((s) => s.trim())
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+
+      // Single string value
+      return [value];
+    }
+
+    return const [];
+  }
+
+
+
 }

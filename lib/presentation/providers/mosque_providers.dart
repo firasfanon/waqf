@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/presentation/providers/supabase_providers.dart';
 import '../../data/repositories/mosque_repository.dart';
 import '../../data/models/mosque.dart';
-import 'auth_provider.dart';
 
 // ============ Repository Providers ============
 

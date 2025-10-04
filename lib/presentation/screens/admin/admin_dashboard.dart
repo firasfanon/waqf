@@ -1,18 +1,37 @@
+// lib/presentation/screens/admin/admin_dashboard.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:palestinian_ministry_endowments/presentation/widgets/common/admin_app_bar.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../app/router.dart';
+import '../../providers/auth_provider.dart';
 
-class AdminDashboardScreen extends StatefulWidget {
+class AdminDashboardScreen extends ConsumerStatefulWidget {
   const AdminDashboardScreen({super.key});
 
   @override
-  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+  ConsumerState<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
 }
 
-class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check authentication on init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuth();
+    });
+  }
+
+  void _checkAuth() {
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+    if (!isAuthenticated) {
+      AppRouter.pushAndClearStack(context, AppRouter.adminLogin);
+    }
+  }
 
   final List<DashboardModule> _modules = [
     const DashboardModule(
@@ -67,14 +86,110 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider);
+
+    // Listen for auth changes
+    ref.listen(isAuthenticatedProvider, (previous, next) {
+      if (!next) {
+        AppRouter.pushAndClearStack(context, AppRouter.adminLogin);
+      }
+    });
+
     return Scaffold(
-      appBar: const AdminAppBar(
+      appBar: AdminAppBar(
         title: 'لوحة التحكم الإدارية',
         showBackButton: false,
         actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: null, // Will be implemented
+          // User profile button
+          PopupMenuButton<String>(
+            icon: CircleAvatar(
+              backgroundColor: AppColors.goldenYellow,
+              child: Text(
+                currentUser?.name.substring(0, 1) ?? 'A',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            offset: const Offset(0, 50),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                enabled: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentUser?.name ?? 'مستخدم',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      currentUser?.email ?? '',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.islamicGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        currentUser?.role ?? '',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: AppColors.islamicGreen,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: 'profile',
+                child: Row(
+                  children: [
+                    Icon(Icons.person, size: 20),
+                    SizedBox(width: 12),
+                    Text('الملف الشخصي'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'settings',
+                child: Row(
+                  children: [
+                    Icon(Icons.settings, size: 20),
+                    SizedBox(width: 12),
+                    Text('الإعدادات'),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, size: 20, color: AppColors.error),
+                    SizedBox(width: 12),
+                    Text('تسجيل الخروج', style: TextStyle(color: AppColors.error)),
+                  ],
+                ),
+              ),
+            ],
+            onSelected: _handleMenuAction,
           ),
         ],
       ),
@@ -83,8 +198,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section
-            _buildWelcomeSection(),
+            // Welcome Section with user info
+            _buildWelcomeSection(currentUser),
 
             const SizedBox(height: 24),
 
@@ -112,7 +227,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildWelcomeSection() {
+  Widget _buildWelcomeSection(currentUser) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.paddingL),
       decoration: BoxDecoration(
@@ -126,7 +241,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'مرحباً بك في لوحة التحكم',
+                  'مرحباً ${currentUser?.name ?? 'مستخدم'}',
                   style: AppTextStyles.headlineSmall.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -134,7 +249,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'نظام إدارة وزارة الأوقاف والشؤون الدينية',
+                  currentUser?.department ?? 'نظام إدارة وزارة الأوقاف والشؤون الدينية',
                   style: AppTextStyles.bodyLarge.copyWith(
                     color: Colors.white.withOpacity(0.9),
                   ),
@@ -149,10 +264,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ],
             ),
           ),
-          const Icon(
-            Icons.dashboard,
-            size: 48,
-            color: Colors.white,
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.dashboard,
+              size: 30,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -563,6 +686,116 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           label: 'الإعدادات',
         ),
       ],
+    );
+  }
+
+  void _handleMenuAction(String action) {
+    switch (action) {
+      case 'profile':
+        _showProfileDialog();
+        break;
+      case 'settings':
+      // Navigate to settings
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('الإعدادات')),
+        );
+        break;
+      case 'logout':
+        _showLogoutDialog();
+        break;
+    }
+  }
+
+  void _showProfileDialog() {
+    final user = ref.read(currentUserProvider);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('الملف الشخصي'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileRow('الاسم', user?.name ?? ''),
+            _buildProfileRow('البريد الإلكتروني', user?.email ?? ''),
+            _buildProfileRow('الدور', user?.role ?? ''),
+            if (user?.department != null)
+              _buildProfileRow('القسم', user!.department!),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إغلاق'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigate to edit profile
+            },
+            child: const Text('تعديل'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              '$label:',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(child: Text(value)),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('تسجيل الخروج'),
+        content: const Text('هل أنت متأكد من رغبتك في تسجيل الخروج؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+
+              // Show loading
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+
+              // Logout
+              await ref.read(authStateProvider.notifier).logout();
+
+              // Navigation handled by listener
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+            ),
+            child: const Text('تسجيل الخروج'),
+          ),
+        ],
+      ),
     );
   }
 }

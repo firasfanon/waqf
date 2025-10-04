@@ -46,8 +46,8 @@ class AppConstants {
   );
 
   // API Endpoints
-  static const String baseUrl = 'https://dcuhtmmnbncaezdcbbop.supabase.co';
-  static const String apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjdWh0bW1uYm5jYWV6ZGNiYm9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0MzQ1OTksImV4cCI6MjA3NTAxMDU5OX0.thQRlQuGagzCU5CimSby50nnkvRKfHFCTE5ctZIUpZ0';
+  static const String baseUrl = 'https://bkdtsakkprwhdmquolzo.supabase.co';
+  static const String apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZHRzYWtrcHJ3aGRtcXVvbHpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4MzkyODQsImV4cCI6MjA3MDQxNTI4NH0.EZ36kzew1g7YoOnG0SrFcwW7dO_TCkFhlaarRh1JBx0';
 
   // Service Categories
   static const List<String> serviceCategories = [
