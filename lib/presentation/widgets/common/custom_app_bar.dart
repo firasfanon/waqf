@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../app/router.dart';
+import 'user_profile_widget.dart'; // ← ADD THIS
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -10,6 +11,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.showSearchButton = false,
     this.showNotificationButton = false,
+    this.showUserProfile = true, // ← ADD THIS
+    this.showGreeting = true, // ← ADD THIS
     this.actions,
     this.backgroundColor,
     this.elevation,
@@ -23,6 +26,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final bool showSearchButton;
   final bool showNotificationButton;
+  final bool showUserProfile; // ← ADD THIS
+  final bool showGreeting; // ← ADD THIS
   final List<Widget>? actions;
   final Color? backgroundColor;
   final double? elevation;
@@ -89,7 +94,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Stack(
             children: [
               const Icon(Icons.notifications_outlined),
-              // Notification badge
               Positioned(
                 right: 0,
                 top: 0,
@@ -122,6 +126,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     }
 
+    // ✨ ADD USER PROFILE WIDGET
+    if (showUserProfile) {
+      actionsList.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: UserProfileWidget(
+            showGreeting: showGreeting,
+          ),
+        ),
+      );
+    }
+
     // Add custom actions
     if (actions != null) {
       actionsList.addAll(actions!);
@@ -148,6 +164,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   );
 }
 
+// Keep NotificationBottomSheet as before...
 class NotificationBottomSheet extends StatelessWidget {
   const NotificationBottomSheet({super.key});
 
@@ -159,7 +176,6 @@ class NotificationBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Handle bar
           Center(
             child: Container(
               width: 40,
@@ -170,54 +186,35 @@ class NotificationBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // Title
           Text(
             'الإشعارات',
             style: AppTextStyles.headlineSmall.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Notifications list
           _buildNotificationItem(
             title: 'إعلان جديد',
             message: 'تم نشر إعلان مهم حول مواعيد صلاة الجمعة',
             time: 'منذ ساعة',
             isRead: false,
           ),
-
           _buildNotificationItem(
             title: 'خبر جديد',
             message: 'افتتاح مسجد جديد في مدينة رام الله',
             time: 'منذ ساعتين',
             isRead: true,
           ),
-
-          _buildNotificationItem(
-            title: 'تذكير',
-            message: 'موعد المحاضرة غداً في تمام الساعة الثالثة',
-            time: 'منذ يوم',
-            isRead: true,
-          ),
-
           const SizedBox(height: 16),
-
-          // See all button
           Center(
             child: TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                // Navigate to notifications screen
               },
               child: const Text('عرض جميع الإشعارات'),
             ),
           ),
-
           const SizedBox(height: 8),
         ],
       ),
@@ -231,35 +228,64 @@ class NotificationBottomSheet extends StatelessWidget {
     required bool isRead,
   }) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(AppConstants.paddingM),
-        decoration: BoxDecoration(
-          color: isRead ? Colors.grey[50] : AppColors.islamicGreen.withOpacity(
-              0.1),
-          borderRadius: BorderRadius.circular(AppConstants.radiusM),
-          border: Border.all(
-            color: isRead ? Colors.grey[200]! : AppColors.islamicGreen
-                .withOpacity(0.3),
-          ),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(AppConstants.paddingM),
+      decoration: BoxDecoration(
+        color: isRead
+            ? Colors.grey[50]
+            : AppColors.islamicGreen.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(AppConstants.radiusM),
+        border: Border.all(
+          color: isRead
+              ? Colors.grey[200]!
+              : AppColors.islamicGreen.withOpacity(0.3),
         ),
-        child: Row(
-            children: [
-              // Notification icon
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.islamicGreen.withOpacity(0.2),
-                  shape: BoxShape.circle,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.islamicGreen.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.notifications,
+              color: AppColors.islamicGreen,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.titleSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.notifications,
-                  color: AppColors.islamicGreen,
-                  size: 20,
+                const SizedBox(height: 4),
+                Text(
+                  message,
+                  style: AppTextStyles.bodySmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              )
-            ]
-        )
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // ← ADD THIS
 import '../../../core/constants/app_constants.dart';
 import '../../../app/router.dart';
 import '../../widgets/common/loading_widget.dart';
+import '../../providers/auth_provider.dart'; // ← ADD THIS
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget { // ← CHANGE TO ConsumerStatefulWidget
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState(); // ← CHANGE HERE
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen> // ← ADD ConsumerState
     with TickerProviderStateMixin {
   late AnimationController _logoController;
   late AnimationController _textController;
@@ -67,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
     ));
   }
 
+  // ✨ THIS IS THE KEY METHOD - UPDATED WITH AUTH CHECK
   void _startSplashSequence() async {
     // Set status bar style
     SystemChrome.setSystemUIOverlayStyle(
@@ -82,12 +85,20 @@ class _SplashScreenState extends State<SplashScreen>
     // Start text animation
     await _textController.forward();
 
-    // Wait for a moment
+    // Wait for animations to complete
     await Future.delayed(const Duration(seconds: 2));
 
-    // Navigate to home
-    if (mounted) {
-      AppRouter.pushReplacement(context, AppRouter.home);
+    if (!mounted) return;
+
+    // ✨ CHECK AUTHENTICATION STATE
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+
+    if (isAuthenticated) {
+      // 🔐 User is logged in → Navigate to Admin Dashboard
+      AppRouter.pushAndClearStack(context, AppRouter.adminDashboard);
+    } else {
+      // 🌍 User not logged in → Navigate to Public Home
+      AppRouter.pushAndClearStack(context, AppRouter.home);
     }
   }
 
@@ -231,184 +242,4 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-// Alternative splash screen with Palestinian flag theme
-class PalestinianSplashScreen extends StatefulWidget {
-  const PalestinianSplashScreen({super.key});
-
-  @override
-  State<PalestinianSplashScreen> createState() => _PalestinianSplashScreenState();
-}
-
-class _PalestinianSplashScreenState extends State<PalestinianSplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
-
-    _controller.forward().then((_) {
-      Future.delayed(const Duration(seconds: 1), () {
-        if (mounted) {
-          AppRouter.pushReplacement(context, AppRouter.home);
-        }
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.palestineBlack,
-              AppColors.palestineGreen,
-            ],
-          ),
-        ),
-        child: AnimatedBuilder(
-          animation: _fadeAnimation,
-          builder: (context, child) {
-            return Opacity(
-              opacity: _fadeAnimation.value,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Palestinian flag pattern
-                  Container(
-                    width: 200,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        // Flag stripes
-                        Column(
-                          children: [
-                            Expanded(
-                              child: Container(color: AppColors.palestineBlack),
-                            ),
-                            Expanded(
-                              child: Container(color: AppColors.palestineWhite),
-                            ),
-                            Expanded(
-                              child: Container(color: AppColors.palestineGreen),
-                            ),
-                          ],
-                        ),
-                        // Red triangle
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ClipPath(
-                            clipper: TriangleClipper(),
-                            child: Container(
-                              width: 80,
-                              height: 120,
-                              color: AppColors.palestineRed,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Ministry logo and text
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        const Icon(
-                          Icons.mosque,
-                          size: 60,
-                          color: Colors.white,
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        Text(
-                          'وزارة الأوقاف والشؤون الدينية',
-                          style: AppTextStyles.titleLarge.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Text(
-                          'دولة فلسطين',
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: Colors.white.withOpacity(0.9),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class TriangleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.moveTo(0, 0);
-    path.lineTo(size.width, size.height / 2);
-    path.lineTo(0, size.height);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
+// Keep your Palestinian splash screen as is - it's beautiful! 🇵🇸

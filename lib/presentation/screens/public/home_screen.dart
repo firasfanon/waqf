@@ -28,6 +28,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: const CustomAppBar(
         title: 'وزارة الأوقاف والشؤون الدينية',
         showBackButton: false,
+        showUserProfile: true, // ← Enable user profile
+        showGreeting: true, // ← Enable greeting
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
