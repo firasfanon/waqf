@@ -411,7 +411,7 @@
     },
     {
       "name": "flutter_riverpod",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-3.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -1029,7 +1029,7 @@
     },
     {
       "name": "riverpod",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-3.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -1251,13 +1251,13 @@
     },
     {
       "name": "syncfusion_flutter_charts",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_charts-31.1.22",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_charts-31.1.23",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-31.1.22",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-31.1.23",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },

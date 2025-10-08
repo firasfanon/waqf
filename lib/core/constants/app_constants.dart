@@ -37,6 +37,9 @@ class AppConstants {
   static const Color info = Color(0xFF3B82F6);
   static const Color onSurface = Color(0xFF1F2937);
   static const Color surfaceVariant = Color(0xFFF3F4F6);
+  static const Color textPrimary = Color(0xAB000000);
+  static const Color textSecondary = Color(0xFF6B7280);
+  static const Color borderLight = Color(0xFF6B7280);
 
   // Gradient - Added here for direct access via AppConstants
   static const Gradient islamicGradient = LinearGradient(
@@ -46,8 +49,8 @@ class AppConstants {
   );
 
   // API Endpoints
-  static const String baseUrl = 'https://bkdtsakkprwhdmquolzo.supabase.co';
-  static const String apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZHRzYWtrcHJ3aGRtcXVvbHpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4MzkyODQsImV4cCI6MjA3MDQxNTI4NH0.EZ36kzew1g7YoOnG0SrFcwW7dO_TCkFhlaarRh1JBx0';
+  static const String baseUrl = 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+  static const String apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
 
   // Service Categories
   static const List<String> serviceCategories = [

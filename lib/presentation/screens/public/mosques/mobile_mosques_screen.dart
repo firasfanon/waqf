@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../data/models/mosque.dart';
-import '../../widgets/common/custom_app_bar.dart';
-import '../../widgets/common/search_bar_widget.dart';
-import '../../providers/mosque_providers.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../data/models/mosque.dart';
+import '../../../widgets/common/custom_app_bar.dart';
+import '../../../widgets/common/search_bar_widget.dart';
+import '../../../providers/mosque_providers.dart';
 
 class MosquesScreen extends ConsumerStatefulWidget {
   const MosquesScreen({super.key});

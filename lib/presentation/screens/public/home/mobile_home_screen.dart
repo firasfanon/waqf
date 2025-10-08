@@ -1,25 +1,32 @@
+// lib/presentation/screens/public/mobile_home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../app/router.dart';
-import '../../widgets/common/custom_app_bar.dart';
-import '../../widgets/common/bottom_nav_bar.dart';
-import '../../widgets/home/hero_slider.dart';
-import '../../widgets/home/stats_section.dart';
-import '../../widgets/home/news_section.dart';
-import '../../widgets/home/services_section.dart' hide ServicesSection;
-import '../../widgets/home/announcements_section.dart';
-import '../../widgets/home/activities_section.dart';
+import '../../../../app/router.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../widgets/common/bottom_nav_bar.dart';
+import '../../../widgets/common/custom_app_bar.dart';
+import '../../../widgets/home/activities_section.dart';
+import '../../../widgets/home/announcements_section.dart';
+import '../../../widgets/home/hero_slider.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+import '../../../widgets/home/news_section.dart';
+import '../../../widgets/home/services_section.dart';
+import '../../../widgets/home/stats_section.dart';
+
+
+
+
+/// Mobile-optimized Home Screen
+/// Features: Bottom navigation, vertical scrolling, stacked sections
+class MobileHomeScreen extends ConsumerStatefulWidget {
+  const MobileHomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<MobileHomeScreen> createState() => _MobileHomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _MobileHomeScreenState extends ConsumerState<MobileHomeScreen> {
   int _currentIndex = 0;
 
   @override
@@ -28,8 +35,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: const CustomAppBar(
         title: 'وزارة الأوقاف والشؤون الدينية',
         showBackButton: false,
-        showUserProfile: true, // ← Enable user profile
-        showGreeting: true, // ← Enable greeting
+        showUserProfile: true,
+        showGreeting: true,
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
@@ -44,33 +51,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: FadeInAnimation(child: widget),
                 ),
                 children: [
-                  // Hero Slider
                   const HeroSlider(),
-
-                  // Minister's Message Section
                   _buildMinisterSection(),
-
-                  // Statistics Section
                   const StatsSection(),
-
-                  // Priority Announcements
                   const AnnouncementsSection(),
-
-                  // Latest News
                   const NewsSection(),
-
-                  // Services
                   const ServicesSection(),
-
-                  // Upcoming Activities
                   const ActivitiesSection(),
-
-                  // Quick Links
                   _buildQuickLinksSection(),
-
-                  // Contact Section
                   _buildContactSection(),
-
                   const SizedBox(height: 20),
                 ],
               ),
@@ -86,31 +75,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _refreshData() async {
-    // Refresh data from providers
     await Future.delayed(const Duration(seconds: 1));
   }
 
   void _onBottomNavTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    setState(() => _currentIndex = index);
 
     switch (index) {
-      case 0:
-      // Already on home
-        break;
-      case 1:
-        Navigator.pushNamed(context, AppRouter.news);
-        break;
-      case 2:
-        Navigator.pushNamed(context, AppRouter.services);
-        break;
-      case 3:
-        Navigator.pushNamed(context, AppRouter.mosques);
-        break;
-      case 4:
-        Navigator.pushNamed(context, AppRouter.about);
-        break;
+      case 0: break; // Already on home
+      case 1: Navigator.pushNamed(context, AppRouter.news); break;
+      case 2: Navigator.pushNamed(context, AppRouter.services); break;
+      case 3: Navigator.pushNamed(context, AppRouter.mosques); break;
+      case 4: Navigator.pushNamed(context, AppRouter.about); break;
     }
   }
 
@@ -142,11 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             child: Row(
               children: [
-                const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 24,
-                ),
+                const Icon(Icons.person, color: Colors.white, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   'كلمة معالي الوزير',
@@ -162,29 +134,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             padding: const EdgeInsets.all(AppConstants.paddingM),
             child: Row(
               children: [
-                // Minister Photo
                 Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppConstants.islamicGreen,
-                      width: 3,
-                    ),
+                    border: Border.all(color: AppConstants.islamicGreen, width: 3),
                   ),
                   child: CircleAvatar(
                     radius: 35,
                     backgroundColor: Colors.grey[200],
-                    child: const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
+                    child: const Icon(Icons.person, size: 40, color: Colors.grey),
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Minister Info
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'نرحب بكم في موقع وزارة الأوقاف والشؤون الدينية الفلسطينية، حيث نعمل على خدمة ديننا الحنيف ومجتمعنا الفلسطيني.',
+                        'نرحب بكم في موقع وزارة الأوقاف والشؤون الدينية الفلسطينية...',
                         style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -225,16 +188,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRouter.minister);
-                },
-                child: const Text(
-                  'اقرأ المزيد',
-                  style: TextStyle(
-                    color: AppConstants.islamicGreen,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                onPressed: () => Navigator.pushNamed(context, AppRouter.minister),
+                child: const Text('اقرأ المزيد'),
               ),
             ),
           ),
@@ -245,30 +200,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildQuickLinksSection() {
     final quickLinks = [
-      {
-        'title': 'دليل المساجد',
-        'icon': Icons.mosque,
-        'route': AppRouter.mosques,
-        'color': AppConstants.islamicGreen,
-      },
-      {
-        'title': 'الخدمات الإلكترونية',
-        'icon': Icons.computer,
-        'route': AppRouter.eservices,
-        'color': AppConstants.goldenYellow,
-      },
-      {
-        'title': 'المشاريع',
-        'icon': Icons.construction,
-        'route': AppRouter.projects,
-        'color': AppConstants.info,
-      },
-      {
-        'title': 'اتصل بنا',
-        'icon': Icons.contact_phone,
-        'route': AppRouter.contact,
-        'color': AppConstants.sageGreen,
-      },
+      {'title': 'دليل المساجد', 'icon': Icons.mosque, 'route': AppRouter.mosques, 'color': AppConstants.islamicGreen},
+      {'title': 'الخدمات الإلكترونية', 'icon': Icons.computer, 'route': AppRouter.eservices, 'color': AppConstants.goldenYellow},
+      {'title': 'المشاريع', 'icon': Icons.construction, 'route': AppRouter.projects, 'color': AppConstants.info},
+      {'title': 'اتصل بنا', 'icon': Icons.contact_phone, 'route': AppRouter.contact, 'color': AppConstants.sageGreen},
     ];
 
     return Container(
@@ -297,16 +232,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             itemBuilder: (context, index) {
               final link = quickLinks[index];
               return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, link['route'] as String);
-                },
+                onTap: () => Navigator.pushNamed(context, link['route'] as String),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                    border: Border.all(
-                      color: (link['color'] as Color).withOpacity(0.3),
-                    ),
+                    border: Border.all(color: (link['color'] as Color).withOpacity(0.3)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),
@@ -327,11 +258,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             bottomRight: Radius.circular(AppConstants.radiusM),
                           ),
                         ),
-                        child: Icon(
-                          link['icon'] as IconData,
-                          color: Colors.white,
-                          size: 24,
-                        ),
+                        child: Icon(link['icon'] as IconData, color: Colors.white, size: 24),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -367,11 +294,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.contact_phone,
-                color: Colors.white,
-                size: 28,
-              ),
+              const Icon(Icons.contact_phone, color: Colors.white, size: 28),
               const SizedBox(width: 12),
               Text(
                 'تواصل معنا',
@@ -403,16 +326,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const SizedBox(height: 20),
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRouter.contact);
-              },
+              onPressed: () => Navigator.pushNamed(context, AppRouter.contact),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: AppConstants.islamicGreen,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               ),
               child: const Text('اتصل بنا'),
             ),
@@ -430,11 +348,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          color: Colors.white.withOpacity(0.9),
-          size: 20,
-        ),
+        Icon(icon, color: Colors.white.withOpacity(0.9), size: 20),
         const SizedBox(width: 12),
         Expanded(
           child: Column(

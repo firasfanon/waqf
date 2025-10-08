@@ -2,16 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile_screen.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile/profile_screen.dart';
+import '../presentation/screens/public/home/home_screen.dart';
 import '../presentation/screens/public/splash_screen.dart';
-import '../presentation/screens/public/home_screen.dart';
-import '../presentation/screens/public/news_screen.dart';
-import '../presentation/screens/public/news_detail_screen.dart';
+import '../presentation/screens/public/home/mobile_home_screen.dart';
+import '../presentation/screens/public/news/mobile_news_screen.dart';
+import '../presentation/screens/public/news_details/news_detail_screen.dart';
 import '../presentation/screens/public/announcements_screen.dart';
 import '../presentation/screens/public/activities_screen.dart';
 import '../presentation/screens/public/services_screen.dart' hide EServicesScreen;
 import '../presentation/screens/public/eservices_screen.dart';
-import '../presentation/screens/public/mosques_screen.dart';
+import '../presentation/screens/public/mosques/mobile_mosques_screen.dart';
 import '../presentation/screens/public/projects_screen.dart';
 import '../presentation/screens/public/about_screen.dart';
 import '../presentation/screens/public/minister_screen.dart';
@@ -20,11 +21,11 @@ import '../presentation/screens/public/structure_screen.dart';
 import '../presentation/screens/public/former_ministers_screen.dart';
 import '../presentation/screens/public/contact_screen.dart';
 import '../presentation/screens/public/search_screen.dart';
-import '../presentation/screens/admin/login_screen.dart';
-import '../presentation/screens/admin/admin_dashboard.dart';
-import '../presentation/screens/admin/waqf_lands_screen.dart';
-import '../presentation/screens/admin/cases_screen.dart';
-import '../presentation/screens/admin/documents_screen.dart';
+import '../presentation/screens/admin/login/mobile_login_screen.dart';
+import '../presentation/screens/admin/dashboard/admin_dashboard.dart';
+import '../presentation/screens/admin/waqf_lands/waqf_lands_screen.dart';
+import '../presentation/screens/admin/cases/cases_screen.dart';
+import '../presentation/screens/admin/documents/documents_screen.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../data/models/news_article.dart';
 
@@ -77,7 +78,7 @@ class AppRouter {
 
       case news:
         return MaterialPageRoute(
-          builder: (_) => const NewsScreen(),
+          builder: (_) => const MobileNewsScreen(),
           settings: settings,
         );
 
@@ -173,7 +174,7 @@ class AppRouter {
     // Admin Login (No Auth Required)
       case adminLogin:
         return MaterialPageRoute(
-          builder: (_) => const AdminLoginScreen(),
+          builder: (_) => const MobileLoginScreen(),
           settings: settings,
         );
 

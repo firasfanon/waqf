@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../data/models/waqf_land.dart';
-import '../../widgets/common/custom_app_bar.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../data/models/waqf_land.dart';
+import '../../../widgets/common/custom_app_bar.dart';
 
 class WaqfLandsScreen extends ConsumerStatefulWidget {
   const WaqfLandsScreen({super.key});

@@ -1,19 +1,19 @@
-// lib/presentation/screens/admin/login_screen.dart
+// lib/presentation/screens/admin/web_login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/services/storage_service.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../app/router.dart';
-import '../../providers/auth_provider.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../app/router.dart';
+import '../../../providers/auth_provider.dart';
 
-class AdminLoginScreen extends ConsumerStatefulWidget {
-  const AdminLoginScreen({super.key});
+class MobileLoginScreen extends ConsumerStatefulWidget {
+  const MobileLoginScreen({super.key});
 
   @override
-  ConsumerState<AdminLoginScreen> createState() => _AdminLoginScreenState();
+  ConsumerState<MobileLoginScreen> createState() => _AdminLoginScreenState();
 }
 
-class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
+class _AdminLoginScreenState extends ConsumerState<MobileLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -274,8 +274,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
   }
 
   /// Handle login button press
-// lib/presentation/screens/admin/login_screen.dart
-// Update the _handleLogin method:
+
 
   Future<void> _handleLogin() async {
     // Validate form

@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:palestinian_ministry_endowments/presentation/widgets/common/admin_app_bar.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../app/router.dart';
-import '../../providers/auth_provider.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../app/router.dart';
+import '../../../providers/auth_provider.dart';
 
-class AdminDashboardScreen extends ConsumerStatefulWidget {
-  const AdminDashboardScreen({super.key});
+class MobileAdminDashboard extends ConsumerStatefulWidget {
+  const MobileAdminDashboard({super.key});
 
   @override
-  ConsumerState<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+  ConsumerState<MobileAdminDashboard> createState() => _AdminDashboardScreenState();
 }
 
-class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
+class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
   int _selectedIndex = 0;
 
   @override

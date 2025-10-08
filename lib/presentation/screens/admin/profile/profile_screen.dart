@@ -1,9 +1,9 @@
 // lib/presentation/screens/admin/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../providers/auth_provider.dart';
-import '../../widgets/common/admin_app_bar.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../widgets/common/admin_app_bar.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
