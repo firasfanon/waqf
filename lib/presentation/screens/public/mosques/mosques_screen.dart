@@ -15,7 +15,7 @@ class MosquesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      return const MobileMosquesScreen();
+      return const WebMosquesScreen();
     } else {
       return const MobileMosquesScreen();
     }

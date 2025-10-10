@@ -13,7 +13,7 @@ import '../presentation/screens/public/news/mobile_news_screen.dart';
 import '../presentation/screens/public/news_details/news_detail_screen.dart';
 import '../presentation/screens/public/announcements_screen.dart';
 import '../presentation/screens/public/activities_screen.dart';
-import '../presentation/screens/public/services_screen.dart' hide EServicesScreen;
+import '../presentation/screens/public/services_screen/services_screen.dart' hide EServicesScreen;
 import '../presentation/screens/public/eservices_screen.dart';
 import '../presentation/screens/public/mosques/mobile_mosques_screen.dart';
 import '../presentation/screens/public/projects_screen.dart';
