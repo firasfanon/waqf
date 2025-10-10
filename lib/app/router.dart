@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/login/login_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile/profile_screen.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/public/mosques/mosques_screen.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/public/news/news_screen.dart';
 import '../presentation/screens/public/home/home_screen.dart';
 import '../presentation/screens/public/splash_screen.dart';
 import '../presentation/screens/public/home/mobile_home_screen.dart';
@@ -22,7 +25,7 @@ import '../presentation/screens/public/former_ministers_screen.dart';
 import '../presentation/screens/public/contact_screen.dart';
 import '../presentation/screens/public/search_screen.dart';
 import '../presentation/screens/admin/login/mobile_login_screen.dart';
-import '../presentation/screens/admin/dashboard/admin_dashboard.dart';
+import '../presentation/screens/admin/dashboard/dashboard_screen.dart';
 import '../presentation/screens/admin/waqf_lands/waqf_lands_screen.dart';
 import '../presentation/screens/admin/cases/cases_screen.dart';
 import '../presentation/screens/admin/documents/documents_screen.dart';
@@ -78,7 +81,7 @@ class AppRouter {
 
       case news:
         return MaterialPageRoute(
-          builder: (_) => const MobileNewsScreen(),
+          builder: (_) => const NewsScreen(),
           settings: settings,
         );
 
@@ -174,7 +177,7 @@ class AppRouter {
     // Admin Login (No Auth Required)
       case adminLogin:
         return MaterialPageRoute(
-          builder: (_) => const MobileLoginScreen(),
+          builder: (_) => const LoginScreen(),
           settings: settings,
         );
 
@@ -182,7 +185,7 @@ class AppRouter {
       case adminDashboard:
         return MaterialPageRoute(
           builder: (_) => const AuthGuardedRoute(
-            child: AdminDashboardScreen(),
+            child: DashboardScreen(),
           ),
           settings: settings,
         );

@@ -5,8 +5,8 @@ import 'mobile_login_screen.dart';
 import 'web_login_screen.dart';
 
 /// Platform-aware Admin Login Screen Router
-class AdminLoginScreen extends StatelessWidget {
-  const AdminLoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

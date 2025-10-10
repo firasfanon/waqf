@@ -1,4 +1,4 @@
-// lib/presentation/screens/admin/admin_dashboard.dart
+// lib/presentation/screens/admin/dashboard_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
