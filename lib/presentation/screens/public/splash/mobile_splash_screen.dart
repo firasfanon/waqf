@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // ← ADD THIS
-import '../../../core/constants/app_constants.dart';
-import '../../../app/router.dart';
-import '../../widgets/common/loading_widget.dart';
-import '../../providers/auth_provider.dart'; // ← ADD THIS
+import '../../../../core/constants/app_constants.dart';
+import '../../../../app/router.dart';
+import '../../../widgets/common/loading_widget.dart';
+import '../../../providers/auth_provider.dart'; // ← ADD THIS
 
-class SplashScreen extends ConsumerStatefulWidget { // ← CHANGE TO ConsumerStatefulWidget
-  const SplashScreen({super.key});
+class MobileSplashScreen extends ConsumerStatefulWidget { // ← CHANGE TO ConsumerStatefulWidget
+  const MobileSplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState(); // ← CHANGE HERE
+  ConsumerState<MobileSplashScreen> createState() => _SplashScreenState(); // ← CHANGE HERE
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> // ← ADD ConsumerState
+class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD ConsumerState
     with TickerProviderStateMixin {
   late AnimationController _logoController;
   late AnimationController _textController;
@@ -242,4 +242,3 @@ class _SplashScreenState extends ConsumerState<SplashScreen> // ← ADD Consumer
   }
 }
 
-// Keep your Palestinian splash screen as is - it's beautiful! 🇵🇸
