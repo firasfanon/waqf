@@ -4,6 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../widgets/web/web_app_bar.dart';
 import '../../../widgets/web/web_footer.dart';
 import '../../../widgets/web/web_container.dart';
+import '../../../widgets/common/app_filter_chip.dart';
 
 class WebServicesScreen extends StatefulWidget {
   const WebServicesScreen({super.key});
@@ -238,30 +239,13 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
         final isSelected = _selectedCategory == category ||
             (category == 'جميع الخدمات' && _selectedCategory == null);
 
-        return InkWell(
-          onTap: () => setState(() {
+        return AppFilterChip(
+          label: category,
+          isSelected: isSelected,
+          onSelected: () => setState(() {
             _selectedCategory = category == 'جميع الخدمات' ? null : category;
           }),
-          borderRadius: BorderRadius.circular(25),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(
-                color: isSelected ? Colors.white : Colors.white.withOpacity(0.3),
-                width: 2,
-              ),
-            ),
-            child: Text(
-              category,
-              style: TextStyle(
-                color: isSelected ? AppColors.islamicGreen : Colors.white,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                fontSize: 15,
-              ),
-            ),
-          ),
+          onDarkBackground: true,
         );
       }).toList(),
     );

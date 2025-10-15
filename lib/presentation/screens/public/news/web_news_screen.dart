@@ -7,6 +7,7 @@ import '../../../widgets/web/web_footer.dart';
 import '../../../widgets/web/web_container.dart';
 import '../../../widgets/common/loading_widget.dart';
 import '../../../widgets/common/error_widget.dart';
+import '../../../widgets/common/app_filter_chip.dart';
 import '../../../providers/news_provider.dart';
 import '../../../../data/models/news_article.dart';
 
@@ -79,30 +80,23 @@ class _WebNewsScreenState extends ConsumerState<WebNewsScreen> {
       runSpacing: 12,
       alignment: WrapAlignment.center,
       children: [
-        _buildCategoryChip(null, 'الكل'),
-        ...NewsCategory.values.map((cat) => _buildCategoryChip(cat, cat.displayName)),
+        // "All" category chip
+        AppFilterChip(
+          label: 'الكل',
+          isSelected: _selectedCategory == null,
+          onSelected: () => setState(() => _selectedCategory = null),
+          onDarkBackground: true,
+        ),
+        // Category chips from enum
+        ...NewsCategory.values.map((category) {
+          return AppFilterChip(
+            label: category.displayName,
+            isSelected: _selectedCategory == category,
+            onSelected: () => setState(() => _selectedCategory = category),
+            onDarkBackground: true,
+          );
+        }),
       ],
-    );
-  }
-
-  Widget _buildCategoryChip(NewsCategory? category, String label) {
-    final isSelected = _selectedCategory == category;
-
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (_) {
-        setState(() => _selectedCategory = category);
-      },
-      backgroundColor: Colors.white.withOpacity(0.2),
-      selectedColor: Colors.white,
-      labelStyle: TextStyle(
-        color: isSelected ? AppConstants.islamicGreen : Colors.white,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      ),
-      side: BorderSide(
-        color: isSelected ? Colors.white : Colors.white30,
-      ),
     );
   }
 

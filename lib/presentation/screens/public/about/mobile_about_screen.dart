@@ -1,10 +1,13 @@
+// lib/presentation/screens/public/about/mobile_about_screen.dart
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../widgets/common/custom_app_bar.dart';
-import '../../../app/router.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../widgets/common/custom_app_bar.dart';
+import '../../../../app/router.dart';
 
-class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+/// Mobile-optimized About Screen
+/// Features: Vertical scrolling, stacked sections, mobile-friendly layout
+class MobileAboutScreen extends StatelessWidget {
+  const MobileAboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +40,18 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               AppConstants.appName,
-              style: AppTextStyles.headlineSmall.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              style: AppTextStyles.headlineSmall.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'نعمل على خدمة المساجد والأوقاف الإسلامية في فلسطين',
-              style: AppTextStyles.bodyLarge.copyWith(color: Colors.white.withOpacity(0.9)),
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: Colors.white.withOpacity(0.9),
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -54,10 +62,26 @@ class AboutScreen extends StatelessWidget {
 
   Widget _buildQuickLinks(BuildContext context) {
     final links = [
-      {'title': 'كلمة الوزير', 'icon': Icons.person, 'route': AppRouter.minister},
-      {'title': 'الرؤية والرسالة', 'icon': Icons.flag, 'route': AppRouter.visionMission},
-      {'title': 'الهيكل التنظيمي', 'icon': Icons.account_tree, 'route': AppRouter.structure},
-      {'title': 'الوزراء السابقون', 'icon': Icons.history, 'route': AppRouter.formerMinisters},
+      {
+        'title': 'كلمة الوزير',
+        'icon': Icons.person,
+        'route': AppRouter.minister
+      },
+      {
+        'title': 'الرؤية والرسالة',
+        'icon': Icons.flag,
+        'route': AppRouter.visionMission
+      },
+      {
+        'title': 'الهيكل التنظيمي',
+        'icon': Icons.account_tree,
+        'route': AppRouter.structure
+      },
+      {
+        'title': 'الوزراء السابقون',
+        'icon': Icons.history,
+        'route': AppRouter.formerMinisters
+      },
     ];
 
     return GridView.builder(
@@ -79,9 +103,17 @@ class AboutScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(link['icon'] as IconData, size: 32, color: AppColors.islamicGreen),
+                Icon(
+                  link['icon'] as IconData,
+                  size: 32,
+                  color: AppColors.islamicGreen,
+                ),
                 const SizedBox(height: 8),
-                Text(link['title'] as String, style: AppTextStyles.titleSmall, textAlign: TextAlign.center),
+                Text(
+                  link['title'] as String,
+                  style: AppTextStyles.titleSmall,
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
@@ -94,7 +126,12 @@ class AboutScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('نبذة عن الوزارة', style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          'نبذة عن الوزارة',
+          style: AppTextStyles.titleLarge.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 16),
         Card(
           child: Padding(
@@ -107,7 +144,12 @@ class AboutScreen extends StatelessWidget {
                   style: AppTextStyles.bodyLarge,
                 ),
                 const SizedBox(height: 16),
-                Text('المهام الرئيسية', style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  'المهام الرئيسية',
+                  style: AppTextStyles.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 _buildBulletPoint('الإشراف على المساجد والمصليات في جميع أنحاء فلسطين'),
                 _buildBulletPoint('إدارة الأوقاف الإسلامية والحفاظ عليها'),

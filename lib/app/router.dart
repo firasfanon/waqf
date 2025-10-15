@@ -6,21 +6,22 @@ import 'package:palestinian_ministry_endowments/presentation/screens/admin/login
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile/profile_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/public/mosques/mosques_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/public/news/news_screen.dart';
+import '../presentation/screens/admin/activities/activities_management_screen.dart';
+import '../presentation/screens/public/404/404_screen.dart';
 import '../presentation/screens/public/home/home_screen.dart';
 import '../presentation/screens/public/services/services_screen.dart';
 import '../presentation/screens/public/splash/splash_screen.dart';
 import '../presentation/screens/public/news_details/news_detail_screen.dart';
 import '../presentation/screens/public/announcements_screen.dart';
-import '../presentation/screens/public/activities_screen.dart';
 import '../presentation/screens/public/eservices_screen.dart';
 import '../presentation/screens/public/projects_screen.dart';
-import '../presentation/screens/public/about_screen.dart';
+import '../presentation/screens/public/about/about_screen.dart';
 import '../presentation/screens/public/minister_screen.dart';
 import '../presentation/screens/public/vision_mission_screen.dart';
 import '../presentation/screens/public/structure_screen.dart';
 import '../presentation/screens/public/former_ministers_screen.dart';
-import '../presentation/screens/public/contact_screen.dart';
-import '../presentation/screens/public/search_screen.dart';
+import '../presentation/screens/public/contact/contact_screen.dart';
+import '../presentation/screens/public/search/search_screen.dart';
 import '../presentation/screens/admin/dashboard/dashboard_screen.dart';
 import '../presentation/screens/admin/waqf_lands/waqf_lands_screen.dart';
 import '../presentation/screens/admin/cases/cases_screen.dart';
@@ -47,6 +48,10 @@ class AppRouter {
   static const String formerMinisters = '/former-ministers';
   static const String contact = '/contact';
   static const String search = '/search';
+  static const String notFound = '/404-not-found';
+  static const String fridaySermon = '/friday-sermon';
+  static const String organizationalStructure = '/organizational-structure';
+  static const String previousMinisters = '/previous-ministers';
 
   // Admin Routes
   static const String adminLogin = '/admin/login';
@@ -55,6 +60,14 @@ class AppRouter {
   static const String adminCases = '/admin/cases';
   static const String adminDocuments = '/admin/documents';
   static const String adminProfile = '/admin/profile';
+  static const String adminActivities = '/admin/activities';
+  static const String adminSettings = '/admin/settings';
+  static const String adminReports = '/admin/reports';
+  static const String adminUsers = '/admin/users';
+  static const String adminNews = '/admin/news';
+  static const String adminAnnouncements = '/admin/announcements';
+  static const String adminMosques = '/admin/mosques';
+
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -96,7 +109,7 @@ class AppRouter {
 
       case activities:
         return MaterialPageRoute(
-          builder: (_) => const ActivitiesScreen(),
+          builder: (_) => const ActivitiesManagementScreen(),
           settings: settings,
         );
 
@@ -314,6 +327,11 @@ class AppRouter {
       formerMinisters,
       contact,
       search,
+      notFound,
+      fridaySermon,
+      organizationalStructure,
+      previousMinisters
+
     ];
     return publicRoutes.contains(routeName);
   }
@@ -414,65 +432,6 @@ class _AuthGuardedRouteState extends ConsumerState<AuthGuardedRoute> {
       body: Center(
         child: CircularProgressIndicator(
           color: AppColors.islamicGreen,
-        ),
-      ),
-    );
-  }
-}
-
-// ============================================
-// 404 NOT FOUND SCREEN
-// ============================================
-
-class NotFoundScreen extends StatelessWidget {
-  const NotFoundScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('الصفحة غير موجودة'),
-        backgroundColor: AppColors.islamicGreen,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 100,
-              color: Colors.grey,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              '404',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'الصفحة غير موجودة',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () => AppRouter.pushReplacement(context, AppRouter.home),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.islamicGreen,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-              ),
-              child: const Text('العودة للرئيسية'),
-            ),
-          ],
         ),
       ),
     );

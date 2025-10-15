@@ -1,29 +1,48 @@
-// lib/presentation/screens/admin/dashboard_screen.dart
+// lib/presentation/screens/admin/web_admin_dashboard.dart
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/common/admin_app_bar.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../widgets/web/web_sidebar.dart';
 
 class WebAdminDashboard extends ConsumerStatefulWidget {
   const WebAdminDashboard({super.key});
 
   @override
-  ConsumerState<WebAdminDashboard> createState() => _AdminDashboardScreenState();
+  ConsumerState<WebAdminDashboard> createState() => _WebAdminDashboardState();
 }
 
-class _AdminDashboardScreenState extends ConsumerState<WebAdminDashboard> {
-  int _selectedIndex = 0;
+class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
+  String _selectedDashboard = 'main';
+  bool _autoRefresh = false;
+  int _refreshInterval = 30;
+  bool _showAdvancedMetrics = false;
+  String _selectedTimeRange = '7d';
+  String _viewMode = 'charts';
+  Timer? _refreshTimer;
+
+  final List<DashboardType> _dashboardTypes = [
+    DashboardType(id: 'main', name: 'الرئيسية', icon: Icons.home, description: 'نظرة عامة شاملة'),
+    DashboardType(id: 'financial', name: 'المالية', icon: Icons.attach_money, description: 'التقارير المالية'),
+    DashboardType(id: 'operations', name: 'العمليات', icon: Icons.settings, description: 'إدارة العمليات'),
+    DashboardType(id: 'analytics', name: 'التحليلات', icon: Icons.analytics, description: 'تحليلات متقدمة'),
+    DashboardType(id: 'security', name: 'الأمان', icon: Icons.security, description: 'مراقبة الأمان'),
+    DashboardType(id: 'performance', name: 'الأداء', icon: Icons.trending_up, description: 'مؤشرات الأداء'),
+  ];
 
   @override
   void initState() {
     super.initState();
-    // Check authentication on init
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAuth();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAuth());
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   void _checkAuth() {
@@ -33,415 +52,439 @@ class _AdminDashboardScreenState extends ConsumerState<WebAdminDashboard> {
     }
   }
 
-  final List<DashboardModule> _modules = [
-    const DashboardModule(
-      title: 'إدارة القضايا',
-      icon: Icons.gavel,
-      route: AppRouter.adminCases,
-      color: AppColors.islamicGreen,
-      count: 45,
-      description: 'القضايا المفتوحة',
-    ),
-    const DashboardModule(
-      title: 'الأراضي الوقفية',
-      icon: Icons.landscape,
-      route: AppRouter.adminWaqfLands,
-      color: AppColors.goldenYellow,
-      count: 128,
-      description: 'عقار وقفي',
-    ),
-    const DashboardModule(
-      title: 'إدارة الوثائق',
-      icon: Icons.folder,
-      route: AppRouter.adminDocuments,
-      color: AppColors.info,
-      count: 1520,
-      description: 'وثيقة',
-    ),
-    const DashboardModule(
-      title: 'المساجد',
-      icon: Icons.mosque,
-      route: '/admin/mosques',
-      color: AppColors.success,
-      count: 89,
-      description: 'مسجد مسجل',
-    ),
-    const DashboardModule(
-      title: 'الأنشطة',
-      icon: Icons.event,
-      route: '/admin/activities',
-      color: Colors.purple,
-      count: 23,
-      description: 'نشاط فعال',
-    ),
-    const DashboardModule(
-      title: 'المستخدمين',
-      icon: Icons.people,
-      route: '/admin/users',
-      color: AppColors.sageGreen,
-      count: 67,
-      description: 'مستخدم نشط',
-    ),
-  ];
+  void _startAutoRefresh() {
+    _refreshTimer?.cancel();
+    if (_autoRefresh) {
+      _refreshTimer = Timer.periodic(Duration(seconds: _refreshInterval), (_) => setState(() {}));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = ref.watch(currentUserProvider);
-
-    // Listen for auth changes
     ref.listen(isAuthenticatedProvider, (previous, next) {
-      if (!next) {
-        AppRouter.pushAndClearStack(context, AppRouter.adminLogin);
-      }
+      if (!next) AppRouter.pushAndClearStack(context, AppRouter.adminLogin);
     });
 
     return Scaffold(
-      appBar: AdminAppBar(
-        title: 'لوحة التحكم الإدارية',
-        showBackButton: false,
-        actions: [
-          // User profile button
-          PopupMenuButton<String>(
-            icon: CircleAvatar(
-              backgroundColor: AppColors.goldenYellow,
-              child: Text(
-                currentUser?.name.substring(0, 1) ?? 'A',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+      backgroundColor: AppColors.surfaceVariant,
+      body: Row(
+        children: [
+          // REUSABLE SIDEBAR - Following DRY principle
+          WebSidebar(currentRoute: AppRouter.adminDashboard),
+          // MAIN CONTENT AREA
+          Expanded(
+            child: Column(
+              children: [
+                _buildTopBar(),
+                Expanded(child: _buildMainContent()),
+              ],
             ),
-            offset: const Offset(0, 50),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                enabled: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      currentUser?.name ?? 'مستخدم',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      currentUser?.email ?? '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.islamicGreen.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        currentUser?.role ?? '',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: AppColors.islamicGreen,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: 'profile',
-                child: Row(
-                  children: [
-                    Icon(Icons.person, size: 20),
-                    SizedBox(width: 12),
-                    Text('الملف الشخصي'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'settings',
-                child: Row(
-                  children: [
-                    Icon(Icons.settings, size: 20),
-                    SizedBox(width: 12),
-                    Text('الإعدادات'),
-                  ],
-                ),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: 'logout',
-                child: Row(
-                  children: [
-                    Icon(Icons.logout, size: 20, color: AppColors.error),
-                    SizedBox(width: 12),
-                    Text('تسجيل الخروج', style: TextStyle(color: AppColors.error)),
-                  ],
-                ),
-              ),
-            ],
-            onSelected: _handleMenuAction,
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.paddingM),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcome Section with user info
-            _buildWelcomeSection(currentUser),
-
-            const SizedBox(height: 24),
-
-            // Statistics Cards
-            _buildStatisticsCards(),
-
-            const SizedBox(height: 24),
-
-            // Charts Section
-            _buildChartsSection(),
-
-            const SizedBox(height: 24),
-
-            // Quick Actions
-            _buildQuickActions(),
-
-            const SizedBox(height: 24),
-
-            // Recent Activity
-            _buildRecentActivity(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 
-  Widget _buildWelcomeSection(currentUser) {
+  Widget _buildTopBar() {
     return Container(
-      padding: const EdgeInsets.all(AppConstants.paddingL),
+      height: 70,
       decoration: BoxDecoration(
-        gradient: AppColors.islamicGradient,
-        borderRadius: BorderRadius.circular(AppConstants.radiusL),
+        color: Colors.white,
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          children: [
+            const Text('لوحة التحكم المتقدمة', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppConstants.islamicGreen)),
+            const Spacer(),
+            Row(
               children: [
-                Text(
-                  'مرحباً ${currentUser?.name ?? 'مستخدم'}',
-                  style: AppTextStyles.headlineSmall.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Text('تحديث تلقائي:', style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                const SizedBox(width: 8),
+                Switch(
+                  value: _autoRefresh,
+                  onChanged: (value) => setState(() {
+                    _autoRefresh = value;
+                    _startAutoRefresh();
+                  }),
+                  activeColor: AppConstants.islamicGreen,
+                ),
+              ],
+            ),
+            const SizedBox(width: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(border: Border.all(color: Colors.grey[300]!), borderRadius: BorderRadius.circular(8)),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _selectedTimeRange,
+                  items: const [
+                    DropdownMenuItem(value: '24h', child: Text('24 ساعة')),
+                    DropdownMenuItem(value: '7d', child: Text('7 أيام')),
+                    DropdownMenuItem(value: '30d', child: Text('30 يوم')),
+                    DropdownMenuItem(value: '1y', child: Text('سنة')),
+                  ],
+                  onChanged: (value) => setState(() => _selectedTimeRange = value!),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.download, size: 18),
+              label: const Text('تصدير'),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.sageGreen),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton.icon(
+              onPressed: () => setState(() {}),
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('تحديث'),
+              style: ElevatedButton.styleFrom(backgroundColor: AppConstants.islamicGreen),
+            ),
+            const SizedBox(width: 16),
+            IconButton(onPressed: () {}, icon: Badge(label: const Text('5'), child: const Icon(Icons.notifications_outlined))),
+            const SizedBox(width: 8),
+            IconButton(onPressed: () {}, icon: Badge(label: const Text('3'), child: const Icon(Icons.mail_outline))),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDashboardTypeSelector(),
+          const SizedBox(height: 24),
+          if (_showAdvancedMetrics) ...[_buildAdvancedSettings(), const SizedBox(height: 24)],
+          _buildDashboardContent(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDashboardTypeSelector() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('نوع لوحة التحكم', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Row(
+                  children: [
+                    TextButton.icon(
+                      onPressed: () => setState(() => _showAdvancedMetrics = !_showAdvancedMetrics),
+                      icon: const Icon(Icons.settings, size: 18),
+                      label: const Text('إعدادات متقدمة'),
+                    ),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: () => setState(() {
+                        _selectedDashboard = 'main';
+                        _autoRefresh = false;
+                        _showAdvancedMetrics = false;
+                      }),
+                      icon: const Icon(Icons.refresh, size: 18),
+                      label: const Text('إعادة تعيين'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: _dashboardTypes.map((dashboard) {
+                final isActive = _selectedDashboard == dashboard.id;
+                return InkWell(
+                  onTap: () => setState(() => _selectedDashboard = dashboard.id),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 180,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: isActive ? AppConstants.islamicGreen : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: isActive ? AppConstants.islamicGreen : Colors.grey[300]!, width: 2),
+                      boxShadow: isActive ? [BoxShadow(color: AppConstants.islamicGreen.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))] : null,
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(dashboard.icon, size: 32, color: isActive ? Colors.white : AppConstants.islamicGreen),
+                        const SizedBox(height: 12),
+                        Text(dashboard.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isActive ? Colors.white : Colors.black87)),
+                        const SizedBox(height: 4),
+                        Text(dashboard.description, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: isActive ? Colors.white.withOpacity(0.9) : Colors.grey[600])),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdvancedSettings() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('الإعدادات المتقدمة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('فترة التحديث (ثانية)', style: TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<int>(
+                        value: _refreshInterval,
+                        decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
+                        items: const [
+                          DropdownMenuItem(value: 10, child: Text('10 ثوانٍ')),
+                          DropdownMenuItem(value: 30, child: Text('30 ثانية')),
+                          DropdownMenuItem(value: 60, child: Text('دقيقة واحدة')),
+                          DropdownMenuItem(value: 300, child: Text('5 دقائق')),
+                        ],
+                        onChanged: (value) => setState(() {
+                          _refreshInterval = value!;
+                          _startAutoRefresh();
+                        }),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  currentUser?.department ?? 'نظام إدارة وزارة الأوقاف والشؤون الدينية',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: Colors.white.withOpacity(0.9),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'آخر تحديث: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: Colors.white.withOpacity(0.8),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('عرض البيانات', style: TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => setState(() => _viewMode = 'charts'),
+                              icon: const Icon(Icons.bar_chart, size: 18),
+                              label: const Text('رسوم'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _viewMode == 'charts' ? AppConstants.islamicGreen : Colors.grey[300],
+                                foregroundColor: _viewMode == 'charts' ? Colors.white : Colors.black87,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => setState(() => _viewMode = 'tables'),
+                              icon: const Icon(Icons.table_chart, size: 18),
+                              label: const Text('جداول'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _viewMode == 'tables' ? AppConstants.islamicGreen : Colors.grey[300],
+                                foregroundColor: _viewMode == 'tables' ? Colors.white : Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.dashboard,
-              size: 30,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatisticsCards() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'إحصائيات سريعة',
-          style: AppTextStyles.titleLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.5,
-          ),
-          itemCount: _modules.length,
-          itemBuilder: (context, index) {
-            final module = _modules[index];
-            return _buildStatCard(module);
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(DashboardModule module) {
-    return Card(
-      child: InkWell(
-        onTap: () => Navigator.pushNamed(context, module.route),
-        borderRadius: BorderRadius.circular(AppConstants.radiusM),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.paddingM),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: module.color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Icon(
-                  module.icon,
-                  color: module.color,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                '${module.count}',
-                style: AppTextStyles.headlineSmall.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: module.color,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                module.description,
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: Colors.grey[600],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                module.title,
-                style: AppTextStyles.labelMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildChartsSection() {
+  Widget _buildDashboardContent() {
+    switch (_selectedDashboard) {
+      case 'financial':
+        return _buildFinancialDashboard();
+      case 'security':
+        return _buildSecurityDashboard();
+      case 'analytics':
+        return _buildAnalyticsDashboard();
+      case 'performance':
+        return _buildPerformanceDashboard();
+      default:
+        return _buildMainDashboard();
+    }
+  }
+
+  Widget _buildMainDashboard() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'التقارير والإحصائيات',
-          style: AppTextStyles.titleLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
+        _buildStatisticsRow(),
+        const SizedBox(height: 24),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: _buildCasesChart()),
-            const SizedBox(width: 12),
-            Expanded(child: _buildWaqfChart()),
+            Expanded(flex: 2, child: _buildMonthlyChart()),
+            const SizedBox(width: 24),
+            Expanded(flex: 1, child: _buildPieChart()),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(flex: 2, child: _buildRecentActivity()),
+            const SizedBox(width: 24),
+            Expanded(flex: 1, child: _buildSystemStatus()),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCasesChart() {
+// FIX FOR OVERFLOW - Replace _buildStatisticsRow method
+
+  Widget _buildStatisticsRow() {
+    final stats = [
+      {'title': 'القضايا المفتوحة', 'value': '45', 'icon': Icons.gavel, 'color': AppColors.islamicGreen, 'trend': '+12%'},
+      {'title': 'الأراضي الوقفية', 'value': '1,247', 'icon': Icons.landscape, 'color': AppColors.goldenYellow, 'trend': '+5%'},
+      {'title': 'الوثائق', 'value': '15,432', 'icon': Icons.folder, 'color': AppColors.info, 'trend': '+8%'},
+      {'title': 'المستخدمون', 'value': '156', 'icon': Icons.people, 'color': AppColors.success, 'trend': '+3'},
+    ];
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 1.5, // ← INCREASE THIS
+      ),
+      itemCount: stats.length,
+      itemBuilder: (context, index) {
+        final stat = stats[index];
+        return Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.grey[200]!),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14), // ← REDUCE
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8), // ← REDUCE
+                      decoration: BoxDecoration(
+                        color: (stat['color'] as Color).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(stat['icon'] as IconData, color: stat['color'] as Color, size: 20),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(stat['trend'] as String, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.success)),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Text(stat['value'] as String, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 2),
+                Text(stat['title'] as String, style: TextStyle(fontSize: 12, color: Colors.grey[600]), maxLines: 1, overflow: TextOverflow.ellipsis),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _buildMonthlyChart() {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingM),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'حالة القضايا',
-              style: AppTextStyles.titleMedium.copyWith(
-                fontWeight: FontWeight.bold,
+            const Text('النشاط الشهري', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 250,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: 400,
+                  barGroups: List.generate(6, (i) => BarChartGroupData(x: i, barRods: [BarChartRodData(toY: (i + 1) * 50.0, color: AppConstants.islamicGreen, width: 40)])),
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, getTitlesWidget: (value, meta) => Text(['ينا', 'فبر', 'مار', 'أبر', 'ماي', 'يون'][value.toInt()]))),
+                    leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  ),
+                  gridData: FlGridData(show: true, drawVerticalLine: false),
+                  borderData: FlBorderData(show: false),
+                ),
               ),
             ),
-            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPieChart() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('توزيع القضايا', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 24),
             SizedBox(
-              height: 150,
+              height: 250,
               child: PieChart(
                 PieChartData(
                   sections: [
-                    PieChartSectionData(
-                      color: AppColors.success,
-                      value: 35,
-                      title: 'مُحلّة\n35',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    PieChartSectionData(
-                      color: AppColors.warning,
-                      value: 25,
-                      title: 'قيد المراجعة\n25',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    PieChartSectionData(
-                      color: AppColors.info,
-                      value: 15,
-                      title: 'جديدة\n15',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    PieChartSectionData(color: AppColors.success, value: 35, title: '٣٥', radius: 60),
+                    PieChartSectionData(color: AppColors.warning, value: 25, title: '٢٥', radius: 60),
+                    PieChartSectionData(color: AppColors.info, value: 15, title: '١٥', radius: 60),
                   ],
-                  sectionsSpace: 2,
+                  sectionsSpace: 3,
                   centerSpaceRadius: 40,
                 ),
               ),
@@ -452,382 +495,94 @@ class _AdminDashboardScreenState extends ConsumerState<WebAdminDashboard> {
     );
   }
 
-  Widget _buildWaqfChart() {
+  Widget _buildRecentActivity() {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingM),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'الأراضي الوقفية حسب المحافظة',
-              style: AppTextStyles.titleMedium.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Text('النشاط الأخير', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            SizedBox(
-              height: 150,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  maxY: 50,
-                  barGroups: [
-                    BarChartGroupData(x: 0, barRods: [
-                      BarChartRodData(toY: 45, color: AppColors.islamicGreen, width: 16)
-                    ]),
-                    BarChartGroupData(x: 1, barRods: [
-                      BarChartRodData(toY: 32, color: AppColors.goldenYellow, width: 16)
-                    ]),
-                    BarChartGroupData(x: 2, barRods: [
-                      BarChartRodData(toY: 28, color: AppColors.info, width: 16)
-                    ]),
-                    BarChartGroupData(x: 3, barRods: [
-                      BarChartRodData(toY: 23, color: AppColors.success, width: 16)
-                    ]),
-                  ],
-                  titlesData: FlTitlesData(
-                    leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          const titles = ['القدس', 'رام الله', 'نابلس', 'الخليل'];
-                          if (value.toInt() < titles.length) {
-                            return Text(
-                              titles[value.toInt()],
-                              style: const TextStyle(fontSize: 10),
-                            );
-                          }
-                          return const Text('');
-                        },
-                      ),
-                    ),
-                  ),
-                  borderData: FlBorderData(show: false),
-                  gridData: const FlGridData(show: false),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuickActions() {
-    final quickActions = [
-      QuickAction(
-        title: 'إضافة قضية جديدة',
-        icon: Icons.add_circle,
-        color: AppColors.islamicGreen,
-        onTap: () {},
-      ),
-      QuickAction(
-        title: 'تسجيل وثيقة',
-        icon: Icons.upload_file,
-        color: AppColors.info,
-        onTap: () {},
-      ),
-      QuickAction(
-        title: 'إنشاء تقرير',
-        icon: Icons.assessment,
-        color: AppColors.warning,
-        onTap: () {},
-      ),
-      QuickAction(
-        title: 'إدارة المستخدمين',
-        icon: Icons.people_alt,
-        color: AppColors.sageGreen,
-        onTap: () {},
-      ),
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'إجراءات سريعة',
-          style: AppTextStyles.titleLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 2.5,
-          ),
-          itemCount: quickActions.length,
-          itemBuilder: (context, index) {
-            final action = quickActions[index];
-            return Card(
-              child: InkWell(
-                onTap: action.onTap,
-                borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstants.paddingM),
+            ...List.generate(
+                5,
+                    (i) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
                     children: [
                       Container(
                         width: 40,
                         height: 40,
-                        decoration: BoxDecoration(
-                          color: action.color.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          action.icon,
-                          color: action.color,
-                          size: 24,
-                        ),
+                        decoration: BoxDecoration(color: AppConstants.islamicGreen.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                        child: const Icon(Icons.notifications, color: AppConstants.islamicGreen, size: 20),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       Expanded(
-                        child: Text(
-                          action.title,
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('نشاط رقم ${i + 1}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Text('منذ ${i + 1} ساعة', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRecentActivity() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'النشاطات الأخيرة',
-          style: AppTextStyles.titleLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Card(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            separatorBuilder: (context, index) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: AppColors.islamicGreen.withOpacity(0.1),
-                  child: const Icon(
-                    Icons.notifications,
-                    color: AppColors.islamicGreen,
-                    size: 20,
-                  ),
-                ),
-                title: Text(
-                  'تم إنشاء قضية جديدة #${1000 + index}',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                subtitle: Text(
-                  'منذ ${index + 1} ساعة',
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {},
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomNavigation() {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      onTap: (index) => setState(() => _selectedIndex = index),
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppColors.sageGreen,
-      unselectedItemColor: Colors.grey,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard),
-          label: 'الرئيسية',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.gavel),
-          label: 'القضايا',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.landscape),
-          label: 'الأوقاف',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.folder),
-          label: 'الوثائق',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'الإعدادات',
-        ),
-      ],
-    );
-  }
-
-  void _handleMenuAction(String action) {
-    switch (action) {
-      case 'profile':
-        _showProfileDialog();
-        break;
-      case 'settings':
-      // Navigate to settings
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('الإعدادات')),
-        );
-        break;
-      case 'logout':
-        _showLogoutDialog();
-        break;
-    }
-  }
-
-  void _showProfileDialog() {
-    final user = ref.read(currentUserProvider);
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('الملف الشخصي'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildProfileRow('الاسم', user?.name ?? ''),
-            _buildProfileRow('البريد الإلكتروني', user?.email ?? ''),
-            _buildProfileRow('الدور', user?.role ?? ''),
-            if (user?.department != null)
-              _buildProfileRow('القسم', user!.department!),
+                )),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إغلاق'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigate to edit profile
-            },
-            child: const Text('تعديل'),
-          ),
-        ],
       ),
     );
   }
 
-  Widget _buildProfileRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              '$label:',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(child: Text(value)),
-        ],
+  Widget _buildSystemStatus() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Colors.grey[200]!)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('حالة النظام', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            ...List.generate(
+                4,
+                    (i) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(['المعالج', 'الذاكرة', 'التخزين', 'الشبكة'][i]),
+                          Text('${(i + 1) * 20}%', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      LinearProgressIndicator(value: (i + 1) * 0.2, backgroundColor: Colors.grey[200], color: AppConstants.islamicGreen),
+                    ],
+                  ),
+                )),
+          ],
+        ),
       ),
     );
   }
 
-  void _showLogoutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('تسجيل الخروج'),
-        content: const Text('هل أنت متأكد من رغبتك في تسجيل الخروج؟'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-
-              // Show loading
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-
-              // Logout
-              await ref.read(authStateProvider.notifier).logout();
-
-              // Navigation handled by listener
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
-            child: const Text('تسجيل الخروج'),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildFinancialDashboard() => const Center(child: Text('لوحة المالية', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)));
+  Widget _buildSecurityDashboard() => const Center(child: Text('لوحة الأمان', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)));
+  Widget _buildAnalyticsDashboard() => const Center(child: Text('لوحة التحليلات', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)));
+  Widget _buildPerformanceDashboard() => const Center(child: Text('لوحة الأداء', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)));
 }
 
-class DashboardModule {
-  final String title;
+class DashboardType {
+  final String id;
+  final String name;
   final IconData icon;
-  final String route;
-  final Color color;
-  final int count;
   final String description;
-
-  const DashboardModule({
-    required this.title,
-    required this.icon,
-    required this.route,
-    required this.color,
-    required this.count,
-    required this.description,
-  });
-}
-
-class QuickAction {
-  final String title;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const QuickAction({
-    required this.title,
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
+  DashboardType({required this.id, required this.name, required this.icon, required this.description});
 }

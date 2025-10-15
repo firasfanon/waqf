@@ -19,7 +19,7 @@ class _WebMosquesScreenState extends ConsumerState<WebMosquesScreen> {
   String _searchQuery = '';
   String? _selectedGovernorate;
   MosqueType? _selectedType;
-  Set<String> _selectedFeatures = {};
+  final Set<String> _selectedFeatures = {};
   int _minCapacity = 0;
   int _maxCapacity = 2000;
 
@@ -456,7 +456,7 @@ class _WebMosquesScreenState extends ConsumerState<WebMosquesScreen> {
           _buildFilterSection(
             title: 'المحافظة',
             child: DropdownButtonFormField<String>(
-              value: _selectedGovernorate,
+              initialValue: _selectedGovernorate,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1391,15 +1391,21 @@ class _WebMosquesScreenState extends ConsumerState<WebMosquesScreen> {
       // Features filter
       bool matchesFeatures = true;
       if (_selectedFeatures.contains('wheelchair') &&
-          !mosque.hasWheelchairAccess) matchesFeatures = false;
-      if (_selectedFeatures.contains('ac') && !mosque.hasAirConditioning)
+          !mosque.hasWheelchairAccess) {
         matchesFeatures = false;
-      if (_selectedFeatures.contains('female') && !mosque.hasFemaleSection)
+      }
+      if (_selectedFeatures.contains('ac') && !mosque.hasAirConditioning) {
         matchesFeatures = false;
-      if (_selectedFeatures.contains('parking') && !mosque.hasParkingSpace)
+      }
+      if (_selectedFeatures.contains('female') && !mosque.hasFemaleSection) {
         matchesFeatures = false;
-      if (_selectedFeatures.contains('library') && !mosque.hasLibrary)
+      }
+      if (_selectedFeatures.contains('parking') && !mosque.hasParkingSpace) {
         matchesFeatures = false;
+      }
+      if (_selectedFeatures.contains('library') && !mosque.hasLibrary) {
+        matchesFeatures = false;
+      }
 
       // Capacity filter
       final matchesCapacity =

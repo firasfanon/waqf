@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/router.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../widgets/home/hero_slider.dart';
 import '../../../widgets/web/web_app_bar.dart';
 import '../../../widgets/web/web_container.dart';
 import '../../../widgets/web/web_footer.dart';
@@ -30,7 +31,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             _buildStatsSection(),
             _buildNewsAndSidebar(),
             _buildServicesSection(),
-            _buildContactSection(),
+            //_buildContactSection(),
             const WebFooter(),
           ],
         ),
@@ -39,111 +40,15 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
   }
 
   // Hero Section (Full Width)
+// Replace your old _buildHeroSection() with:
   Widget _buildHeroSection() {
-    return Container(
-      height: 500,
-      decoration: BoxDecoration(
-        gradient: AppConstants.islamicGradient,
-        image: DecorationImage(
-          image: const NetworkImage('https://example.com/hero.jpg'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.4),
-            BlendMode.darken,
-          ),
-          onError: (exception, stackTrace) {},
-        ),
-      ),
-      child: Center(
-        child: WebContainer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'وزارة الأوقاف والشؤون الدينية الفلسطينية',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .displayMedium
-                    ?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    const Shadow(
-                      offset: Offset(2, 2),
-                      blurRadius: 4,
-                      color: Colors.black45,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'خدمة المجتمع من خلال القيم الإسلامية الأصيلة',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(
-                  color: Colors.white.withOpacity(0.95),
-                  shadows: [
-                    const Shadow(
-                      offset: Offset(1, 1),
-                      blurRadius: 3,
-                      color: Colors.black45,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppRouter.services),
-                    icon: const Icon(Icons.miscellaneous_services),
-                    label: const Text('الخدمات الإلكترونية'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: AppConstants.islamicGreen,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 20),
-                      textStyle: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  OutlinedButton.icon(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppRouter.about),
-                    icon: const Icon(Icons.info_outline),
-                    label: const Text('عن الوزارة'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white, width: 2),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 20),
-                      textStyle: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return const HeroSlider();
   }
-
   // Stats Section (4 Columns)
   Widget _buildStatsSection() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 60),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: WebContainer(
         child: Column(
           children: [
@@ -158,7 +63,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 color: AppConstants.islamicGreen,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(child: _buildStatCard(icon: Icons.mosque,
@@ -191,7 +96,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
   Widget _buildStatCard(
       {required IconData icon, required String value, required String label, required Color color}) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
@@ -752,7 +657,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
       ),
     );
   }
-
+/*
   // Contact Section
   Widget _buildContactSection() {
     return Container(
@@ -867,7 +772,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
       ),
     );
   }
-
+*/
   Widget _buildContactInfo(
       {required IconData icon, required String title, required String content}) {
     return Row(

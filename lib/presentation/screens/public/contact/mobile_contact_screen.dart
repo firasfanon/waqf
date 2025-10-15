@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../widgets/common/custom_app_bar.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../widgets/common/custom_app_bar.dart';
 
-class ContactScreen extends StatefulWidget {
-  const ContactScreen({super.key});
+class MobileContactScreen extends StatefulWidget {
+  const MobileContactScreen({super.key});
 
   @override
-  State<ContactScreen> createState() => _ContactScreenState();
+  State<MobileContactScreen> createState() => _MobileContactScreenState();
 }
 
-class _ContactScreenState extends State<ContactScreen> {
+class _MobileContactScreenState extends State<MobileContactScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();

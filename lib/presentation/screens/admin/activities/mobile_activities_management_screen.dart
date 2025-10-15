@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../core/utils/date_utils.dart';
-import '../../../data/models/activity.dart';
-import '../../widgets/common/custom_app_bar.dart';
-import '../../widgets/common/search_bar_widget.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/date_utils.dart';
+import '../../../../data/models/activity.dart';
+import '../../../widgets/common/custom_app_bar.dart';
+import '../../../widgets/common/search_bar_widget.dart';
 
-class ActivitiesScreen extends StatefulWidget {
-  const ActivitiesScreen({super.key});
+class MobileActivitiesManagementScreen extends StatefulWidget {
+  const MobileActivitiesManagementScreen({super.key});
 
   @override
-  State<ActivitiesScreen> createState() => _ActivitiesScreenState();
+  State<MobileActivitiesManagementScreen> createState() => _MobileActivitiesManagementScreenState();
 }
 
-class _ActivitiesScreenState extends State<ActivitiesScreen>
+class _MobileActivitiesManagementScreenState extends State<MobileActivitiesManagementScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String _searchQuery = '';

@@ -1,15 +1,18 @@
+// lib/presentation/screens/public/search/mobile_search_screen.dart
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../widgets/common/custom_app_bar.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../widgets/common/custom_app_bar.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+/// Mobile-optimized Search Screen
+/// Features: Vertical scrolling, mobile-friendly search interface
+class MobileSearchScreen extends StatefulWidget {
+  const MobileSearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<MobileSearchScreen> createState() => _MobileSearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _MobileSearchScreenState extends State<MobileSearchScreen> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
   String _selectedCategory = 'all';
@@ -37,78 +40,76 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: const CustomAppBar(title: 'البحث'),
       body: Column(
         children: [
-          // Search Bar
-          Container(
-            padding: const EdgeInsets.all(AppConstants.paddingM),
-            color: Colors.grey[50],
-            child: Column(
-              children: [
-                TextField(
-                  controller: _searchController,
-                  textDirection: TextDirection.rtl,
-                  decoration: InputDecoration(
-                    hintText: 'ابحث في جميع الأقسام...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {
-                          _searchQuery = '';
-                          _searchResults.clear();
-                        });
-                      },
-                    )
-                        : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  onChanged: (value) {
-                    setState(() => _searchQuery = value);
-                    _performSearch(value);
-                  },
-                  onSubmitted: _performSearch,
-                ),
-
-                const SizedBox(height: 12),
-
-                // Category Filter
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _categories.map((category) {
-                      final isSelected = _selectedCategory == category;
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: FilterChip(
-                          label: Text(_getCategoryName(category)),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            setState(() {
-                              _selectedCategory = category;
-                              if (_searchQuery.isNotEmpty) {
-                                _performSearch(_searchQuery);
-                              }
-                            });
-                          },
-                          selectedColor: AppColors.islamicGreen.withOpacity(0.2),
-                          checkmarkColor: AppColors.islamicGreen,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Search Results
+          _buildSearchBar(),
           Expanded(
             child: _buildSearchResults(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.paddingM),
+      color: Colors.grey[50],
+      child: Column(
+        children: [
+          TextField(
+            controller: _searchController,
+            textDirection: TextDirection.rtl,
+            decoration: InputDecoration(
+              hintText: 'ابحث في جميع الأقسام...',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  _searchController.clear();
+                  setState(() {
+                    _searchQuery = '';
+                    _searchResults.clear();
+                  });
+                },
+              )
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppConstants.radiusM),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            onChanged: (value) {
+              setState(() => _searchQuery = value);
+              _performSearch(value);
+            },
+            onSubmitted: _performSearch,
+          ),
+          const SizedBox(height: 12),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _categories.map((category) {
+                final isSelected = _selectedCategory == category;
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: FilterChip(
+                    label: Text(_getCategoryName(category)),
+                    selected: isSelected,
+                    onSelected: (selected) {
+                      setState(() {
+                        _selectedCategory = category;
+                        if (_searchQuery.isNotEmpty) {
+                          _performSearch(_searchQuery);
+                        }
+                      });
+                    },
+                    selectedColor: AppColors.islamicGreen.withOpacity(0.2),
+                    checkmarkColor: AppColors.islamicGreen,
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),
@@ -148,7 +149,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         const SizedBox(height: 16),
-
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -169,9 +169,7 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           }).toList(),
         ),
-
         const SizedBox(height: 32),
-
         Text(
           'عمليات البحث الأخيرة',
           style: AppTextStyles.titleMedium.copyWith(
@@ -179,7 +177,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         const SizedBox(height: 16),
-
         ..._getRecentSearches().map((search) {
           return ListTile(
             leading: const Icon(Icons.history),
@@ -322,7 +319,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   List<SearchResult> _getMockResults(String query) {
-    // Mock search results
     return [
       SearchResult(
         title: 'دليل المساجد في فلسطين',
@@ -348,35 +344,54 @@ class _SearchScreenState extends State<SearchScreen> {
 
   String _getCategoryName(String category) {
     switch (category) {
-      case 'all': return 'الكل';
-      case 'news': return 'الأخبار';
-      case 'mosques': return 'المساجد';
-      case 'services': return 'الخدمات';
-      case 'activities': return 'الأنشطة';
-      case 'documents': return 'الوثائق';
-      default: return category;
+      case 'all':
+        return 'الكل';
+      case 'news':
+        return 'الأخبار';
+      case 'mosques':
+        return 'المساجد';
+      case 'services':
+        return 'الخدمات';
+      case 'activities':
+        return 'الأنشطة';
+      case 'documents':
+        return 'الوثائق';
+      default:
+        return category;
     }
   }
 
   Color _getCategoryColor(String category) {
     switch (category) {
-      case 'news': return AppColors.info;
-      case 'mosques': return AppColors.islamicGreen;
-      case 'services': return AppColors.goldenYellow;
-      case 'activities': return Colors.purple;
-      case 'documents': return AppColors.sageGreen;
-      default: return Colors.grey;
+      case 'news':
+        return AppColors.info;
+      case 'mosques':
+        return AppColors.islamicGreen;
+      case 'services':
+        return AppColors.goldenYellow;
+      case 'activities':
+        return Colors.purple;
+      case 'documents':
+        return AppColors.sageGreen;
+      default:
+        return Colors.grey;
     }
   }
 
   IconData _getCategoryIcon(String category) {
     switch (category) {
-      case 'news': return Icons.article;
-      case 'mosques': return Icons.mosque;
-      case 'services': return Icons.miscellaneous_services;
-      case 'activities': return Icons.event;
-      case 'documents': return Icons.folder;
-      default: return Icons.search;
+      case 'news':
+        return Icons.article;
+      case 'mosques':
+        return Icons.mosque;
+      case 'services':
+        return Icons.miscellaneous_services;
+      case 'activities':
+        return Icons.event;
+      case 'documents':
+        return Icons.folder;
+      default:
+        return Icons.search;
     }
   }
 }
