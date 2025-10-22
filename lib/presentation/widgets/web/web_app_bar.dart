@@ -56,22 +56,16 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
       onTap: () => Navigator.pushNamed(context, AppRouter.home),
       child: Row(
         children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              gradient: AppConstants.islamicGradient,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.mosque, color: Colors.white, size: 28),
-          ),
+
+            Image.asset( AppConstants.appLogo, height: 60, width: 60),
+
           const SizedBox(width: 12),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'وزارة الأوقاف',
+                'وزارة الأوقاف و الشؤون الدينية',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppConstants.islamicGreen,

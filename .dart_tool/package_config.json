@@ -146,6 +146,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "carousel_slider",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/carousel_slider-4.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "characters",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.4.0",
       "packageUri": "lib/",
@@ -1128,6 +1134,12 @@
       "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "smooth_page_indicator",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/smooth_page_indicator-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "source_gen",

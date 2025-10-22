@@ -4,7 +4,7 @@ import '../models/news_article.dart';
 class NewsService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  // Get all published news articles
+// news_service.dart - Clean version
   Future<List<NewsArticle>> getAllNews({
     int? limit,
     int? offset,
@@ -30,11 +30,9 @@ class NewsService {
           .map((json) => NewsArticle.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      // Return sample data if Supabase is not configured
       return _getSampleNews();
     }
   }
-
   // Get featured news articles
   Future<List<NewsArticle>> getFeaturedNews({int limit = 5}) async {
     try {

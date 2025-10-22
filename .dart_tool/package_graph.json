@@ -8,6 +8,7 @@
       "version": "1.0.0+1",
       "dependencies": [
         "cached_network_image",
+        "carousel_slider",
         "connectivity_plus",
         "dio",
         "file_picker",
@@ -40,6 +41,7 @@
         "reactive_forms",
         "share_plus",
         "shared_preferences",
+        "smooth_page_indicator",
         "supabase_flutter",
         "syncfusion_flutter_charts",
         "timezone",
@@ -607,6 +609,13 @@
         "meta",
         "riverpod",
         "state_notifier"
+      ]
+    },
+    {
+      "name": "carousel_slider",
+      "version": "4.2.1",
+      "dependencies": [
+        "flutter"
       ]
     },
     {
@@ -2435,6 +2444,13 @@
       "dependencies": [
         "args",
         "yaml"
+      ]
+    },
+    {
+      "name": "smooth_page_indicator",
+      "version": "1.2.1",
+      "dependencies": [
+        "flutter"
       ]
     }
   ],

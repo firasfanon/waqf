@@ -151,6 +151,7 @@ class _WebNewsScreenState extends ConsumerState<WebNewsScreen> {
     );
   }
 
+
   Widget _buildNewsCard(NewsArticle article) {
     return Card(
       elevation: 2,

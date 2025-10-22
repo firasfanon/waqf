@@ -81,14 +81,9 @@ class _WebLoginScreenState extends ConsumerState<WebLoginScreen> {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Icon(
-                          Icons.mosque,
-                          size: 70,
-                          color: AppConstants.islamicGreen,
-                        ),
+                        child: Image.asset(AppConstants.appLogo, height: 40, width: 40)
                       ),
                       const SizedBox(height: 40),
                       Text(

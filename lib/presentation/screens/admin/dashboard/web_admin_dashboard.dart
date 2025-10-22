@@ -108,7 +108,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                     _autoRefresh = value;
                     _startAutoRefresh();
                   }),
-                  activeColor: AppConstants.islamicGreen,
+                  activeThumbColor: AppConstants.islamicGreen,
                 ),
               ],
             ),
@@ -259,7 +259,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                       const Text('فترة التحديث (ثانية)', style: TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        value: _refreshInterval,
+                        initialValue: _refreshInterval,
                         decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
                         items: const [
                           DropdownMenuItem(value: 10, child: Text('10 ثوانٍ')),
@@ -378,7 +378,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
         crossAxisCount: 4,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 1.5, // ← INCREASE THIS
+        childAspectRatio: 2, // ← INCREASE THIS
       ),
       itemCount: stats.length,
       itemBuilder: (context, index) {

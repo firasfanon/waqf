@@ -89,6 +89,7 @@ const _$MosqueTypeEnumMap = {
 
 const _$MosqueStatusEnumMap = {
   MosqueStatus.active: 'active',
+  MosqueStatus.inactive: 'inactive',
   MosqueStatus.underConstruction: 'under_construction',
   MosqueStatus.underRenovation: 'under_renovation',
   MosqueStatus.closed: 'closed',

@@ -52,13 +52,13 @@ class WebSidebar extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.mosque,
-                    size: 40,
-                    color: AppConstants.islamicGreen,
-                  ),
+                  child:
+
+                  Image.asset( AppConstants.appLogo, height: 60, width: 60),
+
                 ),
                 const SizedBox(height: 16),
+
                 const Text(
                   'لوحة التحكم',
                   style: TextStyle(
@@ -90,7 +90,7 @@ class WebSidebar extends ConsumerWidget {
                     context,
                     icon: Icons.dashboard,
                     label: 'لوحة التحكم',
-                    route: AppRouter.adminDashboard,
+                    route: AppRouter.adminHomeManagement,
                   ),
                   _buildNavItem(
                     context,
@@ -138,8 +138,17 @@ class WebSidebar extends ConsumerWidget {
                     label: 'الفعاليات',
                     route: AppRouter.adminActivities,
                   ),
+
                   const SizedBox(height: 16),
+
                   _buildSidebarSection('الإدارة'),
+                  _buildNavItem(
+                    context,
+                    icon: Icons.home_filled,
+                    label:'الصفحة الرئيسية',
+                    route: AppRouter.adminHomeManagement,
+                  ),
+
                   _buildNavItem(
                     context,
                     icon: Icons.people,
@@ -158,6 +167,8 @@ class WebSidebar extends ConsumerWidget {
                     label: 'التقارير',
                     route: AppRouter.adminReports,
                   ),
+
+
                 ],
               ),
             ),

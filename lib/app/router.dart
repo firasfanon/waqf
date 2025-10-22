@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/hero_slider_management/hero_slider_management_screen.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/homepage_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/login/login_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile/profile_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/public/mosques/mosques_screen.dart';
@@ -67,6 +69,8 @@ class AppRouter {
   static const String adminNews = '/admin/news';
   static const String adminAnnouncements = '/admin/announcements';
   static const String adminMosques = '/admin/mosques';
+  static const String adminHomeManagement = '/admin/home-management';
+  static const String adminHeroSlider = '/admin/hero-slider';
 
 
 
@@ -234,6 +238,21 @@ class AppRouter {
           settings: settings,
         );
 
+      case adminHomeManagement:
+        return MaterialPageRoute(
+          builder: (_) => const AuthGuardedRoute(
+            child: HomeManagementScreen(),
+          ),
+          settings: settings,
+        );
+
+      case adminHeroSlider:
+        return MaterialPageRoute(
+          builder: (_) => const AuthGuardedRoute(
+            child: HeroSliderManagementScreen(),
+          ),
+          settings: settings,
+        );
 
     // 404 - Route Not Found
       default:

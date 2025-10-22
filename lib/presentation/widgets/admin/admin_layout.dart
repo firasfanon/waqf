@@ -1,9 +1,5 @@
 // lib/presentation/widgets/admin/admin_layout.dart
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../app/router.dart';
-import '../../providers/auth_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../web/web_sidebar.dart';
 

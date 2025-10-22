@@ -38,15 +38,29 @@ class NewsArticle {
   final String title;
   final String excerpt;
   final String content;
+
+  @JsonKey(name: 'image_url')  // ← ADD THIS
   final String? imageUrl;
+
   final String author;
   final NewsCategory category;
   final PublishStatus status;
+
+  @JsonKey(name: 'view_count')  // ← ADD THIS
   final int viewCount;
+
+  @JsonKey(name: 'is_featured')  // ← ADD THIS
   final bool isFeatured;
+
   final List<String> tags;
+
+  @JsonKey(name: 'published_at')  // ← ADD THIS
   final DateTime? publishedAt;
+
+  @JsonKey(name: 'created_at')  // ← ADD THIS
   final DateTime createdAt;
+
+  @JsonKey(name: 'updated_at')  // ← ADD THIS
   final DateTime updatedAt;
 
   const NewsArticle({

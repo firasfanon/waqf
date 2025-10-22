@@ -5,6 +5,7 @@ class AppConstants {
   static const String appName = 'وزارة الأوقاف والشؤون الدينية';
   static const String appNameEn = 'Palestinian Ministry of Endowments';
   static const String appVersion = '1.0.0';
+  static const String appLogo = 'assets/icons/appLogo.png';
 
   // Spacing Constants
   static const double paddingXS = 4.0;

@@ -1,17 +1,19 @@
 // lib/presentation/screens/public/web_home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:palestinian_ministry_endowments/app/router.dart';
+import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/data/models/homepage_section.dart';
+import 'package:palestinian_ministry_endowments/presentation/providers/homepage_settings_provider.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/home/hero_slider.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_app_bar.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_container.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_footer.dart';
 
-import '../../../../app/router.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../widgets/home/hero_slider.dart';
-import '../../../widgets/web/web_app_bar.dart';
-import '../../../widgets/web/web_container.dart';
-import '../../../widgets/web/web_footer.dart';
 
 
-/// Web-optimized Home Screen
-/// Features: Horizontal navbar, multi-column layout, footer
+/// Web-optimized Home Screen - DATABASE DRIVEN
+/// Fetches all content from Supabase
 class WebHomeScreen extends ConsumerStatefulWidget {
   const WebHomeScreen({super.key});
 
@@ -22,16 +24,33 @@ class WebHomeScreen extends ConsumerStatefulWidget {
 class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
   @override
   Widget build(BuildContext context) {
+    // Watch all section providers
+    final ministerState = ref.watch(ministerSectionNotifierProvider);
+    final statsState = ref.watch(statisticsSectionNotifierProvider);
+    final newsState = ref.watch(newsSectionNotifierProvider);
+    final annState = ref.watch(announcementsSectionNotifierProvider);
+
     return Scaffold(
       appBar: const WebAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Hero Section - Fetches from hero_slides table
             _buildHeroSection(),
-            _buildStatsSection(),
-            _buildNewsAndSidebar(),
+
+            // Stats Section - Fetches from homepage_sections table
+            _buildStatsSection(statsState.settings),
+
+            // News + Sidebar Layout
+            _buildNewsAndSidebar(
+              ministerSettings: ministerState.settings,
+              newsSettings: newsState.settings,
+              announcementsSettings: annState.settings,
+            ),
+
+            // Services Section (static for now - can be made dynamic later)
             _buildServicesSection(),
-            //_buildContactSection(),
+
             const WebFooter(),
           ],
         ),
@@ -39,13 +58,50 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  // Hero Section (Full Width)
-// Replace your old _buildHeroSection() with:
+  // =====================================================
+  // HERO SECTION
+  // =====================================================
   Widget _buildHeroSection() {
-    return const HeroSlider();
+    return const HeroSlider(); // This widget should fetch from DB internally
   }
-  // Stats Section (4 Columns)
-  Widget _buildStatsSection() {
+
+  // =====================================================
+  // STATS SECTION (Database-Driven)
+  // =====================================================
+  Widget _buildStatsSection(StatisticsSectionSettings? settings) {
+    // Default counters if no settings
+    final counters = settings?.counters ??
+        [
+          const StatisticCounter(
+            label: 'مسجد',
+            value: 1250,
+            icon: 'mosque',
+            color: '#2D5016',
+            target: 1500,
+          ),
+          const StatisticCounter(
+            label: 'أرض وقفية',
+            value: 850,
+            icon: 'landscape',
+            color: '#C4A962',
+            target: 1000,
+          ),
+          const StatisticCounter(
+            label: 'إمام وخطيب',
+            value: 3200,
+            icon: 'people',
+            color: '#3B82F6',
+            target: 4000,
+          ),
+          const StatisticCounter(
+            label: 'نشاط سنوي',
+            value: 450,
+            icon: 'event',
+            color: '#22C55E',
+            target: 500,
+          ),
+        ];
+
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -54,49 +110,75 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
           children: [
             Text(
               'إحصائيات الوزارة',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .displaySmall
-                  ?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppConstants.islamicGreen,
               ),
             ),
+
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(child: _buildStatCard(icon: Icons.mosque,
-                    value: '1,250',
-                    label: 'مسجد',
-                    color: AppConstants.islamicGreen)),
-                const SizedBox(width: 20),
-                Expanded(child: _buildStatCard(icon: Icons.landscape,
-                    value: '850',
-                    label: 'أرض وقفية',
-                    color: AppConstants.goldenYellow)),
-                const SizedBox(width: 20),
-                Expanded(child: _buildStatCard(icon: Icons.people,
-                    value: '3,200',
-                    label: 'إمام وخطيب',
-                    color: AppConstants.info)),
-                const SizedBox(width: 20),
-                Expanded(child: _buildStatCard(icon: Icons.event,
-                    value: '450',
-                    label: 'نشاط سنوي',
-                    color: AppConstants.success)),
-              ],
-            ),
+
+            // Dynamic counters from database
+            settings?.layout == 'row'
+                ? _buildStatsRow(counters, settings)
+                : _buildStatsGrid(counters, settings),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(
-      {required IconData icon, required String value, required String label, required Color color}) {
+  Widget _buildStatsGrid(
+      List<StatisticCounter> counters, StatisticsSectionSettings? settings) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: counters.length > 3 ? 4 : counters.length,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+        childAspectRatio: 1,
+      ),
+      itemCount: counters.length,
+      itemBuilder: (context, index) {
+        final counter = counters[index];
+        return _buildStatCard(
+          counter: counter,
+          showProgress: settings?.showProgress ?? false,
+          showTargets: settings?.showTargets ?? false,
+        );
+      },
+    );
+  }
+
+  Widget _buildStatsRow(
+      List<StatisticCounter> counters, StatisticsSectionSettings? settings) {
+    return Row(
+      children: counters.map((counter) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: _buildStatCard(
+              counter: counter,
+              showProgress: settings?.showProgress ?? false,
+              showTargets: settings?.showTargets ?? false,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStatCard({
+    required StatisticCounter counter,
+    bool showProgress = false,
+    bool showTargets = false,
+  }) {
+    final color = _parseColor(counter.color);
+    final icon = _parseIcon(counter.icon);
+
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
@@ -110,7 +192,9 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Icon
           Container(
             width: 80,
             height: 80,
@@ -121,35 +205,61 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             child: Icon(icon, color: color, size: 40),
           ),
           const SizedBox(height: 20),
+
+          // Value
           Text(
-            value,
-            style: Theme
-                .of(context)
-                .textTheme
-                .displaySmall
-                ?.copyWith(
+            counter.value.toString(),
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
           const SizedBox(height: 8),
+
+          // Label
           Text(
-            label,
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(
+            counter.label,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: AppConstants.textSecondary,
             ),
+            textAlign: TextAlign.center,
           ),
+
+          // Progress bar (if enabled)
+          if (showProgress && counter.target > 0) ...[
+            const SizedBox(height: 12),
+            LinearProgressIndicator(
+              value: counter.value / counter.target,
+              backgroundColor: Colors.grey[200],
+              color: color,
+              minHeight: 6,
+            ),
+          ],
+
+          // Target (if enabled)
+          if (showTargets && counter.target > 0) ...[
+            const SizedBox(height: 8),
+            Text(
+              'الهدف: ${counter.target}',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  // News + Sidebar Layout (60% / 40%)
-  Widget _buildNewsAndSidebar() {
+  // =====================================================
+  // NEWS + SIDEBAR (Database-Driven)
+  // =====================================================
+  Widget _buildNewsAndSidebar({
+    MinisterSectionSettings? ministerSettings,
+    NewsSectionSettings? newsSettings,
+    AnnouncementsSectionSettings? announcementsSettings,
+  }) {
     return Container(
       color: AppColors.surfaceVariant,
       padding: const EdgeInsets.symmetric(vertical: 60),
@@ -160,34 +270,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             // News Section (60%)
             Expanded(
               flex: 6,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'آخر الأخبار',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .displaySmall
-                            ?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppConstants.islamicGreen,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AppRouter.news),
-                        child: const Text('عرض جميع الأخبار →'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  ..._getSampleNews().map((article) => _buildNewsCard(article)),
-                ],
-              ),
+              child: _buildNewsSection(newsSettings),
             ),
 
             const SizedBox(width: 40),
@@ -197,9 +280,9 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
               flex: 4,
               child: Column(
                 children: [
-                  _buildMinisterCard(),
+                  _buildMinisterCard(ministerSettings),
                   const SizedBox(height: 20),
-                  _buildAnnouncementsCard(),
+                  _buildAnnouncementsCard(announcementsSettings),
                   const SizedBox(height: 20),
                   _buildQuickLinksCard(),
                 ],
@@ -211,7 +294,52 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildNewsCard(Map<String, dynamic> article) {
+  Widget _buildNewsSection(NewsSectionSettings? settings) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'آخر الأخبار',
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppConstants.islamicGreen,
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pushNamed(context, AppRouter.news),
+              child: const Text('عرض جميع الأخبار →'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+
+        // TODO: Fetch actual news from database
+        // For now, show sample news (you'll replace this with actual DB fetch)
+        ..._getSampleNews(settings?.showCount ?? 3).map(
+              (article) => _buildNewsCard(
+            article: article,
+            showCategories: settings?.showCategories ?? true,
+            showViewCounts: settings?.showViewCounts ?? true,
+            showDates: settings?.showDates ?? true,
+            showExcerpts: settings?.showExcerpts ?? true,
+            showImages: settings?.showImages ?? true,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNewsCard({
+    required Map<String, dynamic> article,
+    bool showCategories = true,
+    bool showViewCounts = true,
+    bool showDates = true,
+    bool showExcerpts = true,
+    bool showImages = true,
+  }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 20),
       elevation: 2,
@@ -226,82 +354,95 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppConstants.radiusS),
-                child: Container(
-                  width: 150,
-                  height: 100,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.image, size: 40),
+              // Image (conditional)
+              if (showImages) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppConstants.radiusS),
+                  child: Container(
+                    width: 150,
+                    height: 100,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image, size: 40),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 20),
+                const SizedBox(width: 20),
+              ],
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppConstants.islamicGreen.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        article['category'] as String,
-                        style: const TextStyle(
-                          color: AppConstants.islamicGreen,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                    // Category badge (conditional)
+                    if (showCategories) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppConstants.islamicGreen.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          article['category'] as String,
+                          style: const TextStyle(
+                            color: AppConstants.islamicGreen,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 12),
+                    ],
+
+                    // Title
                     Text(
                       article['title'] as String,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      article['excerpt'] as String,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(
-                        color: AppConstants.textSecondary,
+
+                    // Excerpt (conditional)
+                    if (showExcerpts) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        article['excerpt'] as String,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppConstants.textSecondary,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    ],
+
                     const SizedBox(height: 12),
+
+                    // Meta info
                     Row(
                       children: [
-                        const Icon(
-                            Icons.access_time, size: 16, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          article['date'] as String,
-                          style: const TextStyle(fontSize: 14, color: Colors
-                              .grey),
-                        ),
-                        const SizedBox(width: 20),
-                        const Icon(
-                            Icons.visibility, size: 16, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${article['views']}',
-                          style: const TextStyle(fontSize: 14, color: Colors
-                              .grey),
-                        ),
+                        if (showDates) ...[
+                          const Icon(Icons.access_time,
+                              size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            article['date'] as String,
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
+                        if (showViewCounts && showDates)
+                          const SizedBox(width: 20),
+                        if (showViewCounts) ...[
+                          const Icon(Icons.visibility,
+                              size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${article['views']}',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
                       ],
                     ),
                   ],
@@ -314,7 +455,19 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildMinisterCard() {
+  // =====================================================
+  // MINISTER CARD (Database-Driven)
+  // =====================================================
+  Widget _buildMinisterCard(MinisterSectionSettings? settings) {
+    // Default values if no settings
+    final name = settings?.name ?? 'د. محمود الهباش';
+    final position = settings?.position ?? 'وزير الأوقاف والشؤون الدينية';
+    final message = settings?.message ??
+        'نرحب بكم في موقع وزارة الأوقاف والشؤون الدينية الفلسطينية، حيث نعمل على خدمة ديننا الحنيف ومجتمعنا الفلسطيني.';
+    final quote = settings?.quote ?? '';
+    final showQuote = settings?.showQuote ?? false;
+    final messageLink = settings?.messageLink ?? AppRouter.minister;
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -323,6 +476,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
@@ -338,11 +492,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 const SizedBox(width: 12),
                 Text(
                   'كلمة معالي الوزير',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -350,54 +500,85 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
               ],
             ),
           ),
+
+          // Content
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                // Avatar
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: AppConstants.islamicGreen.withOpacity(0.1),
-                  child: const Icon(
-                      Icons.person, size: 50, color: AppConstants.islamicGreen),
+                  backgroundImage: settings?.imageUrl.isNotEmpty == true
+                      ? NetworkImage(settings!.imageUrl)
+                      : null,
+                  child: settings?.imageUrl.isEmpty ?? true
+                      ? const Icon(Icons.person,
+                      size: 50, color: AppConstants.islamicGreen)
+                      : null,
                 ),
                 const SizedBox(height: 16),
+
+                // Name
                 Text(
-                  'د. محمود الهباش',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(
+                  name,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppConstants.islamicGreen,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
+
+                // Position
                 Text(
-                  'وزير الأوقاف والشؤون الدينية',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
+                  position,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppConstants.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
+
+                // Message
                 Text(
-                  'نرحب بكم في موقع وزارة الأوقاف والشؤون الدينية الفلسطينية، حيث نعمل على خدمة ديننا الحنيف ومجتمعنا الفلسطيني.',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium,
+                  message,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
                 ),
+
+                // Quote (conditional)
+                if (showQuote && quote.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppConstants.islamicGreen.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border(
+                        right: BorderSide(
+                          color: AppConstants.islamicGreen,
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      quote,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontStyle: FontStyle.italic,
+                        color: AppConstants.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, AppRouter.minister),
+                  onPressed: () => Navigator.pushNamed(context, messageLink),
                   child: const Text('اقرأ المزيد'),
                 ),
               ],
@@ -408,7 +589,16 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildAnnouncementsCard() {
+  // =====================================================
+  // ANNOUNCEMENTS CARD (Database-Driven)
+  // =====================================================
+  Widget _buildAnnouncementsCard(AnnouncementsSectionSettings? settings) {
+    final showCount = settings?.showCount ?? 2;
+    final showPriorities = settings?.showPriorities ?? true;
+
+    // TODO: Fetch actual announcements from database
+    final announcements = _getSampleAnnouncements(showCount);
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -425,11 +615,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 const SizedBox(width: 12),
                 Text(
                   'إعلانات هامة',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -437,16 +623,17 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             ),
           ),
           const Divider(height: 1),
-          _buildAnnouncementItem(
-            title: 'تغيير موعد صلاة الجمعة',
-            priority: 'عاجل',
-            color: AppConstants.error,
+
+          // Announcements list
+          ...announcements.map(
+                (ann) => _buildAnnouncementItem(
+              title: ann['title'],
+              priority: ann['priority'],
+              color: ann['color'],
+              showPriority: showPriorities,
+            ),
           ),
-          _buildAnnouncementItem(
-            title: 'دورة تدريبية لأئمة المساجد',
-            priority: 'هام',
-            color: AppConstants.warning,
-          ),
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Center(
@@ -462,10 +649,15 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildAnnouncementItem(
-      {required String title, required String priority, required Color color}) {
+  Widget _buildAnnouncementItem({
+    required String title,
+    required String priority,
+    required Color color,
+    bool showPriority = true,
+  }) {
     return ListTile(
-      leading: Container(
+      leading: showPriority
+          ? Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: color,
@@ -479,7 +671,8 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+      )
+          : null,
       title: Text(
         title,
         style: const TextStyle(fontWeight: FontWeight.w600),
@@ -489,6 +682,9 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
+  // =====================================================
+  // QUICK LINKS CARD (Static)
+  // =====================================================
   Widget _buildQuickLinksCard() {
     return Card(
       elevation: 2,
@@ -506,11 +702,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 const SizedBox(width: 12),
                 Text(
                   'روابط سريعة',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -518,16 +710,20 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             ),
           ),
           const Divider(height: 1),
-          _buildQuickLinkItem(icon: Icons.mosque,
+          _buildQuickLinkItem(
+              icon: Icons.mosque,
               title: 'دليل المساجد',
               route: AppRouter.mosques),
-          _buildQuickLinkItem(icon: Icons.computer,
+          _buildQuickLinkItem(
+              icon: Icons.computer,
               title: 'الخدمات الإلكترونية',
               route: AppRouter.eservices),
-          _buildQuickLinkItem(icon: Icons.construction,
+          _buildQuickLinkItem(
+              icon: Icons.construction,
               title: 'المشاريع',
               route: AppRouter.projects),
-          _buildQuickLinkItem(icon: Icons.contact_phone,
+          _buildQuickLinkItem(
+              icon: Icons.contact_phone,
               title: 'اتصل بنا',
               route: AppRouter.contact),
         ],
@@ -535,8 +731,11 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildQuickLinkItem(
-      {required IconData icon, required String title, required String route}) {
+  Widget _buildQuickLinkItem({
+    required IconData icon,
+    required String title,
+    required String route,
+  }) {
     return ListTile(
       leading: Container(
         width: 40,
@@ -553,7 +752,9 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  // Services Section (Grid)
+  // =====================================================
+  // SERVICES SECTION (Static)
+  // =====================================================
   Widget _buildServicesSection() {
     return Container(
       color: Colors.white,
@@ -563,11 +764,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
           children: [
             Text(
               'خدماتنا',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .displaySmall
-                  ?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppConstants.islamicGreen,
               ),
@@ -581,28 +778,36 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
               mainAxisSpacing: 20,
               childAspectRatio: 1.2,
               children: [
-                _buildServiceCard(icon: Icons.mosque,
+                _buildServiceCard(
+                    icon: Icons.mosque,
                     title: 'دليل المساجد',
                     route: AppRouter.mosques),
-                _buildServiceCard(icon: Icons.computer,
+                _buildServiceCard(
+                    icon: Icons.computer,
                     title: 'الخدمات الإلكترونية',
                     route: AppRouter.eservices),
-                _buildServiceCard(icon: Icons.event,
+                _buildServiceCard(
+                    icon: Icons.event,
                     title: 'الأنشطة والفعاليات',
                     route: AppRouter.activities),
-                _buildServiceCard(icon: Icons.construction,
+                _buildServiceCard(
+                    icon: Icons.construction,
                     title: 'المشاريع',
                     route: AppRouter.projects),
-                _buildServiceCard(icon: Icons.article,
+                _buildServiceCard(
+                    icon: Icons.article,
                     title: 'الأخبار',
                     route: AppRouter.news),
-                _buildServiceCard(icon: Icons.campaign,
+                _buildServiceCard(
+                    icon: Icons.campaign,
                     title: 'الإعلانات',
                     route: AppRouter.announcements),
-                _buildServiceCard(icon: Icons.info,
+                _buildServiceCard(
+                    icon: Icons.info,
                     title: 'عن الوزارة',
                     route: AppRouter.about),
-                _buildServiceCard(icon: Icons.contact_phone,
+                _buildServiceCard(
+                    icon: Icons.contact_phone,
                     title: 'اتصل بنا',
                     route: AppRouter.contact),
               ],
@@ -613,8 +818,11 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
     );
   }
 
-  Widget _buildServiceCard(
-      {required IconData icon, required String title, required String route}) {
+  Widget _buildServiceCard({
+    required IconData icon,
+    required String title,
+    required String route,
+  }) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -640,11 +848,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
               const SizedBox(height: 16),
               Text(
                 title,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -657,186 +861,88 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
       ),
     );
   }
-/*
-  // Contact Section
-  Widget _buildContactSection() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 60),
-      decoration: const BoxDecoration(
-        gradient: AppConstants.islamicGradient,
-      ),
-      child: WebContainer(
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'تواصل معنا',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .displaySmall
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  _buildContactInfo(
-                    icon: Icons.location_on,
-                    title: 'العنوان',
-                    content: 'رام الله - فلسطين\nشارع الإرسال - مجمع الوزارات',
-                  ),
-                  const SizedBox(height: 20),
-                  _buildContactInfo(
-                    icon: Icons.phone,
-                    title: 'الهاتف',
-                    content: '+970-2-2406340',
-                  ),
-                  const SizedBox(height: 20),
-                  _buildContactInfo(
-                    icon: Icons.email,
-                    title: 'البريد الإلكتروني',
-                    content: 'info@awqaf.ps',
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 60),
-            Expanded(
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.radiusL),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'أرسل رسالة',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppConstants.islamicGreen,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'الاسم',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'البريد الإلكتروني',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        maxLines: 4,
-                        decoration: const InputDecoration(
-                          labelText: 'الرسالة',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.islamicGreen,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text('إرسال',
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-*/
-  Widget _buildContactInfo(
-      {required IconData icon, required String title, required String content}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: Colors.white, size: 28),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                content,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+
+  // =====================================================
+  // HELPER METHODS
+  // =====================================================
+
+  /// Parse color from hex string
+  Color _parseColor(String hexColor) {
+    try {
+      return Color(
+          int.parse(hexColor.replaceFirst('#', '0xFF').replaceAll(' ', '')));
+    } catch (e) {
+      return AppConstants.islamicGreen; // Default
+    }
   }
 
-  List<Map<String, dynamic>> _getSampleNews() {
-    return [
+  /// Parse icon from string name
+  IconData _parseIcon(String iconName) {
+    final iconMap = {
+      'mosque': Icons.mosque,
+      'landscape': Icons.landscape,
+      'people': Icons.people,
+      'event': Icons.event,
+      'building': Icons.business,
+      'school': Icons.school,
+      'book': Icons.book,
+      'money': Icons.attach_money,
+    };
+    return iconMap[iconName.toLowerCase()] ?? Icons.star;
+  }
+
+  // =====================================================
+  // SAMPLE DATA (TODO: Replace with actual DB fetch)
+  // =====================================================
+
+  List<Map<String, dynamic>> _getSampleNews(int count) {
+    final allNews = [
       {
         'title': 'افتتاح مسجد جديد في مدينة رام الله',
-        'excerpt': 'تم افتتاح مسجد جديد في حي الطيرة برام الله بحضور معالي الوزير وجمع من المواطنين',
+        'excerpt':
+        'تم افتتاح مسجد جديد في حي الطيرة برام الله بحضور معالي الوزير وجمع من المواطنين',
         'category': 'مساجد',
         'date': 'منذ ساعتين',
         'views': 150,
       },
       {
         'title': 'ندوة حول الوسطية في الإسلام',
-        'excerpt': 'تنظم الوزارة ندوة علمية حول موضوع الوسطية في الإسلام بمشاركة علماء من مختلف البلدان',
+        'excerpt':
+        'تنظم الوزارة ندوة علمية حول موضوع الوسطية في الإسلام بمشاركة علماء من مختلف البلدان',
         'category': 'فعاليات',
         'date': 'منذ 5 ساعات',
         'views': 89,
       },
       {
         'title': 'دورة تدريبية لأئمة المساجد حول الخطابة',
-        'excerpt': 'تنطلق غداً دورة تدريبية متخصصة لأئمة المساجد حول فن الخطابة والإلقاء',
+        'excerpt':
+        'تنطلق غداً دورة تدريبية متخصصة لأئمة المساجد حول فن الخطابة والإلقاء',
         'category': 'تعليم',
         'date': 'منذ يوم',
         'views': 67,
-
-      }
+      },
     ];
+    return allNews.take(count).toList();
+  }
+
+  List<Map<String, dynamic>> _getSampleAnnouncements(int count) {
+    final allAnnouncements = [
+      {
+        'title': 'تغيير موعد صلاة الجمعة',
+        'priority': 'عاجل',
+        'color': AppConstants.error,
+      },
+      {
+        'title': 'دورة تدريبية لأئمة المساجد',
+        'priority': 'هام',
+        'color': AppConstants.warning,
+      },
+      {
+        'title': 'صيانة دورية للمساجد',
+        'priority': 'عادي',
+        'color': AppConstants.info,
+      },
+    ];
+    return allAnnouncements.take(count).toList();
   }
 }

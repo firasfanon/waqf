@@ -1,44 +1,31 @@
+// lib/presentation/widgets/home/hero_slider.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../app/router.dart';
+import '../../../data/models/homepage_section.dart';
+import '../../../data/repositories/homepage_repository.dart';
 
-class HeroSlider extends StatefulWidget {
+// Provider for hero slides from database
+final heroSlidesProvider = FutureProvider<List<HeroSlide>>((ref) async {
+  final repository = HomepageRepository(Supabase.instance.client);
+  return repository.fetchActiveHeroSlides();
+});
+
+class HeroSlider extends ConsumerStatefulWidget {
   const HeroSlider({super.key});
 
   @override
-  State<HeroSlider> createState() => _HeroSliderState();
+  ConsumerState<HeroSlider> createState() => _HeroSliderState();
 }
 
-class _HeroSliderState extends State<HeroSlider> {
+class _HeroSliderState extends ConsumerState<HeroSlider> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _autoPlayTimer;
-
-  final List<SliderItem> _slides = [
-    SliderItem(
-      title: 'وزير الأوقاف يشارك في المؤتمر الدولي للوقف الإسلامي',
-      subtitle: 'مشاركة فلسطينية مميزة في المؤتمر الدولي',
-      description: 'شارك معالي وزير الأوقاف والشؤون الدينية في المؤتمر الدولي للوقف الإسلامي الذي عقد في إسطنبول بمشاركة 40 دولة',
-      imageUrl: 'https://images.pexels.com/photos/378570/pexels-photo-378570.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      ctaText: 'اقرأ المزيد',
-    ),
-    SliderItem(
-      title: 'افتتاح مسجد السلام بعد أعمال الترميم والتطوير',
-      subtitle: 'إنجاز جديد في مجال تطوير المساجد',
-      description: 'برعاية وزير الأوقاف تم افتتاح مسجد السلام في مدينة نابلس بعد أعمال الترميم والتطوير التي استمرت 6 أشهر',
-      imageUrl: 'https://images.pexels.com/photos/8107628/pexels-photo-8107628.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      ctaText: 'شاهد التفاصيل',
-    ),
-    SliderItem(
-      title: 'انطلاق فعاليات مسابقة الأقصى لحفظ القرآن الكريم',
-      subtitle: 'الدورة الـ15 من المسابقة القرآنية الكبرى',
-      description: 'انطلقت فعاليات الدورة الـ15 من مسابقة الأقصى لحفظ القرآن الكريم بمشاركة 500 متسابق من مختلف المحافظات',
-      imageUrl: 'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      ctaText: 'تابع الفعاليات',
-    ),
-  ];
 
   @override
   void initState() {
@@ -48,35 +35,38 @@ class _HeroSliderState extends State<HeroSlider> {
 
   @override
   void dispose() {
-    _autoPlayTimer?.cancel(); // CRITICAL: Cancel timer before dispose
+    _autoPlayTimer?.cancel();
     _autoPlayTimer = null;
     _pageController.dispose();
     super.dispose();
   }
 
   void _startAutoPlay() {
-    _autoPlayTimer?.cancel(); // Cancel existing timer
+    _autoPlayTimer?.cancel();
     _autoPlayTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      // CRITICAL FIX: Check if widget is mounted
       if (!mounted) {
         timer.cancel();
         return;
       }
 
-      if (_currentPage < _slides.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
+      final slidesAsync = ref.read(heroSlidesProvider);
+      slidesAsync.whenData((slides) {
+        if (slides.isEmpty) return;
 
-      // Check both mounted AND hasClients before animating
-      if (mounted && _pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-        );
-      }
+        if (_currentPage < slides.length - 1) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+
+        if (mounted && _pageController.hasClients) {
+          _pageController.animateToPage(
+            _currentPage,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
     });
   }
 
@@ -89,16 +79,16 @@ class _HeroSliderState extends State<HeroSlider> {
     );
   }
 
-  void _previousSlide() {
+  void _previousSlide(int totalSlides) {
     if (_currentPage > 0) {
       _goToSlide(_currentPage - 1);
     } else {
-      _goToSlide(_slides.length - 1);
+      _goToSlide(totalSlides - 1);
     }
   }
 
-  void _nextSlide() {
-    if (_currentPage < _slides.length - 1) {
+  void _nextSlide(int totalSlides) {
+    if (_currentPage < totalSlides - 1) {
       _goToSlide(_currentPage + 1);
     } else {
       _goToSlide(0);
@@ -107,6 +97,21 @@ class _HeroSliderState extends State<HeroSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final slidesAsync = ref.watch(heroSlidesProvider);
+
+    return slidesAsync.when(
+      data: (slides) {
+        if (slides.isEmpty) {
+          return _buildEmptyState();
+        }
+        return _buildSlider(slides);
+      },
+      loading: () => _buildLoadingState(),
+      error: (error, stack) => _buildErrorState(error),
+    );
+  }
+
+  Widget _buildSlider(List<HeroSlide> slides) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
@@ -122,9 +127,9 @@ class _HeroSliderState extends State<HeroSlider> {
                 });
               }
             },
-            itemCount: _slides.length,
+            itemCount: slides.length,
             itemBuilder: (context, index) {
-              return _buildSlide(_slides[index], index);
+              return _buildSlide(slides[index], index);
             },
           ),
 
@@ -133,31 +138,34 @@ class _HeroSliderState extends State<HeroSlider> {
             bottom: 40,
             left: 0,
             right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _slides.length,
-                    (index) => GestureDetector(
-                  onTap: () => _goToSlide(index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentPage == index ? 40 : 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? AppColors.goldenYellow
-                          : Colors.white.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(6),
-                      boxShadow: _currentPage == index
-                          ? [
-                        BoxShadow(
-                          color: AppColors.goldenYellow.withOpacity(0.5),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                          : null,
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  slides.length,
+                      (index) => GestureDetector(
+                    onTap: () => _goToSlide(index),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == index ? 40 : 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: _currentPage == index
+                            ? AppConstants.goldenYellow
+                            : Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: _currentPage == index
+                            ? [
+                          BoxShadow(
+                            color: AppConstants.goldenYellow.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                            : null,
+                      ),
                     ),
                   ),
                 ),
@@ -165,7 +173,7 @@ class _HeroSliderState extends State<HeroSlider> {
             ),
           ),
 
-          // Left Arrow
+          // Left Arrow (RTL - goes to next)
           Positioned(
             left: 32,
             top: 0,
@@ -174,7 +182,7 @@ class _HeroSliderState extends State<HeroSlider> {
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: _nextSlide,
+                  onTap: () => _nextSlide(slides.length),
                   child: Container(
                     width: 48,
                     height: 48,
@@ -182,14 +190,15 @@ class _HeroSliderState extends State<HeroSlider> {
                       color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.chevron_right, color: Colors.white, size: 32),
+                    child: const Icon(Icons.chevron_right,
+                        color: Colors.white, size: 32),
                   ),
                 ),
               ),
             ),
           ),
 
-          // Right Arrow
+          // Right Arrow (RTL - goes to previous)
           Positioned(
             right: 32,
             top: 0,
@@ -198,7 +207,7 @@ class _HeroSliderState extends State<HeroSlider> {
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: _previousSlide,
+                  onTap: () => _previousSlide(slides.length),
                   child: Container(
                     width: 48,
                     height: 48,
@@ -206,7 +215,8 @@ class _HeroSliderState extends State<HeroSlider> {
                       color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.chevron_left, color: Colors.white, size: 32),
+                    child: const Icon(Icons.chevron_left,
+                        color: Colors.white, size: 32),
                   ),
                 ),
               ),
@@ -217,7 +227,7 @@ class _HeroSliderState extends State<HeroSlider> {
     );
   }
 
-  Widget _buildSlide(SliderItem slide, int index) {
+  Widget _buildSlide(HeroSlide slide, int index) {
     final isActive = _currentPage == index;
 
     return Stack(
@@ -228,11 +238,12 @@ class _HeroSliderState extends State<HeroSlider> {
             imageUrl: slide.imageUrl,
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
-              decoration: BoxDecoration(gradient: AppConstants.islamicGradient),
+              decoration: const BoxDecoration(gradient: AppConstants.islamicGradient),
             ),
             errorWidget: (context, url, error) => Container(
-              decoration: BoxDecoration(gradient: AppConstants.islamicGradient),
-              child: const Center(child: Icon(Icons.image, size: 80, color: Colors.white54)),
+              decoration: const BoxDecoration(gradient: AppConstants.islamicGradient),
+              child: const Center(
+                  child: Icon(Icons.image, size: 80, color: Colors.white54)),
             ),
           ),
         ),
@@ -245,7 +256,7 @@ class _HeroSliderState extends State<HeroSlider> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  AppColors.sageGreen.withOpacity(0.8),
+                  AppConstants.sageGreen.withOpacity(0.8),
                   AppConstants.islamicGreen.withOpacity(0.6),
                   Colors.transparent,
                 ],
@@ -274,11 +285,16 @@ class _HeroSliderState extends State<HeroSlider> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       height: 1.2,
-                      shadows: [Shadow(offset: Offset(2, 2), blurRadius: 4, color: Colors.black45)],
+                      shadows: [
+                        Shadow(
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
+                            color: Colors.black45)
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+              //  const SizedBox(height: 20),
 
                 // Content Row
                 Row(
@@ -299,9 +315,14 @@ class _HeroSliderState extends State<HeroSlider> {
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 24,
-                                color: AppColors.goldenYellow,
+                                color: AppConstants.goldenYellow,
                                 fontWeight: FontWeight.w600,
-                                shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black45)],
+                                shadows: const [
+                                  Shadow(
+                                      offset: Offset(1, 1),
+                                      blurRadius: 3,
+                                      color: Colors.black45)
+                                ],
                               ),
                             ),
                           ),
@@ -316,13 +337,19 @@ class _HeroSliderState extends State<HeroSlider> {
                                 fontSize: 18,
                                 color: Colors.white.withOpacity(0.9),
                                 height: 1.6,
-                                shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black45)],
+                                shadows: const [
+                                  Shadow(
+                                      offset: Offset(1, 1),
+                                      blurRadius: 3,
+                                      color: Colors.black45)
+                                ],
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
+
                     const SizedBox(width: 40),
 
                     // Buttons Section
@@ -334,29 +361,62 @@ class _HeroSliderState extends State<HeroSlider> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Primary CTA (from database)
+
+                            //                          ✅✅✅   DEFAULT VALUES     ✅✅✅
                             ElevatedButton.icon(
-                              onPressed: () => Navigator.pushNamed(context, AppRouter.news),
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, slide.ctaLink ?? '/'),  // ← Default route
                               icon: const Icon(Icons.article),
-                              label: Text(slide.ctaText),
+                              label: Text(slide.ctaText ?? 'اقرأ المزيد'),            // ← Default text
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 foregroundColor: AppConstants.islamicGreen,
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 20),
+                                textStyle: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
                                 elevation: 5,
                               ),
                             ),
+
+                            /*
+
+
+                            // ✅✅✅ Only show button if both ctaText and ctaLink exist ✅✅✅
+                            if (slide.ctaText != null && slide.ctaLink != null)
+                              ElevatedButton.icon(
+                                onPressed: () =>
+                                    Navigator.pushNamed(context, slide.ctaLink!),  // ← Add !
+                                icon: const Icon(Icons.article),
+                                label: Text(slide.ctaText!),                        // ← Add !
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: AppConstants.islamicGreen,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 32, vertical: 20),
+                                  textStyle: const TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                  elevation: 5,
+                                ),
+                              ),
+
+                            */
                             const SizedBox(height: 20),
+                            // Secondary CTA
                             OutlinedButton.icon(
                               onPressed: () => Navigator.pushNamed(context, AppRouter.about),
-                              icon: const Icon(Icons.info_outline),
-                              label: const Text('تعرف علينا'),
+                              icon: Icon(Icons.info_outline),  // ✅ Remove const
+                              label: Text('تعرف علينا'),  // ✅ Remove const
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: Colors.white,
-                                side: const BorderSide(color: Colors.white, width: 2),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                side: BorderSide(color: Colors.white, width: 2),  // ✅ Remove const
+                                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 20),  // ✅ Remove const
+                                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),  // ✅ Remove const
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
@@ -373,20 +433,128 @@ class _HeroSliderState extends State<HeroSlider> {
       ],
     );
   }
-}
 
-class SliderItem {
-  final String title;
-  final String subtitle;
-  final String description;
-  final String imageUrl;
-  final String ctaText;
+  // Loading State
+  Widget _buildLoadingState() {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+      height: screenHeight * 0.6,
+      child: Container(
+        decoration: const BoxDecoration(gradient: AppConstants.islamicGradient),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: AppConstants.goldenYellow,
+                strokeWidth: 3,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'جاري التحميل...',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-  SliderItem({
-    required this.title,
-    required this.subtitle,
-    required this.description,
-    required this.imageUrl,
-    required this.ctaText,
-  });
+  // Empty State
+  Widget _buildEmptyState() {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+      height: screenHeight * 0.6,
+      child: Container(
+        decoration: const BoxDecoration(gradient: AppConstants.islamicGradient),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.image_not_supported,
+                  size: 80,
+                  color: Colors.white54,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'لا توجد شرائح متاحة حالياً',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'يرجى إضافة شرائح من لوحة التحكم',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Error State
+  Widget _buildErrorState(Object error) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+      height: screenHeight * 0.6,
+      child: Container(
+        color: Colors.grey[900],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.error_outline,
+                size: 80,
+                color: Colors.red,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'حدث خطأ في تحميل الشرائح',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton.icon(
+                onPressed: () {
+                  ref.refresh(heroSlidesProvider);
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('إعادة المحاولة'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppConstants.islamicGreen,
+                  foregroundColor: Colors.white,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
