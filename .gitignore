@@ -33,6 +33,14 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Environment variables - IMPORTANT: Keep these files secret!
+.env
+.env.local
+.env.*.local
+.env.development
+.env.staging
+.env.production
+
 # Symbolication related
 app.*.symbols
 
