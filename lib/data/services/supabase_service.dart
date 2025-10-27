@@ -1,5 +1,6 @@
 // lib/data/services/supabase_service.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 class SupabaseService {
   static final SupabaseService _instance = SupabaseService._internal();
@@ -8,8 +9,30 @@ class SupabaseService {
 
   SupabaseService._internal();
 
-  // Get the Supabase client
-  SupabaseClient get client => Supabase.instance.client;
+  // Get the Supabase client with safety check
+  SupabaseClient get client {
+    try {
+      if (Supabase.instance.initialized) {
+        return Supabase.instance.client;
+      } else {
+        throw Exception(
+          'Supabase is not initialized. Please check your .env configuration.',
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Error accessing Supabase client: $e');
+      rethrow;
+    }
+  }
+
+  // Check if Supabase is properly initialized
+  bool get isInitialized {
+    try {
+      return Supabase.instance.initialized;
+    } catch (e) {
+      return false;
+    }
+  }
 
   // ============ AUTH HELPERS ============
 
