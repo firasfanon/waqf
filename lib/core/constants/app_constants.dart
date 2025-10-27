@@ -52,24 +52,49 @@ class AppConstants {
 
   // API Endpoints - Read from environment variables for security
   // Fallback to hardcoded values only for development if .env is missing
-  static String get baseUrl =>
-      dotenv.env['SUPABASE_URL'] ?? 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+  static String get baseUrl {
+    try {
+      return dotenv.env['SUPABASE_URL'] ?? 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+    } catch (e) {
+      return 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+    }
+  }
 
-  static String get apiKey =>
-      dotenv.env['SUPABASE_ANON_KEY'] ??
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+  static String get apiKey {
+    try {
+      return dotenv.env['SUPABASE_ANON_KEY'] ??
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+    } catch (e) {
+      return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+    }
+  }
 
   // Google Maps API Key
-  static String get googleMapsApiKey =>
-      dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
+  static String get googleMapsApiKey {
+    try {
+      return dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 
   // Firebase Project ID
-  static String get firebaseProjectId =>
-      dotenv.env['FIREBASE_PROJECT_ID'] ?? '';
+  static String get firebaseProjectId {
+    try {
+      return dotenv.env['FIREBASE_PROJECT_ID'] ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 
   // Environment (development, staging, production)
-  static String get environment =>
-      dotenv.env['ENVIRONMENT'] ?? 'development';
+  static String get environment {
+    try {
+      return dotenv.env['ENVIRONMENT'] ?? 'development';
+    } catch (e) {
+      return 'development';
+    }
+  }
 
   // Service Categories
   static const List<String> serviceCategories = [
