@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/storage_service.dart';
 import 'app/router.dart';
@@ -26,17 +27,26 @@ void main() async {
 }
 
 Future<void> _initializeServices() async {
-  // 1. Initialize Storage Service (Must be first!)
+  // 1. Load environment variables (Must be first!)
+  try {
+    await dotenv.load(fileName: '.env');
+    debugPrint('✅ Environment variables loaded successfully');
+  } catch (e) {
+    debugPrint('⚠️  .env file not found, using default values: $e');
+  }
+
+  // 2. Initialize Storage Service
   await StorageService.instance.init();
 
-  // 2. Initialize Supabase
+  // 3. Initialize Supabase
   try {
     await Supabase.initialize(
       url: AppConstants.baseUrl,
       anonKey: AppConstants.apiKey,
     );
+    debugPrint('✅ Supabase initialized: ${AppConstants.baseUrl}');
   } catch (e) {
-    debugPrint('Supabase initialization failed: $e');
+    debugPrint('❌ Supabase initialization failed: $e');
   }
 
   // TODO: Add other services when needed (notifications, etc.)

@@ -60,6 +60,7 @@ dependencies:
   permission_handler: ^12.0.1
   url_launcher: ^6.2.2
   share_plus: ^12.0.0
+  flutter_dotenv: ^5.1.0
 
   # PDF & Documents
   pdf: ^3.10.7
@@ -111,6 +112,7 @@ flutter:
     - assets/animations/
     - assets/data/
     - assets/fonts/
+    - .env
 
   # Fonts
   fonts:
