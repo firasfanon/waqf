@@ -31,22 +31,48 @@ Future<void> _initializeServices() async {
   try {
     await dotenv.load(fileName: '.env');
     debugPrint('✅ Environment variables loaded successfully');
+    debugPrint('📍 Environment: ${AppConstants.environment}');
   } catch (e) {
-    debugPrint('⚠️  .env file not found, using default values: $e');
+    debugPrint('⚠️  .env file not found, using default values');
+    debugPrint('   This is expected for web platform on first run');
+    debugPrint('   Make sure to run: cp .env.example .env');
   }
 
   // 2. Initialize Storage Service
-  await StorageService.instance.init();
-
-  // 3. Initialize Supabase
   try {
-    await Supabase.initialize(
-      url: AppConstants.baseUrl,
-      anonKey: AppConstants.apiKey,
-    );
-    debugPrint('✅ Supabase initialized: ${AppConstants.baseUrl}');
+    await StorageService.instance.init();
+    debugPrint('✅ Storage service initialized');
   } catch (e) {
+    debugPrint('❌ Storage service initialization failed: $e');
+  }
+
+  // 3. Initialize Supabase (with validation)
+  try {
+    final supabaseUrl = AppConstants.baseUrl;
+    final supabaseKey = AppConstants.apiKey;
+
+    // Validate that we have proper credentials
+    if (supabaseUrl.isEmpty || supabaseKey.isEmpty) {
+      throw Exception('Supabase URL or API key is missing. Please configure .env file.');
+    }
+
+    // Check if already initialized (prevents re-initialization errors)
+    if (Supabase.instance.client.auth.currentSession == null ||
+        !Supabase.instance.initialized) {
+      await Supabase.initialize(
+        url: supabaseUrl,
+        anonKey: supabaseKey,
+        debug: false, // Set to true for debugging
+      );
+    }
+
+    debugPrint('✅ Supabase initialized successfully');
+    debugPrint('   URL: $supabaseUrl');
+  } catch (e, stackTrace) {
     debugPrint('❌ Supabase initialization failed: $e');
+    debugPrint('   Stack trace: $stackTrace');
+    debugPrint('   Please check your .env file configuration');
+    // Don't rethrow - let the app continue with limited functionality
   }
 
   // TODO: Add other services when needed (notifications, etc.)
