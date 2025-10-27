@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConstants {
   // App Information
@@ -49,9 +50,26 @@ class AppConstants {
     end: Alignment.bottomRight,
   );
 
-  // API Endpoints
-  static const String baseUrl = 'https://lyeryfsrhrxuepuqepgi.supabase.co';
-  static const String apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+  // API Endpoints - Read from environment variables for security
+  // Fallback to hardcoded values only for development if .env is missing
+  static String get baseUrl =>
+      dotenv.env['SUPABASE_URL'] ?? 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+
+  static String get apiKey =>
+      dotenv.env['SUPABASE_ANON_KEY'] ??
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+
+  // Google Maps API Key
+  static String get googleMapsApiKey =>
+      dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
+
+  // Firebase Project ID
+  static String get firebaseProjectId =>
+      dotenv.env['FIREBASE_PROJECT_ID'] ?? '';
+
+  // Environment (development, staging, production)
+  static String get environment =>
+      dotenv.env['ENVIRONMENT'] ?? 'development';
 
   // Service Categories
   static const List<String> serviceCategories = [

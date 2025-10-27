@@ -79,22 +79,38 @@ cd palestinian-ministry-endowments
 flutter pub get
 ```
 
-3. **Generate code**
+3. **Configure environment variables**
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env with your actual values
+# Required variables:
+# - SUPABASE_URL
+# - SUPABASE_ANON_KEY
+# - GOOGLE_MAPS_API_KEY
+# - FIREBASE_PROJECT_ID
+```
+
+4. **Generate code**
 ```bash
 flutter packages pub run build_runner build
 ```
 
-4. **Configure Firebase**
-    - Create a new Firebase project
+5. **Configure Firebase**
+    - Create a new Firebase project at https://console.firebase.google.com
     - Add your Android/iOS apps
     - Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
-    - Place them in the appropriate directories
+    - Place them in the appropriate directories:
+      - Android: `android/app/google-services.json`
+      - iOS: `ios/Runner/GoogleService-Info.plist`
 
-5. **Configure Supabase**
-    - Create a Supabase project
-    - Update the URL and API key in `lib/core/constants/app_constants.dart`
+6. **Configure Supabase**
+    - Create a Supabase project at https://app.supabase.com
+    - Get your project URL and anon key from Settings > API
+    - Add them to your `.env` file (created in step 3)
 
-6. **Run the application**
+7. **Run the application**
 ```bash
 flutter run
 ```
@@ -306,21 +322,55 @@ The app supports Arabic (primary) and English (secondary) languages:
 ## 🔧 Configuration
 
 ### Environment Variables
-Create a `.env` file in the project root:
 
-```env
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-GOOGLE_MAPS_API_KEY=your_google_maps_key
-FIREBASE_PROJECT_ID=your_firebase_project_id
-```
+The app uses environment variables for secure configuration management. All sensitive API keys and configuration values are stored in a `.env` file that is **not committed to version control**.
+
+#### Setup Steps:
+
+1. **Copy the example file**:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Edit `.env` with your actual values**:
+   ```env
+   # Supabase Configuration (Required)
+   SUPABASE_URL=https://your-project-id.supabase.co
+   SUPABASE_ANON_KEY=your-actual-supabase-anon-key
+
+   # Google Maps (Required for mosque directory)
+   GOOGLE_MAPS_API_KEY=your-google-maps-api-key
+
+   # Firebase (Required for push notifications)
+   FIREBASE_PROJECT_ID=your-firebase-project-id
+
+   # Environment
+   ENVIRONMENT=development
+   ```
+
+3. **Never commit `.env` to git** - It's already in `.gitignore`
+
+#### How It Works:
+
+- The app loads `.env` at startup using `flutter_dotenv`
+- Variables are accessed via `AppConstants` getters (e.g., `AppConstants.baseUrl`)
+- If `.env` is missing, the app falls back to default values for development
+- Different `.env` files can be used for dev/staging/production
+
+#### Getting API Keys:
+
+- **Supabase**: Create project at https://app.supabase.com → Settings → API
+- **Google Maps**: Get key at https://console.cloud.google.com → APIs & Services → Credentials
+- **Firebase**: Create project at https://console.firebase.google.com → Project Settings
 
 ### App Configuration
-Update `lib/core/constants/app_constants.dart` with your specific settings:
-- API endpoints
+
+Additional app settings can be customized in `lib/core/constants/app_constants.dart`:
 - Feature flags
-- Regional settings
+- Regional settings (governorates, Islamic calendar)
 - Contact information
+- UI constants (spacing, colors, animations)
+- Cache keys and storage preferences
 
 ## 🤝 Contributing
 
