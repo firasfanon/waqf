@@ -58,7 +58,7 @@ Future<void> _initializeServices() async {
 
     // Check if already initialized (prevents re-initialization errors)
     if (Supabase.instance.client.auth.currentSession == null ||
-        !Supabase.instance.initialized) {
+        !Supabase.instance.isInitialized) {
       await Supabase.initialize(
         url: supabaseUrl,
         anonKey: supabaseKey,

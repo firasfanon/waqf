@@ -368,6 +368,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_dotenv",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_dotenv-5.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_driver",
       "rootUri": "file:///C:/flutter/packages/flutter_driver",
       "packageUri": "lib/",
