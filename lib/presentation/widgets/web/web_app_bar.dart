@@ -390,13 +390,15 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () => Navigator.pushNamed(context, AppRouter.adminLogin),
-      icon: const Icon(Icons.login, size: 18),
-      label: const Text('تسجيل الدخول'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppConstants.islamicGreen,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.login, color: AppConstants.textPrimary),
+        onPressed: () => Navigator.pushNamed(context, AppRouter.adminLogin),
+        tooltip: 'تسجيل الدخول',
       ),
     );
   }
