@@ -359,23 +359,36 @@ For technical support or questions:
 
 ## 🗺️ Roadmap
 
-### Version 1.1 (Q2 2024)
-- [ ] Prayer times integration
-- [ ] Islamic calendar events
+### Version 1.1 (In Progress - 2025)
+- [ ] Prayer times integration with location services
+- [ ] Islamic calendar events and Hijri date conversion
+- [ ] Comprehensive testing suite (unit, widget, integration)
+- [ ] Enhanced security with environment-based configuration
+- [ ] Biometric authentication for admin users
+- [ ] Dark mode implementation
+- [ ] Offline-first architecture improvements
+
+### Version 1.2 (Q2-Q3 2025)
+- [ ] Performance monitoring and analytics dashboard
+- [ ] Crash reporting and error tracking
+- [ ] Enhanced accessibility features (screen readers, high contrast)
 - [ ] Voice search in Arabic
-- [ ] Biometric authentication
+- [ ] PDF report generation for admin functions
+- [ ] Advanced search with filters and facets
 
-### Version 1.2 (Q3 2024)
-- [ ] AI-powered chatbot
-- [ ] Advanced analytics
-- [ ] Multi-language support expansion
-- [ ] Desktop applications
+### Version 2.0 (Q4 2025 - Q1 2026)
+- [ ] Desktop applications (Windows, macOS, Linux)
+- [ ] AI-powered chatbot for citizen support
+- [ ] Advanced GIS features for waqf land management
+- [ ] Multi-language support expansion (French, Hebrew)
+- [ ] Progressive Web App (PWA) enhancements
+- [ ] Real-time collaboration features for admin users
 
-### Version 2.0 (Q4 2024)
-- [ ] Blockchain document verification
-- [ ] IoT mosque monitoring
-- [ ] Advanced GIS features
-- [ ] Machine learning recommendations
+### Future Considerations
+- Blockchain-based document verification
+- IoT integration for mosque monitoring systems
+- Machine learning recommendations for services
+- Advanced data analytics and reporting
 
 ## 🙏 Acknowledgments
 
