@@ -220,16 +220,59 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
 ### Running Tests
+
+The project includes comprehensive testing infrastructure with unit, widget, and integration tests.
+
 ```bash
-# Unit tests
+# Run all tests
 flutter test
 
-# Integration tests
-flutter test integration_test/
+# Run specific test file
+flutter test test/unit/core/constants/app_constants_test.dart
 
-# Coverage
+# Run tests by type
+flutter test test/unit/          # Unit tests only
+flutter test test/widget/        # Widget tests only
+
+# Run with coverage report
 flutter test --coverage
+
+# Generate HTML coverage report
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html    # View in browser
+
+# Run in watch mode (re-run on changes)
+flutter test --watch
 ```
+
+#### Test Structure
+
+```
+test/
+├── unit/              # Unit tests for business logic and utilities
+├── widget/            # Widget tests for UI components
+├── integration/       # Integration tests for complete flows
+├── helpers/           # Reusable test helper functions
+├── mocks/             # Mock objects (Supabase, APIs, etc.)
+├── fixtures/          # Sample test data
+└── README.md          # Detailed testing guide
+```
+
+#### Example Tests Included
+
+- **Unit Test**: `test/unit/core/constants/app_constants_test.dart` - Tests for app constants and configuration
+- **Widget Test**: `test/widget/app_test.dart` - Tests for main app widget, RTL support, and localization
+- **Test Helpers**: Pre-built helpers for common testing scenarios
+- **Mock Data**: Sample fixtures for news, mosques, users, etc.
+
+See `test/README.md` for comprehensive testing documentation.
+
+#### Coverage Goals
+
+- **Target**: 70% overall code coverage
+- **Unit Tests**: 80%+ for business logic
+- **Widget Tests**: 60%+ for UI components
+- **Critical Paths**: 90%+ for auth, payments, sensitive operations
 
 ### Building for Production
 
