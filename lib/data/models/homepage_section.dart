@@ -515,5 +515,221 @@ class AnnouncementsSectionSettings {
       'showIcons': showIcons,
       'showDates': showDates,
     };
+
+  }
+
+}
+
+
+// ============================================
+// BREAKING NEWS (Multiple Rows)
+// ============================================
+
+/// Individual Breaking News Item
+class BreakingNewsItem {
+  final String id;
+  final String text;
+  final String? link;
+  final String? icon;
+  final String priority; // 'urgent', 'high', 'normal'
+  final String bgColor;
+  final String textColor;
+  final int displayOrder;
+  final bool isActive;
+  final DateTime? expiresAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String? updatedBy;
+
+  const BreakingNewsItem({
+    required this.id,
+    required this.text,
+    this.link,
+    this.icon,
+    this.priority = 'normal',
+    this.bgColor = '#DC2626',
+    this.textColor = '#FFFFFF',
+    required this.displayOrder,
+    this.isActive = true,
+    this.expiresAt,
+    required this.createdAt,
+    required this.updatedAt,
+    this.updatedBy,
+  });
+
+  factory BreakingNewsItem.fromJson(Map<String, dynamic> json) {
+    return BreakingNewsItem(
+      id: json['id'] as String,
+      text: json['text'] as String,
+      link: json['link'] as String?,
+      icon: json['icon'] as String?,
+      priority: json['priority'] as String? ?? 'normal',
+      bgColor: json['bg_color'] as String? ?? '#DC2626',
+      textColor: json['text_color'] as String? ?? '#FFFFFF',
+      displayOrder: json['display_order'] as int,
+      isActive: json['is_active'] as bool? ?? true,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.parse(json['expires_at'] as String)
+          : null,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedBy: json['updated_by'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'text': text,
+      'link': link,
+      'icon': icon,
+      'priority': priority,
+      'bg_color': bgColor,
+      'text_color': textColor,
+      'display_order': displayOrder,
+      'is_active': isActive,
+      'expires_at': expiresAt?.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'updated_by': updatedBy,
+    };
+  }
+
+  BreakingNewsItem copyWith({
+    String? id,
+    String? text,
+    String? link,
+    String? icon,
+    String? priority,
+    String? bgColor,
+    String? textColor,
+    int? displayOrder,
+    bool? isActive,
+    DateTime? expiresAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? updatedBy,
+  }) {
+    return BreakingNewsItem(
+      id: id ?? this.id,
+      text: text ?? this.text,
+      link: link ?? this.link,
+      icon: icon ?? this.icon,
+      priority: priority ?? this.priority,
+      bgColor: bgColor ?? this.bgColor,
+      textColor: textColor ?? this.textColor,
+      displayOrder: displayOrder ?? this.displayOrder,
+      isActive: isActive ?? this.isActive,
+      expiresAt: expiresAt ?? this.expiresAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      updatedBy: updatedBy ?? this.updatedBy,
+    );
   }
 }
+
+/// Breaking News Section Settings
+class BreakingNewsSectionSettings {
+  final bool enabled;
+  final bool autoScroll;
+  final int scrollSpeed; // pixels per second
+  final int pauseDuration; // milliseconds
+  final bool showIcon;
+  final String defaultIcon;
+  final bool showSeparator;
+  final String separatorText;
+  final bool allowClick;
+  final bool showBorder;
+  final int maxItems;
+
+  const BreakingNewsSectionSettings({
+    this.enabled = true,
+    this.autoScroll = true,
+    this.scrollSpeed = 50,
+    this.pauseDuration = 3000,
+    this.showIcon = true,
+    this.defaultIcon = 'campaign',
+    this.showSeparator = true,
+    this.separatorText = '•',
+    this.allowClick = true,
+    this.showBorder = true,
+    this.maxItems = 10,
+  });
+
+  factory BreakingNewsSectionSettings.fromJson(Map<String, dynamic> json) {
+    return BreakingNewsSectionSettings(
+      enabled: json['enabled'] as bool? ?? true,
+      autoScroll: json['autoScroll'] as bool? ?? true,
+      scrollSpeed: json['scrollSpeed'] as int? ?? 50,
+      pauseDuration: json['pauseDuration'] as int? ?? 3000,
+      showIcon: json['showIcon'] as bool? ?? true,
+      defaultIcon: json['defaultIcon'] as String? ?? 'campaign',
+      showSeparator: json['showSeparator'] as bool? ?? true,
+      separatorText: json['separatorText'] as String? ?? '•',
+      allowClick: json['allowClick'] as bool? ?? true,
+      showBorder: json['showBorder'] as bool? ?? true,
+      maxItems: json['maxItems'] as int? ?? 10,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'enabled': enabled,
+      'autoScroll': autoScroll,
+      'scrollSpeed': scrollSpeed,
+      'pauseDuration': pauseDuration,
+      'showIcon': showIcon,
+      'defaultIcon': defaultIcon,
+      'showSeparator': showSeparator,
+      'separatorText': separatorText,
+      'allowClick': allowClick,
+      'showBorder': showBorder,
+      'maxItems': maxItems,
+    };
+  }
+
+  BreakingNewsSectionSettings copyWith({
+    bool? enabled,
+    bool? autoScroll,
+    int? scrollSpeed,
+    int? pauseDuration,
+    bool? showIcon,
+    String? defaultIcon,
+    bool? showSeparator,
+    String? separatorText,
+    bool? allowClick,
+    bool? showBorder,
+    int? maxItems,
+
+
+
+
+  }) {
+    return BreakingNewsSectionSettings(
+      enabled: enabled ?? this.enabled,
+      autoScroll: autoScroll ?? this.autoScroll,
+      scrollSpeed: scrollSpeed ?? this.scrollSpeed,
+      pauseDuration: pauseDuration ?? this.pauseDuration,
+      showIcon: showIcon ?? this.showIcon,
+      defaultIcon: defaultIcon ?? this.defaultIcon,
+      showSeparator: showSeparator ?? this.showSeparator,
+      separatorText: separatorText ?? this.separatorText,
+      allowClick: allowClick ?? this.allowClick,
+      showBorder: showBorder ?? this.showBorder,
+      maxItems: maxItems ?? this.maxItems,
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -36,11 +36,11 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
             _buildLogo(context),
             const SizedBox(width: 60),
             Expanded(child: _buildNavigation(context)),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             _buildSearchButton(context),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             _buildLanguageSelector(context),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             if (isAuthenticated && currentUser != null)
               _buildUserMenu(context, ref, currentUser)
             else
@@ -240,7 +240,7 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
         side: BorderSide(color: Colors.grey[200]!),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(8),

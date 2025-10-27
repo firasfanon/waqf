@@ -115,7 +115,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
-      height: screenHeight * 0.6,
+      height: screenHeight * 0.5,
       child: Stack(
         children: [
           PageView.builder(

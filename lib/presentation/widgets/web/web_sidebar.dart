@@ -227,6 +227,18 @@ class WebSidebar extends ConsumerWidget {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, color: Colors.white),
                   itemBuilder: (context) => [
+
+                    const PopupMenuItem(
+                      value: 'home',
+                      child: Row(
+                        children: [
+                          Icon(Icons.home, size: 20),
+                          SizedBox(width: 12),
+                          Text('الصفحة الرئيسية'),
+                        ],
+                      ),
+                    ),
+
                     const PopupMenuItem(
                       value: 'profile',
                       child: Row(
@@ -347,12 +359,18 @@ class WebSidebar extends ConsumerWidget {
 
   void _handleMenuAction(BuildContext context, WidgetRef ref, String action) {
     switch (action) {
-      case 'profile':
+      case 'home':
+        Navigator.pushNamed(context, AppRouter.home);
+        break;
+
+        case 'profile':
         Navigator.pushNamed(context, AppRouter.adminProfile);
         break;
+
       case 'settings':
         Navigator.pushNamed(context, AppRouter.adminSettings);
         break;
+
       case 'logout':
         _showLogoutDialog(context, ref);
         break;

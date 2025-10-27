@@ -333,4 +333,163 @@ class HomepageRepository {
       displayOrder: displayOrder,
     );
   }
+
+
+  // ============================================
+  // BREAKING NEWS (Multiple Rows)
+  // ============================================
+
+  /// Fetch active breaking news items that haven't expired
+  Future<List<BreakingNewsItem>> fetchActiveBreakingNews() async {
+    try {
+      final now = DateTime.now().toUtc().toIso8601String();
+      final rows = await _client
+          .from('breaking_news')
+          .select()
+          .eq('is_active', true)
+          .or('expires_at.is.null,expires_at.gt.$now')
+          .order('display_order', ascending: true);
+
+      return (rows as List<dynamic>)
+          .map((json) => BreakingNewsItem.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      log('Error fetching active breaking news: $e');
+      return [];
+    }
+  }
+
+  /// Fetch all breaking news items (for admin)
+  Future<List<BreakingNewsItem>> fetchAllBreakingNews() async {
+    try {
+      final rows = await _client
+          .from('breaking_news')
+          .select()
+          .order('display_order', ascending: true);
+
+      return (rows as List<dynamic>)
+          .map((json) => BreakingNewsItem.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      log('Error fetching all breaking news: $e');
+      return [];
+    }
+  }
+
+  /// Fetch single breaking news item
+  Future<BreakingNewsItem?> fetchBreakingNewsItem(String id) async {
+    try {
+      final row = await _client
+          .from('breaking_news')
+          .select()
+          .eq('id', id)
+          .maybeSingle();
+
+      if (row == null) return null;
+      return BreakingNewsItem.fromJson(row);
+    } catch (e) {
+      log('Error fetching breaking news item: $e');
+      return null;
+    }
+  }
+
+  /// Create new breaking news item
+  Future<String?> createBreakingNewsItem(BreakingNewsItem item) async {
+    try {
+      final userId = _client.auth.currentUser?.id;
+      final response = await _client.from('breaking_news').insert({
+        'text': item.text,
+        'link': item.link,
+        'icon': item.icon,
+        'priority': item.priority,
+        'bg_color': item.bgColor,
+        'text_color': item.textColor,
+        'display_order': item.displayOrder,
+        'is_active': item.isActive,
+        'expires_at': item.expiresAt?.toUtc().toIso8601String(),
+        'updated_by': userId,
+      }).select('id').single();
+
+      log('Breaking news item created: ${response['id']}');
+      return response['id'] as String;
+    } catch (e) {
+      log('Error creating breaking news item: $e');
+      return null;
+    }
+  }
+
+  /// Update breaking news item
+  Future<bool> updateBreakingNewsItem(BreakingNewsItem item) async {
+    try {
+      final userId = _client.auth.currentUser?.id;
+      await _client.from('breaking_news').update({
+        'text': item.text,
+        'link': item.link,
+        'icon': item.icon,
+        'priority': item.priority,
+        'bg_color': item.bgColor,
+        'text_color': item.textColor,
+        'display_order': item.displayOrder,
+        'is_active': item.isActive,
+        'expires_at': item.expiresAt?.toUtc().toIso8601String(),
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+        'updated_by': userId,
+      }).eq('id', item.id);
+
+      log('Breaking news item updated: ${item.id}');
+      return true;
+    } catch (e) {
+      log('Error updating breaking news item: $e');
+      return false;
+    }
+  }
+
+  /// Delete breaking news item
+  Future<bool> deleteBreakingNewsItem(String id) async {
+    try {
+      await _client.from('breaking_news').delete().eq('id', id);
+      log('Breaking news item deleted: $id');
+      return true;
+    } catch (e) {
+      log('Error deleting breaking news item: $e');
+      return false;
+    }
+  }
+
+  /// Reorder breaking news items
+  Future<bool> reorderBreakingNews(List<String> itemIds) async {
+    try {
+      for (int i = 0; i < itemIds.length; i++) {
+        await _client
+            .from('breaking_news')
+            .update({'display_order': i + 1})
+            .eq('id', itemIds[i]);
+      }
+      log('Breaking news items reordered successfully');
+      return true;
+    } catch (e) {
+      log('Error reordering breaking news items: $e');
+      return false;
+    }
+  }
+
+  // -------- Breaking News Settings ----------
+  Future<BreakingNewsSectionSettings?> fetchBreakingNewsSettings() async {
+    final row = await _fetchRow('breaking_news');
+    final settings = (row?['settings'] as Map<String, dynamic>?) ?? {};
+    return BreakingNewsSectionSettings.fromJson(settings);
+  }
+
+  Future<void> updateBreakingNewsSection(
+      BreakingNewsSectionSettings settings,
+      {bool? isActive, int? displayOrder}) {
+    return _upsertSection(
+      sectionName: 'breaking_news',
+      settingsJson: settings.toJson(),
+      isActive: isActive,
+      displayOrder: displayOrder,
+    );
+  }
+
+
 }

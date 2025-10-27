@@ -9,11 +9,13 @@ import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/news_section.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/statistics_section.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/breaking_news_section.dart';
 import '../../../providers/homepage_settings_provider.dart';
 import '../../../providers/header_settings_provider.dart';
 import '../../../providers/footer_settings_provider.dart';
 import '../../../widgets/home/announcements_section.dart';
 import '../../../widgets/web/web_sidebar.dart';
+import '../hero_slider_management/hero_slider_management_screen.dart';
 
 
 
@@ -28,7 +30,7 @@ class WebHomePageManagementScreen extends ConsumerStatefulWidget {
 class _WebHomePageManagementScreenState
     extends ConsumerState<WebHomePageManagementScreen> {
   String _activeTab = 'general_settings';
-  String _activeSection = 'hero';
+  String _activeSection = 'header';
   String _previewMode = 'desktop';
 
   @override
@@ -39,13 +41,16 @@ class _WebHomePageManagementScreenState
     final statsState = ref.watch(statisticsSectionNotifierProvider);
     final newsState = ref.watch(newsSectionNotifierProvider);
     final annState = ref.watch(announcementsSectionNotifierProvider);
+    final breakingNewsState = ref.watch(breakingNewsSectionNotifierProvider);
+
 
     final hasUnsavedChanges = headerState.hasChanges ||
         footerState.hasChanges ||
         ministerState.hasUnsavedChanges ||
         statsState.hasUnsavedChanges ||
         newsState.hasUnsavedChanges ||
-        annState.hasUnsavedChanges;
+        annState.hasUnsavedChanges ||
+        breakingNewsState.hasUnsavedChanges;
 
     return Scaffold(
       body: Row(
@@ -189,23 +194,32 @@ class _WebHomePageManagementScreenState
   Widget _buildGeneralSettingsSectionNav() {
     final sections = [
       {
-        'id': 'hero',
-        'name': 'الشرائح الرئيسية',
-        'icon': Icons.slideshow,
-        'color': Colors.purple
-      },
-      {
         'id': 'header',
         'name': 'إعدادات الهيدر',
         'icon': Icons.web,
         'color': Colors.blue
       },
+
+      {
+        'id': 'hero',
+        'name': 'الشرائح',
+        'icon': Icons.slideshow,
+        'color': Colors.purple
+      },
+
+      {'id': 'breaking_news',
+        'name': 'الأخبار العاجلة',
+        'icon': Icons.campaign,
+        'color': Colors.red
+      },
+
       {
         'id': 'footer',
         'name': 'إعدادات الفوتر',
         'icon': Icons.layers,
         'color': Colors.teal
       },
+
     ];
 
     return _buildSectionNav(sections);
@@ -308,12 +322,18 @@ class _WebHomePageManagementScreenState
   Widget _buildActiveSection() {
     if (_activeTab == 'general_settings') {
       switch (_activeSection) {
-        case 'hero':
-          return const HeroSliderSection();
         case 'header':
           return const HeaderSettingsSection();
+
+        case 'hero':
+          return const HeroSliderSection();
+
+        case 'breaking_news':
+          return const BreakingNewsSection();
+
         case 'footer':
           return const FooterSettingsSection();
+
         default:
           return _buildPlaceholder('قسم $_activeSection');
       }
@@ -381,6 +401,13 @@ class _WebHomePageManagementScreenState
       allSuccess = allSuccess && success;
     }
 
+    if (ref.read(breakingNewsSectionNotifierProvider).hasUnsavedChanges) {
+      final success = await ref
+          .read(breakingNewsSectionNotifierProvider.notifier)
+          .saveSettings();
+      allSuccess = allSuccess && success;
+    }
+
     if (_activeTab == 'content_management') {
       switch (_activeSection) {
         case 'minister':
@@ -406,6 +433,7 @@ class _WebHomePageManagementScreenState
               .saveSettings();
           allSuccess = allSuccess && success;
           break;
+
       }
     }
 
@@ -428,6 +456,12 @@ class _WebHomePageManagementScreenState
         case 'header':
           ref.read(headerSettingsProvider.notifier).resetChanges();
           break;
+
+
+        case 'breaking_news':
+          ref.read(breakingNewsSectionNotifierProvider.notifier).resetChanges();
+          break;
+
         case 'footer':
           ref.read(footerSettingsProvider.notifier).resetChanges();
           break;
