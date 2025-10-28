@@ -194,7 +194,11 @@ class Helpers {
         String? subject,
       }) async {
     try {
-      await Share.shareXFiles(filePaths.cast<XFile>(), text: text, subject: subject);
+      await Share.shareXFiles(
+        filePaths.map((path) => XFile(path)).toList(),
+        text: text,
+        subject: subject,
+      );
     } catch (e) {
       debugPrint('Error sharing files: $e');
     }
@@ -204,9 +208,13 @@ class Helpers {
   static Future<void> copyToClipboard(BuildContext context, String text) async {
     try {
       await Clipboard.setData(ClipboardData(text: text));
-      showSuccess(context, 'تم النسخ إلى الحافظة');
+      if (context.mounted) {
+        showSuccess(context, 'تم النسخ إلى الحافظة');
+      }
     } catch (e) {
-      showError(context, 'فشل في النسخ');
+      if (context.mounted) {
+        showError(context, 'فشل في النسخ');
+      }
     }
   }
 

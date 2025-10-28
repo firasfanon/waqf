@@ -938,6 +938,7 @@ class _HeroSliderManagementScreenState
 
   void _handleAddSlide() {
     final parentContext = context;
+    final messenger = ScaffoldMessenger.of(context);
 
     showDialog(
       context: context,
@@ -946,7 +947,7 @@ class _HeroSliderManagementScreenState
           await ref.read(heroSlidesProvider.notifier).addSlide(slide);
 
           if (mounted) {
-            ScaffoldMessenger.of(parentContext).showSnackBar(
+            messenger.showSnackBar(
               const SnackBar(
                 content: Text('تم إضافة الشريحة بنجاح'),
                 backgroundColor: AppConstants.success,
@@ -960,6 +961,7 @@ class _HeroSliderManagementScreenState
 
   void _handleEditSlide(HeroSlide slide) {
     final parentContext = context;
+    final messenger = ScaffoldMessenger.of(parentContext);
 
     showDialog(
       context: context,
@@ -969,7 +971,7 @@ class _HeroSliderManagementScreenState
           await ref.read(heroSlidesProvider.notifier).updateSlide(updatedSlide);
 
           if (mounted) {
-            ScaffoldMessenger.of(parentContext).showSnackBar(
+            messenger.showSnackBar(
               const SnackBar(
                 content: Text('تم تحديث الشريحة بنجاح'),
                 backgroundColor: AppConstants.success,
@@ -982,12 +984,14 @@ class _HeroSliderManagementScreenState
   }
 
   void _handleToggleActive(HeroSlide slide) async {
+    final messenger = ScaffoldMessenger.of(context);
+
     await ref.read(heroSlidesProvider.notifier).updateSlide(
       slide.copyWith(isActive: !slide.isActive),
     );
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             slide.isActive ? 'تم إخفاء الشريحة' : 'تم إظهار الشريحة',
@@ -1015,10 +1019,12 @@ class _HeroSliderManagementScreenState
             onPressed: () async {
               Navigator.pop(context);
 
+              final messenger = ScaffoldMessenger.of(parentContext);
+
               await ref.read(heroSlidesProvider.notifier).deleteSlide(slide.id);
 
               if (mounted) {
-                ScaffoldMessenger.of(parentContext).showSnackBar(
+                messenger.showSnackBar(
                   const SnackBar(
                     content: Text('تم حذف الشريحة بنجاح'),
                     backgroundColor: AppConstants.error,
@@ -1057,6 +1063,8 @@ class _HeroSliderManagementScreenState
             onPressed: () async {
               Navigator.pop(context);
 
+              final messenger = ScaffoldMessenger.of(parentContext);
+
               await ref.read(heroSlidesProvider.notifier).deleteSlides(
                 _selectedSlides.toList(),
               );
@@ -1067,7 +1075,7 @@ class _HeroSliderManagementScreenState
                   _isMultiSelectMode = false;
                 });
 
-                ScaffoldMessenger.of(parentContext).showSnackBar(
+                messenger.showSnackBar(
                   const SnackBar(
                     content: Text('تم حذف الشرائح بنجاح'),
                     backgroundColor: AppConstants.error,
