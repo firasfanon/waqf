@@ -18,48 +18,68 @@ class BreakingNewsSlider extends ConsumerStatefulWidget {
 class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
-  late AnimationController _animationController;
   bool _isHovered = false;
+  bool _isScrolling = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 30),
-    );
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
   void _startAutoScroll(BreakingNewsSectionSettings settings) {
-    if (!settings.autoScroll || _scrollController.hasClients == false) return;
+    if (!settings.autoScroll ||
+        _scrollController.hasClients == false ||
+        _isScrolling ||
+        _isHovered) {
+      return;
+    }
 
     final maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
+
+    _isScrolling = true;
 
     final duration = Duration(
       milliseconds: (maxScroll / settings.scrollSpeed * 1000).toInt(),
     );
 
-    _animationController.duration = duration;
-    _animationController.forward().then((_) {
+    _scrollController
+        .animateTo(
+          maxScroll,
+          duration: duration,
+          curve: Curves.linear,
+        )
+        .then((_) {
       if (mounted && !_isHovered) {
         Future.delayed(
           Duration(milliseconds: settings.pauseDuration),
               () {
             if (mounted && _scrollController.hasClients) {
-              _scrollController.jumpTo(0);
-              _startAutoScroll(settings);
+              // Smoothly return to start
+              _scrollController
+                  .animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                  .then((_) {
+                _isScrolling = false;
+                if (mounted && !_isHovered) {
+                  _startAutoScroll(settings);
+                }
+              });
             }
           },
         );
+      } else {
+        _isScrolling = false;
       }
     });
   }
@@ -88,12 +108,9 @@ class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
           items: items,
           settings: settings,
           scrollController: _scrollController,
-          animationController: _animationController,
           onHoverChanged: (isHovered) {
             setState(() => _isHovered = isHovered);
-            if (isHovered) {
-              _animationController.stop();
-            } else {
+            if (!isHovered) {
               _startAutoScroll(settings);
             }
           },
@@ -110,14 +127,12 @@ class _BreakingNewsBar extends StatelessWidget {
   final List<BreakingNewsItem> items;
   final BreakingNewsSectionSettings settings;
   final ScrollController scrollController;
-  final AnimationController animationController;
   final ValueChanged<bool> onHoverChanged;
 
   const _BreakingNewsBar({
     required this.items,
     required this.settings,
     required this.scrollController,
-    required this.animationController,
     required this.onHoverChanged,
   });
 
@@ -165,7 +180,6 @@ class _BreakingNewsBar extends StatelessWidget {
                 items: items,
                 settings: settings,
                 scrollController: scrollController,
-                animationController: animationController,
               ),
             ),
           ],
@@ -236,56 +250,42 @@ class _ScrollingNewsContent extends StatelessWidget {
   final List<BreakingNewsItem> items;
   final BreakingNewsSectionSettings settings;
   final ScrollController scrollController;
-  final AnimationController animationController;
 
   const _ScrollingNewsContent({
     required this.items,
     required this.settings,
     required this.scrollController,
-    required this.animationController,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child) {
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(
-            animationController.value *
-                scrollController.position.maxScrollExtent,
-          );
-        }
-        return child!;
-      },
-      child: ListView.separated(
-        controller: scrollController,
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        itemCount: items.length * 3, // Repeat for seamless scrolling
-        separatorBuilder: (context, index) {
-          if (!settings.showSeparator) return const SizedBox(width: 40);
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              settings.separatorText,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+    return ListView.separated(
+      controller: scrollController,
+      scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      itemCount: items.length * 3, // Repeat for seamless scrolling
+      separatorBuilder: (context, index) {
+        if (!settings.showSeparator) return const SizedBox(width: 40);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            settings.separatorText,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          );
-        },
-        itemBuilder: (context, index) {
-          final item = items[index % items.length];
-          return _BreakingNewsItemWidget(
-            item: item,
-            settings: settings,
-          );
-        },
-      ),
+          ),
+        );
+      },
+      itemBuilder: (context, index) {
+        final item = items[index % items.length];
+        return _BreakingNewsItemWidget(
+          item: item,
+          settings: settings,
+        );
+      },
     );
   }
 }

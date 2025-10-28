@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../widgets/home/hero_slider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 /// Web-optimized Splash Screen matching web theme
 class WebSplashScreen extends ConsumerStatefulWidget {
@@ -52,6 +54,28 @@ class _WebSplashScreenState extends ConsumerState<WebSplashScreen>
 
     // Wait minimum 2 seconds for branding
     await Future.delayed(const Duration(milliseconds: 2000));
+
+    if (!mounted) return;
+
+    // Preload hero slides and cache images
+    try {
+      final slidesAsync = await ref.read(heroSlidesProvider.future);
+
+      if (mounted && slidesAsync.isNotEmpty) {
+        // Precache all hero slide images
+        await Future.wait(
+          slidesAsync.map((slide) =>
+            precacheImage(
+              CachedNetworkImageProvider(slide.imageUrl),
+              context,
+            )
+          ),
+        );
+      }
+    } catch (e) {
+      // Continue even if preloading fails
+      debugPrint('Error preloading hero slides: $e');
+    }
 
     if (!mounted) return;
 

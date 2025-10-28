@@ -5,6 +5,7 @@ import '../../../../app/router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../widgets/forms/custom_text_field.dart';
+import '../../../widgets/web/web_app_bar.dart';
 
 /// Web-optimized Admin Login Screen
 /// Features: Centered card, split layout with branding
@@ -62,6 +63,7 @@ class _WebLoginScreenState extends ConsumerState<WebLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const WebAppBar(),
       body: Row(
         children: [
           // Left Side - Branding (40%)

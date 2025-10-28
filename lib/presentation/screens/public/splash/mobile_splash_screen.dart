@@ -5,6 +5,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
 import '../../../widgets/common/loading_widget.dart';
 import '../../../providers/auth_provider.dart'; // ← ADD THIS
+import '../../../widgets/home/hero_slider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MobileSplashScreen extends ConsumerStatefulWidget { // ← CHANGE TO ConsumerStatefulWidget
   const MobileSplashScreen({super.key});
@@ -69,7 +71,7 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
     ));
   }
 
-  // ✨ THIS IS THE KEY METHOD - UPDATED WITH AUTH CHECK
+  // ✨ THIS IS THE KEY METHOD - UPDATED WITH AUTH CHECK AND PRELOADING
   void _startSplashSequence() async {
     // Set status bar style
     SystemChrome.setSystemUIOverlayStyle(
@@ -87,6 +89,28 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
 
     // Wait for animations to complete
     await Future.delayed(const Duration(seconds: 2));
+
+    if (!mounted) return;
+
+    // Preload hero slides and cache images
+    try {
+      final slidesAsync = await ref.read(heroSlidesProvider.future);
+
+      if (mounted && slidesAsync.isNotEmpty) {
+        // Precache all hero slide images
+        await Future.wait(
+          slidesAsync.map((slide) =>
+            precacheImage(
+              CachedNetworkImageProvider(slide.imageUrl),
+              context,
+            )
+          ),
+        );
+      }
+    } catch (e) {
+      // Continue even if preloading fails
+      debugPrint('Error preloading hero slides: $e');
+    }
 
     if (!mounted) return;
 
