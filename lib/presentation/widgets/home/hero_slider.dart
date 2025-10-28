@@ -26,6 +26,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _autoPlayTimer;
+  bool _isHovering = false;
 
   @override
   void initState() {
@@ -43,9 +44,8 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
 
   void _startAutoPlay() {
     _autoPlayTimer?.cancel();
-    _autoPlayTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (!mounted) {
-        timer.cancel();
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
+      if (!mounted || _isHovering) {
         return;
       }
 
@@ -62,11 +62,23 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
         if (mounted && _pageController.hasClients) {
           _pageController.animateToPage(
             _currentPage,
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 1000),
             curve: Curves.easeInOut,
           );
         }
       });
+    });
+  }
+
+  void _pauseAutoPlay() {
+    setState(() {
+      _isHovering = true;
+    });
+  }
+
+  void _resumeAutoPlay() {
+    setState(() {
+      _isHovering = false;
     });
   }
 
@@ -114,24 +126,27 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
   Widget _buildSlider(List<HeroSlide> slides) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      height: screenHeight * 0.6,
-      child: Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              if (mounted) {
-                setState(() {
-                  _currentPage = index;
-                });
-              }
-            },
-            itemCount: slides.length,
-            itemBuilder: (context, index) {
-              return _buildSlide(slides[index], index);
-            },
-          ),
+    return MouseRegion(
+      onEnter: (_) => _pauseAutoPlay(),
+      onExit: (_) => _resumeAutoPlay(),
+      child: SizedBox(
+        height: screenHeight * 0.6,
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                if (mounted) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                }
+              },
+              itemCount: slides.length,
+              itemBuilder: (context, index) {
+                return _buildSlide(slides[index], index);
+              },
+            ),
 
           // Slider Indicators
           Positioned(
@@ -224,6 +239,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
           ),
         ],
       ),
+    ),
     );
   }
 
