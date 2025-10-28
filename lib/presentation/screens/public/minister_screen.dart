@@ -30,7 +30,7 @@ class MinisterScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 60,
-              backgroundColor: AppColors.islamicGreen.withOpacity(0.1),
+              backgroundColor: AppColors.islamicGreen.withValues(alpha:0.1),
               child: const Icon(Icons.person, size: 60, color: AppColors.islamicGreen),
             ),
             const SizedBox(height: 16),

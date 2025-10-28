@@ -112,7 +112,7 @@ class _WebSplashScreenState extends ConsumerState<WebSplashScreen>
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: AppColors.islamicGreen.withOpacity(0.1),
+                  color: AppColors.islamicGreen.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Icon(

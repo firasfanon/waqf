@@ -154,7 +154,7 @@ class StructureScreen extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: AppColors.islamicGreen.withOpacity(0.1),
+            color: AppColors.islamicGreen.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Icon(dept['icon'] as IconData, color: AppColors.islamicGreen),

@@ -159,7 +159,7 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha:0.2),
                               blurRadius: 20,
                               spreadRadius: 5,
                             ),
@@ -208,7 +208,7 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
                             Text(
                               'دولة فلسطين',
                               style: AppTextStyles.titleLarge.copyWith(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha:0.9),
                                 fontWeight: FontWeight.w500,
                               ),
                               textAlign: TextAlign.center,
@@ -219,7 +219,7 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
                             Text(
                               'Palestinian Ministry of Endowments',
                               style: AppTextStyles.bodyLarge.copyWith(
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white.withValues(alpha:0.8),
                                 fontFamily: AppTextStyles.englishFont,
                               ),
                               textAlign: TextAlign.center,
@@ -251,7 +251,7 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
                       child: Text(
                         'الإصدار ${AppConstants.appVersion}',
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha:0.7),
                         ),
                       ),
                     );

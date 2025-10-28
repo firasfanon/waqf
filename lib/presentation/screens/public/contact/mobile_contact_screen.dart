@@ -61,7 +61,7 @@ class _MobileContactScreenState extends State<MobileContactScreen> {
                   Text(
                     'يسعدنا تواصلكم معنا',
                     style: AppTextStyles.bodyLarge.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha:0.9),
                     ),
                   ),
                 ],
@@ -284,7 +284,7 @@ class _MobileContactScreenState extends State<MobileContactScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppColors.islamicGreen.withOpacity(0.1),
+                  color: AppColors.islamicGreen.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(

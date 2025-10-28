@@ -74,7 +74,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha:0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -100,7 +100,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
             'نحن هنا لخدمتكم والإجابة على استفساراتكم في أي وقت',
             style: TextStyle(
               fontSize: 18,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha:0.9),
             ),
             textAlign: TextAlign.center,
           ),
@@ -130,7 +130,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -165,7 +165,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                       Icon(
                         stat['icon'] as IconData,
                         size: 32,
-                        color: (stat['color'] as Color).withOpacity(0.3),
+                        color: (stat['color'] as Color).withValues(alpha:0.3),
                       ),
                     ],
                   ),
@@ -197,7 +197,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -266,7 +266,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -489,8 +489,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.goldenYellow.withOpacity(0.1),
-            AppColors.goldenYellow.withOpacity(0.05),
+            AppColors.goldenYellow.withValues(alpha:0.1),
+            AppColors.goldenYellow.withValues(alpha:0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -513,7 +513,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                 height: 48,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.goldenYellow, AppColors.goldenYellow.withOpacity(0.7)],
+                    colors: [AppColors.goldenYellow, AppColors.goldenYellow.withValues(alpha:0.7)],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -567,7 +567,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.sageGreen.withOpacity(0.1),
+        color: AppColors.sageGreen.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -680,8 +680,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppConstants.islamicGreen.withOpacity(0.05),
-                    AppConstants.islamicGreen.withOpacity(0.02),
+                    AppConstants.islamicGreen.withValues(alpha:0.05),
+                    AppConstants.islamicGreen.withValues(alpha:0.02),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -790,8 +790,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppConstants.islamicGreen.withOpacity(0.05),
-                AppConstants.islamicGreen.withOpacity(0.02),
+                AppConstants.islamicGreen.withValues(alpha:0.05),
+                AppConstants.islamicGreen.withValues(alpha:0.02),
               ],
             ),
             borderRadius: BorderRadius.circular(16),
@@ -880,8 +880,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppConstants.islamicGreen.withOpacity(0.05),
-                    AppConstants.islamicGreen.withOpacity(0.02),
+                    AppConstants.islamicGreen.withValues(alpha:0.05),
+                    AppConstants.islamicGreen.withValues(alpha:0.02),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -897,7 +897,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha:0.1),
                           blurRadius: 10,
                         ),
                       ],
@@ -992,7 +992,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: (contact['color'] as Color).withOpacity(0.1),
+                            color: (contact['color'] as Color).withValues(alpha:0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -1051,8 +1051,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppConstants.islamicGreen.withOpacity(0.05),
-                AppConstants.islamicGreen.withOpacity(0.02),
+                AppConstants.islamicGreen.withValues(alpha:0.05),
+                AppConstants.islamicGreen.withValues(alpha:0.02),
               ],
             ),
             borderRadius: BorderRadius.circular(16),
@@ -1089,8 +1089,8 @@ class _WebContactScreenState extends State<WebContactScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppConstants.islamicGreen.withOpacity(0.05),
-            AppConstants.islamicGreen.withOpacity(0.02),
+            AppConstants.islamicGreen.withValues(alpha:0.05),
+            AppConstants.islamicGreen.withValues(alpha:0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(24),
@@ -1149,7 +1149,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                       height: 64,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [AppColors.goldenYellow, AppColors.goldenYellow.withOpacity(0.7)],
+                          colors: [AppColors.goldenYellow, AppColors.goldenYellow.withValues(alpha:0.7)],
                         ),
                         shape: BoxShape.circle,
                       ),
@@ -1185,7 +1185,7 @@ class _WebContactScreenState extends State<WebContactScreen> {
                       height: 64,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [AppColors.sageGreen, AppColors.sageGreen.withOpacity(0.7)],
+                          colors: [AppColors.sageGreen, AppColors.sageGreen.withValues(alpha:0.7)],
                         ),
                         shape: BoxShape.circle,
                       ),

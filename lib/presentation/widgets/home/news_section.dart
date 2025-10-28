@@ -67,7 +67,7 @@ class ServicesSection extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(icon, color: color, size: 24),

@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/admin_user.dart';
 import '../services/supabase_service.dart';
 import '../../core/services/storage_service.dart';
+import 'dart:developer' as dev;
 
 class AuthRepository {
   final SupabaseService _supabaseService;
@@ -20,96 +21,84 @@ class AuthRepository {
 
   Future<AdminUser> login(String email, String password) async {
     try {
-      // ✅ LOG: Starting login
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('🔐 LOGIN ATTEMPT');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('📧 Email: $email');
-      print('🔑 Password length: ${password.length}');
-      print('⏰ Time: ${DateTime.now()}');
-      print('');
+      // LOG: Starting login
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('LOGIN ATTEMPT', name: 'AuthRepository');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('Email: $email', name: 'AuthRepository');
+      dev.log('Password length: ${password.length}', name: 'AuthRepository');
+      dev.log('Time: ${DateTime.now()}', name: 'AuthRepository');
 
       // 1. Authenticate with Supabase Auth
-      print('📡 Calling Supabase Auth...');
+      dev.log('Calling Supabase Auth...', name: 'AuthRepository');
       final response = await _supabaseService.client.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
-      print('');
-      print('✅ Supabase Auth Response:');
-      print('   User ID: ${response.user?.id}');
-      print('   Email: ${response.user?.email}');
-      print('   Session exists: ${response.session != null}');
+
+      dev.log('Supabase Auth Response:', name: 'AuthRepository');
+      dev.log('User ID: ${response.user?.id}', name: 'AuthRepository');
+      dev.log('Email: ${response.user?.email}', name: 'AuthRepository');
+      dev.log('Session exists: ${response.session != null}', name: 'AuthRepository');
       if (response.session?.accessToken != null) {
-        print('   Access token: ${response.session!.accessToken.substring(0, 20)}...');
+        dev.log('Access token: ${response.session!.accessToken.substring(0, 20)}...', name: 'AuthRepository');
       }
-      print('');
 
       // 2. Check if login was successful
       if (response.user == null) {
-        print('❌ ERROR: No user in response!');
+        dev.log('ERROR: No user in response!', name: 'AuthRepository');
         throw Exception('فشل تسجيل الدخول');
       }
 
       // 3. Fetch user profile from admin_users table
-      print('📋 Fetching user profile from admin_users table...');
-      print('   Looking for user_id: ${response.user!.id}');
+      dev.log('Fetching user profile from admin_users table...', name: 'AuthRepository');
+      dev.log('Looking for user_id: ${response.user!.id}', name: 'AuthRepository');
       final adminUser = await _getUserProfile(response.user!.id);
 
-      print('');
-      print('✅ User Profile Found:');
-      print('   Name: ${adminUser.name}');
-      print('   Email: ${adminUser.email}');
-      print('   Role: ${adminUser.role}');
-      print('   Active: ${adminUser.isActive}');
-      print('');
+
+      dev.log('User Profile Found:', name: 'AuthRepository');
+      dev.log('Name: ${adminUser.name}', name: 'AuthRepository');
+      dev.log('Email: ${adminUser.email}', name: 'AuthRepository');
+      dev.log('Role: ${adminUser.role}', name: 'AuthRepository');
+      dev.log('Active: ${adminUser.isActive}', name: 'AuthRepository');
 
       // 4. Check if user is active
       if (!adminUser.isActive) {
-        print('❌ ERROR: User account is inactive!');
+        dev.log('ERROR: User account is inactive!', name: 'AuthRepository');
         await logout();
         throw Exception('هذا الحساب غير نشط. يرجى التواصل مع المسؤول');
       }
 
       // 5. Save session for "Remember Me"
-      print('💾 Saving session...');
+      dev.log('Saving session...', name: 'AuthRepository');
       await _saveSession(response.session!);
 
-      print('');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('✅ LOGIN SUCCESSFUL!');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('LOGIN SUCCESSFUL!', name: 'AuthRepository');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
 
       return adminUser;
 
     } on AuthException catch (e) {
-      // ✅ FIXED: Removed stackTrace reference
-      print('');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('❌ SUPABASE AUTH EXCEPTION');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('📛 Message: "${e.message}"');
-      print('🔢 Status Code: ${e.statusCode}');
-      print('📍 Type: ${e.runtimeType}');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('SUPABASE AUTH EXCEPTION', name: 'AuthRepository', error: e);
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('Message: "${e.message}"', name: 'AuthRepository', error: e);
+      dev.log('Status Code: ${e.statusCode}', name: 'AuthRepository');
+      dev.log('Type: ${e.runtimeType}', name: 'AuthRepository');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
 
       throw _handleAuthException(e);
 
     } catch (e, stackTrace) {
-      // ✅ Only general exceptions have stackTrace
-      print('');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('❌ GENERAL EXCEPTION');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('📛 Error: $e');
-      print('🔍 Type: ${e.runtimeType}');
-      print('📍 Stack Trace:');
-      print(stackTrace.toString());
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('');
+      // Only general exceptions have stackTrace
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('GENERAL EXCEPTION', name: 'AuthRepository', error: e, stackTrace: stackTrace);
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
+      dev.log('Error: $e', name: 'AuthRepository', error: e);
+      dev.log('Type: ${e.runtimeType}', name: 'AuthRepository');
+      dev.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', name: 'AuthRepository');
 
       throw Exception('خطأ في تسجيل الدخول: ${e.toString()}');
     }
@@ -201,7 +190,7 @@ class AuthRepository {
 
   Future<AdminUser> _getUserProfile(String userId) async {
     try {
-      print('📋 Fetching profile for user_id: $userId');
+      dev.log('Fetching profile for user_id: $userId', name: 'AuthRepository');
 
       final response = await _supabaseService.client
           .from('admin_users')
@@ -209,28 +198,23 @@ class AuthRepository {
           .eq('id', userId)
           .single();
 
-      print('✅ Profile data received:');
-      print('   Raw JSON: $response');
+      dev.log('Profile data received:', name: 'AuthRepository');
+      dev.log('Raw JSON: $response', name: 'AuthRepository');
 
       final adminUser = AdminUser.fromJson(response);
 
-      print('✅ Parsed AdminUser:');
-      print('   ID: ${adminUser.id}');
-      print('   Name: ${adminUser.name}');
-      print('   Email: ${adminUser.email}');
-      print('   Role: ${adminUser.role}');
+      dev.log('Parsed AdminUser:', name: 'AuthRepository');
+      dev.log('ID: ${adminUser.id}', name: 'AuthRepository');
+      dev.log('Name: ${adminUser.name}', name: 'AuthRepository');
+      dev.log('Email: ${adminUser.email}', name: 'AuthRepository');
+      dev.log('Role: ${adminUser.role}', name: 'AuthRepository');
 
       return adminUser;
 
     } catch (e, stackTrace) {
-      print('');
-      print('❌ Failed to fetch user profile!');
-      print('   User ID searched: $userId');
-      print('   Error: $e');
-      print('   Error Type: ${e.runtimeType}');
-      print('   Stack Trace:');
-      print(stackTrace.toString());
-      print('');
+      dev.log('Failed to fetch user profile!', name: 'AuthRepository', error: e, stackTrace: stackTrace);
+      dev.log('User ID searched: $userId', name: 'AuthRepository');
+      dev.log('Error Type: ${e.runtimeType}', name: 'AuthRepository');
 
       throw Exception('فشل جلب بيانات المستخدم: ${e.toString()}');
     }
@@ -282,7 +266,7 @@ class AuthRepository {
       await StorageService.instance.setBool('remember_me', true);
     } catch (e) {
       // Don't throw error, just log
-      print('Failed to save session: $e');
+      dev.log('Failed to save session', name: 'AuthRepository', error: e);
     }
   }
 
@@ -302,7 +286,7 @@ class AuthRepository {
 
       return true;
     } catch (e) {
-      print('Failed to restore session: $e');
+      dev.log('Failed to restore session', name: 'AuthRepository', error: e);
       return false;
     }
   }
@@ -314,7 +298,7 @@ class AuthRepository {
       await StorageService.instance.remove('refresh_token');
       await StorageService.instance.remove('remember_me');
     } catch (e) {
-      print('Failed to clear session: $e');
+      dev.log('Failed to clear session', name: 'AuthRepository', error: e);
     }
   }
 
@@ -327,12 +311,12 @@ class AuthRepository {
 
   Exception _handleAuthException(AuthException e) {
     // Log the raw error for debugging
-    print('🔍 Analyzing Supabase error...');
-    print('   Original message: "${e.message}"');
+    dev.log('Analyzing Supabase error...', name: 'AuthRepository', error: e);
+    dev.log('Original message: "${e.message}"', name: 'AuthRepository');
 
     // Normalize the message for comparison (lowercase, trimmed)
     final message = e.message.toLowerCase().trim();
-    print('   Normalized: "$message"');
+    dev.log('Normalized: "$message"', name: 'AuthRepository');
 
     // Check for various forms of "invalid credentials"
     if (message.contains('invalid') ||
@@ -342,7 +326,7 @@ class AuthRepository {
           message.contains('password') ||
           message.contains('email') ||
           message.contains('login')) {
-        print('   ✓ Detected: Invalid credentials error');
+        dev.log('Detected: Invalid credentials error', name: 'AuthRepository');
         return Exception('البريد الإلكتروني أو كلمة المرور غير صحيحة');
       }
     }
@@ -350,20 +334,20 @@ class AuthRepository {
     // Check for email confirmation
     if (message.contains('email') &&
         (message.contains('confirm') || message.contains('verif'))) {
-      print('   ✓ Detected: Email not confirmed');
+      dev.log('Detected: Email not confirmed', name: 'AuthRepository');
       return Exception('يرجى تأكيد البريد الإلكتروني أولاً');
     }
 
     // Check for already registered
     if (message.contains('already') && message.contains('register')) {
-      print('   ✓ Detected: User already registered');
+      dev.log('Detected: User already registered', name: 'AuthRepository');
       return Exception('هذا البريد الإلكتروني مسجل مسبقاً');
     }
 
     // Check for user not found
     if (message.contains('user') &&
         (message.contains('not found') || message.contains('does not exist'))) {
-      print('   ✓ Detected: User not found');
+      dev.log('Detected: User not found', name: 'AuthRepository');
       return Exception('المستخدم غير موجود');
     }
 
@@ -371,11 +355,11 @@ class AuthRepository {
     if (message.contains('network') ||
         message.contains('connection') ||
         message.contains('timeout')) {
-      print('   ✓ Detected: Network error');
+      dev.log('Detected: Network error', name: 'AuthRepository');
       return Exception('خطأ في الاتصال بالخادم. يرجى التحقق من الإنترنت');
     }
 
     // If no match, return the original error with context
-    print('   ✗ No pattern match - returning original error');
+    dev.log('No pattern match - returning original error', name: 'AuthRepository');
     return Exception('خطأ في المصادقة: ${e.message}');
   }}

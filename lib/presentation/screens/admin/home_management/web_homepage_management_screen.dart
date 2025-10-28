@@ -122,7 +122,7 @@ class _WebHomePageManagementScreenState
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           )
@@ -153,7 +153,7 @@ class _WebHomePageManagementScreenState
                       ? [
                     BoxShadow(
                       color:
-                      AppConstants.islamicGreen.withOpacity(0.3),
+                      AppConstants.islamicGreen.withValues(alpha:0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     )
@@ -270,7 +270,7 @@ class _WebHomePageManagementScreenState
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           )

@@ -16,9 +16,9 @@ class UnsavedChangesBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       decoration: BoxDecoration(
-        color: AppConstants.warning.withOpacity(0.1),
+        color: AppConstants.warning.withValues(alpha:0.1),
         border: Border(
-          bottom: BorderSide(color: AppConstants.warning.withOpacity(0.3)),
+          bottom: BorderSide(color: AppConstants.warning.withValues(alpha:0.3)),
         ),
       ),
       child: Row(

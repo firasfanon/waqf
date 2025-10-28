@@ -56,7 +56,7 @@ class WebNewsDetailScreen extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: AppConstants.islamicGreen.withOpacity(0.1),
+                        color: AppConstants.islamicGreen.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -91,7 +91,7 @@ class WebNewsDetailScreen extends ConsumerWidget {
                         CircleAvatar(
                           radius: 20,
                           backgroundColor: AppConstants.islamicGreen
-                              .withOpacity(0.1),
+                              .withValues(alpha:0.1),
                           child: const Icon(
                             Icons.person,
                             color: AppConstants.islamicGreen,

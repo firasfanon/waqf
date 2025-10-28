@@ -127,7 +127,7 @@ class _BreakingNewsManagementScreenState
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -322,9 +322,9 @@ class _BreakingNewsManagementScreenState
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha:0.3)),
       ),
       child: Row(
         children: [
@@ -407,7 +407,7 @@ class _BreakingNewsManagementScreenState
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
+                  color: Colors.red.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
@@ -511,8 +511,8 @@ class _BreakingNewsManagementScreenState
                 ),
                 decoration: BoxDecoration(
                   color: item.isActive
-                      ? AppConstants.success.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.1),
+                      ? AppConstants.success.withValues(alpha:0.1)
+                      : Colors.grey.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -764,10 +764,13 @@ class _BreakingNewsManagementScreenState
             onPressed: () async {
               Navigator.pop(context);
 
+              // Capture messenger before async gap
+              final messenger = ScaffoldMessenger.of(parentContext);
+
               await ref.read(breakingNewsProvider.notifier).deleteItem(item.id);
 
               if (mounted) {
-                ScaffoldMessenger.of(parentContext).showSnackBar(
+                messenger.showSnackBar(
                   const SnackBar(
                     content: Text('تم حذف الخبر بنجاح'),
                     backgroundColor: AppConstants.error,

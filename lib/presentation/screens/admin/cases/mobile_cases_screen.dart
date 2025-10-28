@@ -43,7 +43,7 @@ class _CasesScreenState extends ConsumerState<MobileCasesScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -286,7 +286,7 @@ class _CasesScreenState extends ConsumerState<MobileCasesScreen> {
         vertical: 6,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color),
       ),
@@ -303,7 +303,7 @@ class _CasesScreenState extends ConsumerState<MobileCasesScreen> {
   Widget _buildStatusChip(CaseStatus status) {
     return Chip(
       label: Text(status.displayName),
-      backgroundColor: AppColors.islamicGreen.withOpacity(0.1),
+      backgroundColor: AppColors.islamicGreen.withValues(alpha:0.1),
       labelStyle: AppTextStyles.labelSmall.copyWith(
         color: AppColors.islamicGreen,
       ),

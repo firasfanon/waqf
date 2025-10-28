@@ -65,7 +65,7 @@ class _ActivitiesContentState extends ConsumerState<ActivitiesContent> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -134,7 +134,7 @@ class _ActivitiesContentState extends ConsumerState<ActivitiesContent> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 28),
@@ -338,7 +338,7 @@ class _ActivitiesContentState extends ConsumerState<ActivitiesContent> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getCategoryColor(activity.category).withOpacity(0.1),
+                  color: _getCategoryColor(activity.category).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -374,7 +374,7 @@ class _ActivitiesContentState extends ConsumerState<ActivitiesContent> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(activity.status).withOpacity(0.1),
+                  color: _getStatusColor(activity.status).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(

@@ -109,7 +109,7 @@ class NewsSection extends ConsumerWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.islamicGreen.withOpacity(0.1),
+                            color: AppColors.islamicGreen.withValues(alpha:0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(

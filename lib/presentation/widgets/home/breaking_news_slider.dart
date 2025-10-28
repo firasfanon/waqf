@@ -19,12 +19,13 @@ class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isHovered = false;
-  bool _isScrolling = false;
+  double _scrollVelocity = 50.0; // Pixels per second (increased for faster scroll)
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _startContinuousScroll();
   }
 
   @override
@@ -33,54 +34,29 @@ class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
     super.dispose();
   }
 
-  void _startAutoScroll(BreakingNewsSectionSettings settings) {
-    if (!settings.autoScroll ||
-        _scrollController.hasClients == false ||
-        _isScrolling ||
-        _isHovered) {
-      return;
-    }
+  void _startContinuousScroll() {
+    Future.doWhile(() async {
+      if (!mounted) return false;
 
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    if (maxScroll <= 0) return;
+      if (_scrollController.hasClients && !_isHovered) {
+        final currentOffset = _scrollController.offset;
+        final maxScroll = _scrollController.position.maxScrollExtent;
 
-    _isScrolling = true;
-
-    final duration = Duration(
-      milliseconds: (maxScroll / settings.scrollSpeed * 1000).toInt(),
-    );
-
-    _scrollController
-        .animateTo(
-          maxScroll,
-          duration: duration,
-          curve: Curves.linear,
-        )
-        .then((_) {
-      if (mounted && !_isHovered) {
-        Future.delayed(
-          Duration(milliseconds: settings.pauseDuration),
-              () {
-            if (mounted && _scrollController.hasClients) {
-              // Smoothly return to start
-              _scrollController
-                  .animateTo(
-                    0,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                  .then((_) {
-                _isScrolling = false;
-                if (mounted && !_isHovered) {
-                  _startAutoScroll(settings);
-                }
-              });
-            }
-          },
-        );
-      } else {
-        _isScrolling = false;
+        // If we've scrolled past 1/3 of the content, jump back seamlessly
+        // This creates the infinite loop effect
+        if (currentOffset >= maxScroll / 3) {
+          _scrollController.jumpTo(0);
+        } else {
+          // Smooth continuous scroll
+          final newOffset = currentOffset + (_scrollVelocity / 60); // 60 FPS
+          if (newOffset <= maxScroll) {
+            _scrollController.jumpTo(newOffset);
+          }
+        }
       }
+
+      await Future.delayed(const Duration(milliseconds: 16)); // ~60 FPS
+      return true;
     });
   }
 
@@ -97,22 +73,12 @@ class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
 
         final settings = settingsState.settings!;
 
-        // Start auto-scroll after build
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (settings.autoScroll && !_isHovered) {
-            _startAutoScroll(settings);
-          }
-        });
-
         return _BreakingNewsBar(
           items: items,
           settings: settings,
           scrollController: _scrollController,
           onHoverChanged: (isHovered) {
             setState(() => _isHovered = isHovered);
-            if (!isHovered) {
-              _startAutoScroll(settings);
-            }
           },
         );
       },
@@ -144,20 +110,20 @@ class _BreakingNewsBar extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             AppConstants.error,
-            AppConstants.error.withOpacity(0.9),
+            AppConstants.error.withValues(alpha: 0.9),
           ],
         ),
         border: settings.showBorder
             ? Border(
           bottom: BorderSide(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             width: 2,
           ),
         )
             : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -215,7 +181,7 @@ class _BreakingNewsLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         borderRadius: const BorderRadius.horizontal(
           left: Radius.circular(0),
         ),

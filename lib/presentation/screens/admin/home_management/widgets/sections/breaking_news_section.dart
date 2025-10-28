@@ -90,12 +90,12 @@ class _BreakingNewsSectionState extends ConsumerState<BreakingNewsSection> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.red.withOpacity(0.05),
-            Colors.red.withOpacity(0.02),
+            Colors.red.withValues(alpha:0.05),
+            Colors.red.withValues(alpha:0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.2)),
+        border: Border.all(color: Colors.red.withValues(alpha:0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

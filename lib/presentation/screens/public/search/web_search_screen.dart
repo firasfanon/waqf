@@ -74,7 +74,7 @@ class _WebSearchScreenState extends State<WebSearchScreen> {
             Text(
               'ابحث في جميع الأقسام والخدمات',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white.withOpacity(0.95),
+                color: Colors.white.withValues(alpha:0.95),
               ),
             ),
             const SizedBox(height: 40),
@@ -257,7 +257,7 @@ class _WebSearchScreenState extends State<WebSearchScreen> {
                 width: 70,
                 height: 70,
                 decoration: BoxDecoration(
-                  color: _getCategoryColor(result.category).withOpacity(0.1),
+                  color: _getCategoryColor(result.category).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -277,7 +277,7 @@ class _WebSearchScreenState extends State<WebSearchScreen> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: _getCategoryColor(result.category).withOpacity(0.1),
+                        color: _getCategoryColor(result.category).withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -361,7 +361,7 @@ class _WebSearchScreenState extends State<WebSearchScreen> {
                     _searchController.text = suggestion;
                     _performSearch(suggestion);
                   },
-                  backgroundColor: AppConstants.islamicGreen.withOpacity(0.1),
+                  backgroundColor: AppConstants.islamicGreen.withValues(alpha:0.1),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 8,
@@ -504,7 +504,7 @@ class _WebSearchScreenState extends State<WebSearchScreen> {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: AppConstants.islamicGreen.withOpacity(0.1),
+                    color: AppConstants.islamicGreen.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(

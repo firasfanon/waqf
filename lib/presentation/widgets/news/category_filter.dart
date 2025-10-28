@@ -65,7 +65,7 @@ class CategoryFilter extends StatelessWidget {
         selected: isSelected,
         onSelected: (_) => onTap(),
         backgroundColor: Colors.white,
-        selectedColor: AppColors.islamicGreen.withOpacity(0.2),
+        selectedColor: AppColors.islamicGreen.withValues(alpha:0.2),
         checkmarkColor: AppColors.islamicGreen,
         labelStyle: TextStyle(
           color: isSelected ? AppColors.islamicGreen : Colors.black87,

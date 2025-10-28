@@ -24,7 +24,7 @@ class CustomErrorWidget extends StatelessWidget {
             Icon(
               icon,
               size: 80,
-              color: AppColors.error.withOpacity(0.5),
+              color: AppColors.error.withValues(alpha:0.5),
             ),
             const SizedBox(height: 24),
             Text(

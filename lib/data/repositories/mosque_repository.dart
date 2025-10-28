@@ -1,6 +1,7 @@
 import '../models/mosque.dart';
 import '../services/supabase_service.dart';
 import 'dart:math' as math;
+import 'dart:developer' as dev;
 
 class MosqueRepository {
   final SupabaseService _supabaseService;
@@ -11,31 +12,30 @@ class MosqueRepository {
   Future<List<Mosque>> getAllMosques() async {
     try {
       // Add debug logging
-      print('🔍 Attempting to fetch mosques from Supabase...');
-      print('🔍 Supabase client initialized: ${_supabaseService.client != null}');
+      dev.log('Attempting to fetch mosques from Supabase...', name: 'MosqueRepository');
+      dev.log('Supabase client initialized: ${_supabaseService.client != null}', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')
           .select()
           .order('name');
 
-      print('✅ Successfully fetched ${(response as List).length} mosques from Supabase');
+      dev.log('Successfully fetched ${(response as List).length} mosques from Supabase', name: 'MosqueRepository');
 
       return (response as List<dynamic>)
           .map((json) => _mapToMosque(json as Map<String, dynamic>))
           .toList();
     } catch (e, stackTrace) {
-      // IMPORTANT: Print the actual error instead of hiding it
-      print('❌ Error fetching mosques from Supabase: $e');
-      print('📍 Stack trace: $stackTrace');
+      // IMPORTANT: Log the actual error instead of hiding it
+      dev.log('Error fetching mosques from Supabase', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
 
       // Check if it's a configuration issue
       if (e.toString().contains('Invalid API key') ||
           e.toString().contains('Invalid URL')) {
-        print('⚠️ Supabase configuration error - check your API keys and URL');
+        dev.log('Supabase configuration error - check your API keys and URL', name: 'MosqueRepository', error: e);
       }
 
-      print('⚠️ Falling back to sample data');
+      dev.log('Falling back to sample data', name: 'MosqueRepository');
       return _getSampleMosques();
     }
   }
@@ -43,7 +43,7 @@ class MosqueRepository {
   // Get mosque by ID
   Future<Mosque?> getMosqueById(int id) async {
     try {
-      print('🔍 Fetching mosque with ID: $id');
+      dev.log('Fetching mosque with ID: $id', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')
@@ -51,11 +51,10 @@ class MosqueRepository {
           .eq('id', id)
           .single();
 
-      print('✅ Successfully fetched mosque: ${response['name']}');
+      dev.log('Successfully fetched mosque: ${response['name']}', name: 'MosqueRepository');
       return _mapToMosque(response);
     } catch (e, stackTrace) {
-      print('❌ Error fetching mosque by ID $id: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error fetching mosque by ID $id', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
 
       final samples = _getSampleMosques();
       try {
@@ -69,7 +68,7 @@ class MosqueRepository {
   // Get mosques by governorate
   Future<List<Mosque>> getMosquesByGovernorate(String governorate) async {
     try {
-      print('🔍 Fetching mosques for governorate: $governorate');
+      dev.log('Fetching mosques for governorate: $governorate', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')
@@ -77,14 +76,13 @@ class MosqueRepository {
           .eq('governorate', governorate)
           .order('name');
 
-      print('✅ Found ${(response as List).length} mosques in $governorate');
+      dev.log('Found ${(response as List).length} mosques in $governorate', name: 'MosqueRepository');
 
       return (response as List<dynamic>)
           .map((json) => _mapToMosque(json as Map<String, dynamic>))
           .toList();
     } catch (e, stackTrace) {
-      print('❌ Error fetching mosques by governorate: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error fetching mosques by governorate', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
 
       return _getSampleMosques()
           .where((m) => m.governorate == governorate)
@@ -95,7 +93,7 @@ class MosqueRepository {
   // Get mosques by type
   Future<List<Mosque>> getMosquesByType(MosqueType type) async {
     try {
-      print('🔍 Fetching mosques of type: ${type.name}');
+      dev.log('Fetching mosques of type: ${type.name}', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')
@@ -103,14 +101,13 @@ class MosqueRepository {
           .eq('type', type.name)
           .order('name');
 
-      print('✅ Found ${(response as List).length} mosques of type ${type.name}');
+      dev.log('Found ${(response as List).length} mosques of type ${type.name}', name: 'MosqueRepository');
 
       return (response as List<dynamic>)
           .map((json) => _mapToMosque(json as Map<String, dynamic>))
           .toList();
     } catch (e, stackTrace) {
-      print('❌ Error fetching mosques by type: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error fetching mosques by type', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
 
       return _getSampleMosques().where((m) => m.type == type).toList();
     }
@@ -119,7 +116,7 @@ class MosqueRepository {
   // Search mosques
   Future<List<Mosque>> searchMosques(String query) async {
     try {
-      print('🔍 Searching mosques with query: $query');
+      dev.log('Searching mosques with query: $query', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')
@@ -127,14 +124,13 @@ class MosqueRepository {
           .or('name.ilike.%$query%,name_en.ilike.%$query%,imam.ilike.%$query%')
           .order('name');
 
-      print('✅ Found ${(response as List).length} mosques matching "$query"');
+      dev.log('Found ${(response as List).length} mosques matching "$query"', name: 'MosqueRepository');
 
       return (response as List<dynamic>)
           .map((json) => _mapToMosque(json as Map<String, dynamic>))
           .toList();
     } catch (e, stackTrace) {
-      print('❌ Error searching mosques: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error searching mosques', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
 
       return _getSampleMosques()
           .where((m) =>
@@ -151,7 +147,7 @@ class MosqueRepository {
         double radiusKm = 5.0,
       }) async {
     try {
-      print('🔍 Fetching mosques near ($latitude, $longitude) within ${radiusKm}km');
+      dev.log('Fetching mosques near ($latitude, $longitude) within ${radiusKm}km', name: 'MosqueRepository');
 
       final allMosques = await getAllMosques();
 
@@ -165,12 +161,11 @@ class MosqueRepository {
         return distance <= radiusKm;
       }).toList();
 
-      print('✅ Found ${nearbyMosques.length} mosques within radius');
+      dev.log('Found ${nearbyMosques.length} mosques within radius', name: 'MosqueRepository');
 
       return nearbyMosques;
     } catch (e, stackTrace) {
-      print('❌ Error fetching nearby mosques: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error fetching nearby mosques', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
       throw Exception('Failed to load nearby mosques: $e');
     }
   }
@@ -178,7 +173,7 @@ class MosqueRepository {
   // Get mosque statistics
   Future<Map<String, dynamic>> getMosqueStatistics() async {
     try {
-      print('🔍 Calculating mosque statistics...');
+      dev.log('Calculating mosque statistics...', name: 'MosqueRepository');
 
       final allMosques = await getAllMosques();
 
@@ -195,12 +190,11 @@ class MosqueRepository {
         },
       };
 
-      print('✅ Statistics calculated successfully');
+      dev.log('Statistics calculated successfully', name: 'MosqueRepository');
 
       return stats;
     } catch (e, stackTrace) {
-      print('❌ Error calculating statistics: $e');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error calculating statistics', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
       throw Exception('Failed to load mosque statistics: $e');
     }
   }
@@ -209,8 +203,8 @@ class MosqueRepository {
   /// Handles null values gracefully to prevent type casting errors
   Mosque _mapToMosque(Map<String, dynamic> json) {
     try {
-      // Debug: Print raw JSON to identify issues
-      print('📦 Mapping mosque: ${json['name']}');
+      // Debug: Log raw JSON to identify issues
+      dev.log('Mapping mosque: ${json['name']}', name: 'MosqueRepository');
 
       return Mosque(
         // Required numeric fields (Supabase always returns these)
@@ -280,9 +274,8 @@ class MosqueRepository {
         updatedAt: DateTime.parse(json['updated_at'] as String),
       );
     } catch (e, stackTrace) {
-      print('❌ Error mapping mosque: $e');
-      print('📦 Problematic JSON: $json');
-      print('📍 Stack trace: $stackTrace');
+      dev.log('Error mapping mosque', name: 'MosqueRepository', error: e, stackTrace: stackTrace);
+      dev.log('Problematic JSON: $json', name: 'MosqueRepository');
       rethrow;  // Re-throw to see the error in the logs
     }
   }
@@ -403,7 +396,7 @@ class MosqueRepository {
         orElse: () => defaultValue,
       );
     } catch (e) {
-      print('⚠️ Unknown enum value "$value", using default: ${defaultValue.name}');
+      dev.log('Unknown enum value "$value", using default: ${defaultValue.name}', name: 'MosqueRepository', error: e);
       return defaultValue;
     }
   }

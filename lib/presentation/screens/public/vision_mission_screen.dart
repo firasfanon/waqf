@@ -134,7 +134,7 @@ class VisionMissionScreen extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.islamicGreen.withOpacity(0.1),
+              color: AppColors.islamicGreen.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(value['icon'] as IconData, color: AppColors.islamicGreen, size: 20),

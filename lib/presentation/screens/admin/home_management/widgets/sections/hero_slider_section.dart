@@ -27,12 +27,12 @@ class _HeroSliderSectionState extends ConsumerState<HeroSliderSection> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.purple.withOpacity(0.05),
-            Colors.purple.withOpacity(0.02)
+            Colors.purple.withValues(alpha:0.05),
+            Colors.purple.withValues(alpha:0.02)
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.purple.withOpacity(0.2)),
+        border: Border.all(color: Colors.purple.withValues(alpha:0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +185,7 @@ class _HeroSliderSectionState extends ConsumerState<HeroSliderSection> {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.6),
+                          Colors.black.withValues(alpha:0.6),
                         ],
                       ),
                     ),
@@ -311,7 +311,7 @@ class _HeroSliderSectionState extends ConsumerState<HeroSliderSection> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.1),
+                  color: Colors.purple.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
@@ -380,8 +380,8 @@ class _HeroSliderSectionState extends ConsumerState<HeroSliderSection> {
                 ),
                 decoration: BoxDecoration(
                   color: slide.isActive
-                      ? AppConstants.success.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.1),
+                      ? AppConstants.success.withValues(alpha:0.1)
+                      : Colors.grey.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

@@ -44,7 +44,7 @@ class _WaqfLandsScreenState extends ConsumerState<MobileWaqfLandsScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -158,7 +158,7 @@ class _WaqfLandsScreenState extends ConsumerState<MobileWaqfLandsScreen> {
                   ),
                   Chip(
                     label: Text(land.status.displayName),
-                    backgroundColor: _getStatusColor(land.status).withOpacity(0.1),
+                    backgroundColor: _getStatusColor(land.status).withValues(alpha:0.1),
                     labelStyle: TextStyle(color: _getStatusColor(land.status)),
                   ),
                 ],

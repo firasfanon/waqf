@@ -71,7 +71,7 @@ class _AdminLoginScreenState extends ConsumerState<MobileLoginScreen> {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: AppColors.islamicGreen.withOpacity(0.1),
+                            color: AppColors.islamicGreen.withValues(alpha:0.1),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(

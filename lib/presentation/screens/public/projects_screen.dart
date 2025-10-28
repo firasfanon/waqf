@@ -46,7 +46,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               selected: isSelected,
               onSelected: (selected) => setState(() => _selectedFilter = filter),
               backgroundColor: Colors.white,
-              selectedColor: AppColors.islamicGreen.withOpacity(0.2),
+              selectedColor: AppColors.islamicGreen.withValues(alpha:0.2),
               labelStyle: TextStyle(
                 color: isSelected ? AppColors.islamicGreen : Colors.black87,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -158,7 +158,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color),
       ),

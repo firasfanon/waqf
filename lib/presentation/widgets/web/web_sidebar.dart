@@ -25,7 +25,7 @@ class WebSidebar extends ConsumerWidget {
         gradient: AppConstants.islamicGradient,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 10,
             offset: const Offset(2, 0),
           ),
@@ -46,7 +46,7 @@ class WebSidebar extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha:0.2),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                       ),
@@ -72,7 +72,7 @@ class WebSidebar extends ConsumerWidget {
                   'وزارة الأوقاف',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha:0.8),
                   ),
                 ),
               ],
@@ -178,7 +178,7 @@ class WebSidebar extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha:0.2),
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(20),
               ),
@@ -218,7 +218,7 @@ class WebSidebar extends ConsumerWidget {
                         currentUser?.role ?? 'Admin',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha:0.8),
                         ),
                       ),
                     ],
@@ -288,7 +288,7 @@ class WebSidebar extends ConsumerWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
-          color: Colors.white.withOpacity(0.6),
+          color: Colors.white.withValues(alpha:0.6),
           letterSpacing: 1,
         ),
       ),
@@ -315,9 +315,9 @@ class WebSidebar extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
+              color: isActive ? Colors.white.withValues(alpha:0.2) : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-              border: isActive ? Border.all(color: Colors.white.withOpacity(0.3)) : null,
+              border: isActive ? Border.all(color: Colors.white.withValues(alpha:0.3)) : null,
             ),
             child: Row(
               children: [
