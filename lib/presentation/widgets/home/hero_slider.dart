@@ -44,7 +44,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
 
   void _startAutoPlay() {
     _autoPlayTimer?.cancel();
-    _autoPlayTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (!mounted || _isHovering) {
         return;
       }

@@ -31,7 +31,7 @@ Future<void> _initializeServices() async {
   try {
     await dotenv.load(fileName: '.env');
     debugPrint('✅ Environment variables loaded successfully');
-    debugPrint('📍 Environment: ${AppConstants.environment}');
+    debugPrint('🔍 Environment: ${AppConstants.environment}');
   } catch (e) {
     debugPrint('⚠️  .env file not found, using default values');
     debugPrint('   This is expected for web platform on first run');
@@ -56,15 +56,12 @@ Future<void> _initializeServices() async {
       throw Exception('Supabase URL or API key is missing. Please configure .env file.');
     }
 
-    // Check if already initialized (prevents re-initialization errors)
-    if (Supabase.instance.client.auth.currentSession == null ||
-        !Supabase.instance.isInitialized) {
-      await Supabase.initialize(
-        url: supabaseUrl,
-        anonKey: supabaseKey,
-        debug: false, // Set to true for debugging
-      );
-    }
+    // FIXED: Removed the problematic pre-check that tried to access Supabase.instance before initialization
+    await Supabase.initialize(
+      url: supabaseUrl,
+      anonKey: supabaseKey,
+      debug: false, // Set to true for debugging
+    );
 
     debugPrint('✅ Supabase initialized successfully');
     debugPrint('   URL: $supabaseUrl');

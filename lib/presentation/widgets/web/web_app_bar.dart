@@ -33,14 +33,19 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Row(
           children: [
+
             _buildLogo(context),
             const SizedBox(width: 60),
+
             Expanded(child: _buildNavigation(context)),
             const SizedBox(width: 10),
-            _buildSearchButton(context),
-            const SizedBox(width: 10),
+
             _buildLanguageSelector(context),
             const SizedBox(width: 10),
+
+            _buildSearchButton(context),
+            const SizedBox(width: 10),
+
             if (isAuthenticated && currentUser != null)
               _buildUserMenu(context, ref, currentUser)
             else
@@ -224,7 +229,7 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
           Icons.search,
           color: isSearchActive
               ? AppConstants.islamicGreen
-              : AppConstants.textPrimary,
+              : Colors.grey[600],
         ),
         onPressed: () => Navigator.pushNamed(context, AppRouter.search),
         tooltip: 'البحث في الموقع',
@@ -247,7 +252,7 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.language, size: 24),
+            Icon(Icons.language, size: 24, color: Colors.grey[600],),
             const SizedBox(width: 8),
             Icon(Icons.arrow_drop_down, size: 18, color: Colors.grey[600]),
           ],
@@ -288,13 +293,13 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   Widget _buildUserMenu(BuildContext context, WidgetRef ref, dynamic user) {
     return PopupMenuButton<String>(
-      offset: const Offset(0, 50),
+      offset: const Offset(0, 60),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey[300]!),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(8),
@@ -310,7 +315,7 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             /*
             Text(
               user.name,
@@ -320,7 +325,7 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
             */
 
            // const SizedBox(width: 8),
-            const Icon(Icons.arrow_drop_down, size: 20),
+            Icon(Icons.arrow_drop_down, size: 20, color: Colors.grey[600],),
           ],
         ),
       ),
@@ -390,13 +395,19 @@ class WebAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
+    final isLoginActive = _isCurrentRoute(context, AppRouter.adminLogin);
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
       ),
       child: IconButton(
-        icon: const Icon(Icons.login, color: AppConstants.textPrimary),
+        icon: Icon(
+          Icons.login,
+          color: isLoginActive
+              ? AppConstants.islamicGreen
+              : AppConstants.textPrimary,),
         onPressed: () => Navigator.pushNamed(context, AppRouter.adminLogin),
         tooltip: 'تسجيل الدخول',
       ),
