@@ -73,13 +73,13 @@ class DecorationUtils {
     );
   }
 
-  /// Primary color container
+  /// Primary color container (Islamic green)
   static BoxDecoration primaryContainer({
     double opacity = 0.1,
     double? radius,
   }) {
     return BoxDecoration(
-      color: AppConstants.primary.withValues(alpha: opacity),
+      color: AppConstants.islamicGreen.withValues(alpha: opacity),
       borderRadius: BorderRadius.circular(radius ?? 4),
     );
   }

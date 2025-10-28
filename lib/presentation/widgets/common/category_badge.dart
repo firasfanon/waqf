@@ -43,15 +43,15 @@ class CategoryBadge extends StatelessWidget {
     );
   }
 
-  /// Primary color badge
+  /// Primary color badge (Islamic green)
   factory CategoryBadge.primary({
     required String label,
     VoidCallback? onTap,
   }) {
     return CategoryBadge(
       label: label,
-      backgroundColor: AppConstants.primary.withValues(alpha: 0.1),
-      textColor: AppConstants.primary,
+      backgroundColor: AppConstants.islamicGreen.withValues(alpha: 0.1),
+      textColor: AppConstants.islamicGreen,
       fontSize: 12,
       fontWeight: FontWeight.bold,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -134,20 +134,31 @@ class CategoryBadge extends StatelessWidget {
     required Color color,
     VoidCallback? onTap,
   }) {
-    return _OutlinedCategoryBadge(
+    return CategoryBadge(
       label: label,
-      color: color,
+      backgroundColor: Colors.transparent,
+      textColor: color,
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      borderRadius: 4,
       onTap: onTap,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = backgroundColor ?? AppConstants.islamicGreen.withValues(alpha: 0.1);
+    final hasBorder = backgroundColor == Colors.transparent;
+
     final badge = Container(
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppConstants.islamicGreen.withValues(alpha: 0.1),
+        color: bgColor,
         borderRadius: BorderRadius.circular(borderRadius ?? 4),
+        border: hasBorder
+            ? Border.all(color: textColor ?? AppConstants.islamicGreen, width: 1.5)
+            : null,
       ),
       child: Text(
         label,
@@ -163,48 +174,6 @@ class CategoryBadge extends StatelessWidget {
       return InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(borderRadius ?? 4),
-        child: badge,
-      );
-    }
-
-    return badge;
-  }
-}
-
-/// Private outlined variant
-class _OutlinedCategoryBadge extends StatelessWidget {
-  final String label;
-  final Color color;
-  final VoidCallback? onTap;
-
-  const _OutlinedCategoryBadge({
-    required this.label,
-    required this.color,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final badge = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: color, width: 1.5),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-
-    if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(4),
         child: badge,
       );
     }

@@ -687,6 +687,7 @@ class _BreakingNewsManagementScreenState
 
   void _handleAddItem() {
     final parentContext = context;
+    final messenger = ScaffoldMessenger.of(parentContext);
 
     showDialog(
       context: context,
@@ -695,7 +696,7 @@ class _BreakingNewsManagementScreenState
           await ref.read(breakingNewsProvider.notifier).addItem(item);
 
           if (mounted) {
-            ScaffoldMessenger.of(parentContext).showSnackBar(
+            messenger.showSnackBar(
               const SnackBar(
                 content: Text('تمت إضافة الخبر بنجاح'),
                 backgroundColor: AppConstants.success,
@@ -709,6 +710,7 @@ class _BreakingNewsManagementScreenState
 
   void _handleEditItem(BreakingNewsItem item) {
     final parentContext = context;
+    final messenger = ScaffoldMessenger.of(parentContext);
 
     showDialog(
       context: context,
@@ -718,7 +720,7 @@ class _BreakingNewsManagementScreenState
           await ref.read(breakingNewsProvider.notifier).updateItem(updatedItem);
 
           if (mounted) {
-            ScaffoldMessenger.of(parentContext).showSnackBar(
+            messenger.showSnackBar(
               const SnackBar(
                 content: Text('تم تحديث الخبر بنجاح'),
                 backgroundColor: AppConstants.success,
@@ -731,12 +733,14 @@ class _BreakingNewsManagementScreenState
   }
 
   void _handleToggleActive(BreakingNewsItem item) async {
+    final messenger = ScaffoldMessenger.of(context);
+
     await ref.read(breakingNewsProvider.notifier).updateItem(
       item.copyWith(isActive: !item.isActive),
     );
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             item.isActive ? 'تم إخفاء الخبر' : 'تم إظهار الخبر',
@@ -809,6 +813,8 @@ class _BreakingNewsManagementScreenState
             onPressed: () async {
               Navigator.pop(context);
 
+              final messenger = ScaffoldMessenger.of(parentContext);
+
               await ref.read(breakingNewsProvider.notifier).deleteItems(
                 _selectedItems.toList(),
               );
@@ -819,7 +825,7 @@ class _BreakingNewsManagementScreenState
                   _isMultiSelectMode = false;
                 });
 
-                ScaffoldMessenger.of(parentContext).showSnackBar(
+                messenger.showSnackBar(
                   const SnackBar(
                     content: Text('تم حذف الأخبار بنجاح'),
                     backgroundColor: AppConstants.error,

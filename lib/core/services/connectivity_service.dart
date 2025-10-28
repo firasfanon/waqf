@@ -249,7 +249,6 @@ class ConnectivityService {
       case ConnectivityResult.other:
         return 'متصل بشبكة أخرى';
       case ConnectivityResult.none:
-      default:
         return 'غير متصل بالإنترنت';
     }
   }

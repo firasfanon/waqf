@@ -342,7 +342,7 @@ class ActivityRepository {
     try {
       dev.log('Calculating activity statistics', name: 'ActivityRepository');
 
-      final all Activities = await getAllActivities();
+      final allActivities = await getAllActivities();
 
       return {
         'total': allActivities.length,
