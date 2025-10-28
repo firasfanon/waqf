@@ -44,7 +44,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
 
   void _startAutoPlay() {
     _autoPlayTimer?.cancel();
-    _autoPlayTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
       if (!mounted || _isHovering) {
         return;
       }
@@ -62,7 +62,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
         if (mounted && _pageController.hasClients) {
           _pageController.animateToPage(
             _currentPage,
-            duration: const Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 1500),
             curve: Curves.easeInOut,
           );
         }
@@ -128,22 +128,25 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
 
     return SizedBox(
       height: screenHeight * 0.5,
-      child: Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              if (mounted) {
-                setState(() {
-                  _currentPage = index;
-                });
-              }
-            },
-            itemCount: slides.length,
-            itemBuilder: (context, index) {
-              return _buildSlide(slides[index], index);
-            },
-          ),
+      child: MouseRegion(
+        onEnter: (_) => _pauseAutoPlay(),
+        onExit: (_) => _resumeAutoPlay(),
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                if (mounted) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                }
+              },
+              itemCount: slides.length,
+              itemBuilder: (context, index) {
+                return _buildSlide(slides[index], index);
+              },
+            ),
 
           // Slider Indicators
           Positioned(
@@ -235,8 +238,8 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
             ),
           ),
         ],
+        ),
       ),
-    ),
     );
   }
 

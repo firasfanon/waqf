@@ -5,6 +5,7 @@ import 'package:palestinian_ministry_endowments/core/services/storage_service.da
 import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../widgets/common/custom_app_bar.dart';
 
 class MobileLoginScreen extends ConsumerStatefulWidget {
   const MobileLoginScreen({super.key});
@@ -41,6 +42,10 @@ class _AdminLoginScreenState extends ConsumerState<MobileLoginScreen> {
     });
 
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'تسجيل الدخول',
+        showBackButton: true,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: AppColors.islamicGradient,
