@@ -189,7 +189,7 @@ void main() {
 
   group('AppColors', () {
     test('should have Islamic green as primary color', () {
-      expect(AppColors.islamicGreen.value, equals(0xFF22C55E));
+      expect(AppColors.islamicGreen.toARGB32(), equals(0xFF22C55E));
     });
 
     test('should have contrasting text colors', () {

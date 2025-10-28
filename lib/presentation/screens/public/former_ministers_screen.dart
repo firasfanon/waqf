@@ -52,7 +52,7 @@ class FormerMinistersScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundColor: AppColors.islamicGreen.withOpacity(0.1),
+              backgroundColor: AppColors.islamicGreen.withValues(alpha:0.1),
               child: Text(
                 minister['name'].toString().split(' ')[0][0] +
                     minister['name'].toString().split(' ').last[0],

@@ -145,7 +145,7 @@ class AppTheme {
       // Chip theme
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.surfaceVariant,
-        selectedColor: AppColors.islamicGreen.withOpacity(0.2),
+        selectedColor: AppColors.islamicGreen.withValues(alpha:0.2),
         labelStyle: AppTextStyles.labelMedium,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.radiusL),
@@ -230,9 +230,9 @@ class AppTheme {
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.islamicGreen.withOpacity(0.5);
+            return AppColors.islamicGreen.withValues(alpha:0.5);
           }
-          return Colors.grey.withOpacity(0.3);
+          return Colors.grey.withValues(alpha:0.3);
         }),
       ),
 
@@ -263,9 +263,9 @@ class AppTheme {
       // Slider theme
       sliderTheme: SliderThemeData(
         activeTrackColor: AppColors.islamicGreen,
-        inactiveTrackColor: AppColors.islamicGreen.withOpacity(0.3),
+        inactiveTrackColor: AppColors.islamicGreen.withValues(alpha:0.3),
         thumbColor: AppColors.islamicGreen,
-        overlayColor: AppColors.islamicGreen.withOpacity(0.2),
+        overlayColor: AppColors.islamicGreen.withValues(alpha:0.2),
         valueIndicatorColor: AppColors.islamicGreen,
       ),
     );

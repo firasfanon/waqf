@@ -173,7 +173,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
             Text(
               'نقدم لكم مجموعة متكاملة من الخدمات الإلكترونية السريعة والموثوقة',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha:0.9),
               ),
               textAlign: TextAlign.center,
             ),
@@ -188,7 +188,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha:0.2),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -315,10 +315,10 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
-        border: Border.all(color: color.withOpacity(0.2), width: 2),
+        border: Border.all(color: color.withValues(alpha:0.2), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -331,12 +331,12 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
             height: 80,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color, color.withOpacity(0.7)],
+                colors: [color, color.withValues(alpha:0.7)],
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha:0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -392,9 +392,9 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.1),
+                    color: AppColors.success.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.success.withOpacity(0.3)),
+                    border: Border.all(color: AppColors.success.withValues(alpha:0.3)),
                   ),
                   child: Row(
                     children: [
@@ -449,7 +449,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
             borderRadius: BorderRadius.circular(AppConstants.radiusL),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha:0.08),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -464,8 +464,8 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      (service['color'] as Color).withOpacity(0.1),
-                      (service['color'] as Color).withOpacity(0.05),
+                      (service['color'] as Color).withValues(alpha:0.1),
+                      (service['color'] as Color).withValues(alpha:0.05),
                     ],
                   ),
                   borderRadius: const BorderRadius.vertical(
@@ -481,13 +481,13 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                         gradient: LinearGradient(
                           colors: [
                             service['color'] as Color,
-                            (service['color'] as Color).withOpacity(0.7),
+                            (service['color'] as Color).withValues(alpha:0.7),
                           ],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: (service['color'] as Color).withOpacity(0.3),
+                            color: (service['color'] as Color).withValues(alpha:0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -505,8 +505,8 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: isAvailable
-                            ? AppColors.success.withOpacity(0.2)
-                            : AppColors.warning.withOpacity(0.2),
+                            ? AppColors.success.withValues(alpha:0.2)
+                            : AppColors.warning.withValues(alpha:0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -627,7 +627,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                   gradient: LinearGradient(
                     colors: [
                       service['color'] as Color,
-                      (service['color'] as Color).withOpacity(0.8),
+                      (service['color'] as Color).withValues(alpha:0.8),
                     ],
                   ),
                   borderRadius: const BorderRadius.only(
@@ -640,7 +640,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha:0.2),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Icon(
@@ -669,7 +669,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha:0.3),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -752,7 +752,7 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: (service['color'] as Color).withOpacity(0.1),
+                          color: (service['color'] as Color).withValues(alpha:0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -842,13 +842,13 @@ class _WebServicesScreenState extends State<WebServicesScreen> {
             Container(
               padding: const EdgeInsets.all(40),
               decoration: BoxDecoration(
-                color: AppColors.islamicGreen.withOpacity(0.1),
+                color: AppColors.islamicGreen.withValues(alpha:0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.miscellaneous_services,
                 size: 80,
-                color: AppColors.islamicGreen.withOpacity(0.5),
+                color: AppColors.islamicGreen.withValues(alpha:0.5),
               ),
             ),
             const SizedBox(height: 32),

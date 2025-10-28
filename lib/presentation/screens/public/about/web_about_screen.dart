@@ -53,7 +53,7 @@ class WebAboutScreen extends StatelessWidget {
             Text(
               'نعمل على خدمة المساجد والأوقاف الإسلامية في فلسطين',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white.withOpacity(0.95),
+                color: Colors.white.withValues(alpha:0.95),
               ),
               textAlign: TextAlign.center,
             ),
@@ -157,7 +157,7 @@ class WebAboutScreen extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 40, color: color),
@@ -287,7 +287,7 @@ class WebAboutScreen extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppConstants.islamicGreen.withOpacity(0.1),
+              color: AppConstants.islamicGreen.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -351,7 +351,7 @@ class WebAboutScreen extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: AppConstants.islamicGreen.withOpacity(0.1),
+                        color: AppConstants.islamicGreen.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -511,7 +511,7 @@ class WebAboutScreen extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha:0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 40, color: color),

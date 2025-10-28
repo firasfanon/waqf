@@ -60,7 +60,7 @@ class EServicesScreen extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: (service['color'] as Color).withOpacity(0.1),
+                  color: (service['color'] as Color).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(32),
                 ),
                 child: Icon(service['icon'] as IconData, size: 32, color: service['color'] as Color),
@@ -75,7 +75,7 @@ class EServicesScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: (service['color'] as Color).withOpacity(0.1),
+                  color: (service['color'] as Color).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(

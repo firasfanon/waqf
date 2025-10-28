@@ -169,12 +169,12 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
                       decoration: BoxDecoration(
                         color: _currentPage == index
                             ? AppConstants.goldenYellow
-                            : Colors.white.withOpacity(0.5),
+                            : Colors.white.withValues(alpha:0.5),
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: _currentPage == index
                             ? [
                           BoxShadow(
-                            color: AppConstants.goldenYellow.withOpacity(0.5),
+                            color: AppConstants.goldenYellow.withValues(alpha:0.5),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -202,7 +202,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha:0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.chevron_right,
@@ -227,7 +227,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha:0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.chevron_left,
@@ -272,8 +272,8 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  AppConstants.sageGreen.withOpacity(0.8),
-                  AppConstants.islamicGreen.withOpacity(0.6),
+                  AppConstants.sageGreen.withValues(alpha:0.8),
+                  AppConstants.islamicGreen.withValues(alpha:0.6),
                   Colors.transparent,
                 ],
               ),
@@ -351,7 +351,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha:0.9),
                                 height: 1.6,
                                 shadows: const [
                                   Shadow(
@@ -495,7 +495,7 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
               Container(
                 padding: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

@@ -98,7 +98,7 @@ class _MobileHomeScreenState extends ConsumerState<MobileHomeScreen> {
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -237,10 +237,10 @@ class _MobileHomeScreenState extends ConsumerState<MobileHomeScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                    border: Border.all(color: (link['color'] as Color).withOpacity(0.3)),
+                    border: Border.all(color: (link['color'] as Color).withValues(alpha:0.3)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha:0.05),
                         blurRadius: 5,
                         offset: const Offset(0, 2),
                       ),
@@ -348,7 +348,7 @@ class _MobileHomeScreenState extends ConsumerState<MobileHomeScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: Colors.white.withOpacity(0.9), size: 20),
+        Icon(icon, color: Colors.white.withValues(alpha:0.9), size: 20),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -365,7 +365,7 @@ class _MobileHomeScreenState extends ConsumerState<MobileHomeScreen> {
               Text(
                 content,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha:0.9),
                 ),
               ),
             ],

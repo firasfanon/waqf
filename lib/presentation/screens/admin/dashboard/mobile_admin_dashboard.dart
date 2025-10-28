@@ -141,7 +141,7 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.islamicGreen.withOpacity(0.1),
+                        color: AppColors.islamicGreen.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -251,14 +251,14 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
                 Text(
                   currentUser?.department ?? 'نظام إدارة وزارة الأوقاف والشؤون الدينية',
                   style: AppTextStyles.bodyLarge.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha:0.9),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'آخر تحديث: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha:0.8),
                   ),
                 ),
               ],
@@ -268,7 +268,7 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha:0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -326,7 +326,7 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: module.color.withOpacity(0.1),
+                  color: module.color.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(
@@ -579,7 +579,7 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: action.color.withOpacity(0.1),
+                          color: action.color.withValues(alpha:0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Icon(
@@ -628,7 +628,7 @@ class _AdminDashboardScreenState extends ConsumerState<MobileAdminDashboard> {
             itemBuilder: (context, index) {
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.islamicGreen.withOpacity(0.1),
+                  backgroundColor: AppColors.islamicGreen.withValues(alpha:0.1),
                   child: const Icon(
                     Icons.notifications,
                     color: AppColors.islamicGreen,

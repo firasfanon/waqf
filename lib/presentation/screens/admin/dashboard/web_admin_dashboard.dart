@@ -90,7 +90,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha:0.05), blurRadius: 10, offset: const Offset(0, 2))],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -218,7 +218,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                       color: isActive ? AppConstants.islamicGreen : Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: isActive ? AppConstants.islamicGreen : Colors.grey[300]!, width: 2),
-                      boxShadow: isActive ? [BoxShadow(color: AppConstants.islamicGreen.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))] : null,
+                      boxShadow: isActive ? [BoxShadow(color: AppConstants.islamicGreen.withValues(alpha:0.3), blurRadius: 10, offset: const Offset(0, 4))] : null,
                     ),
                     child: Column(
                       children: [
@@ -226,7 +226,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                         const SizedBox(height: 12),
                         Text(dashboard.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isActive ? Colors.white : Colors.black87)),
                         const SizedBox(height: 4),
-                        Text(dashboard.description, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: isActive ? Colors.white.withOpacity(0.9) : Colors.grey[600])),
+                        Text(dashboard.description, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: isActive ? Colors.white.withValues(alpha:0.9) : Colors.grey[600])),
                       ],
                     ),
                   ),
@@ -401,7 +401,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                     Container(
                       padding: const EdgeInsets.all(8), // ← REDUCE
                       decoration: BoxDecoration(
-                        color: (stat['color'] as Color).withOpacity(0.1),
+                        color: (stat['color'] as Color).withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(stat['icon'] as IconData, color: stat['color'] as Color, size: 20),
@@ -409,7 +409,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
+                        color: AppColors.success.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(stat['trend'] as String, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.success)),
@@ -515,7 +515,7 @@ class _WebAdminDashboardState extends ConsumerState<WebAdminDashboard> {
                       Container(
                         width: 40,
                         height: 40,
-                        decoration: BoxDecoration(color: AppConstants.islamicGreen.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(color: AppConstants.islamicGreen.withValues(alpha:0.1), borderRadius: BorderRadius.circular(10)),
                         child: const Icon(Icons.notifications, color: AppConstants.islamicGreen, size: 20),
                       ),
                       const SizedBox(width: 16),

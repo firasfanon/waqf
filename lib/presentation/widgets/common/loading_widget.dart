@@ -91,7 +91,7 @@ class _LoadingWidgetState extends State<LoadingWidget>
                       borderRadius: BorderRadius.circular(widget.size / 2),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.islamicGreen.withOpacity(0.3),
+                          color: AppColors.islamicGreen.withValues(alpha:0.3),
                           blurRadius: 10,
                           spreadRadius: 2,
                         ),

@@ -87,12 +87,12 @@ class _HeaderSettingsSectionState extends ConsumerState<HeaderSettingsSection> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.blue.withOpacity(0.05),
-            Colors.blue.withOpacity(0.02)
+            Colors.blue.withValues(alpha:0.05),
+            Colors.blue.withValues(alpha:0.02)
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blue.withOpacity(0.2)),
+        border: Border.all(color: Colors.blue.withValues(alpha:0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -137,7 +137,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
                 child: Icon(
                   Icons.mosque,
                   size: 120,
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha:0.1),
                 ),
               ),
             ],
@@ -162,7 +162,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -265,7 +265,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
           boxShadow: isSelected
               ? [
             BoxShadow(
-              color: AppColors.islamicGreen.withOpacity(0.3),
+              color: AppColors.islamicGreen.withValues(alpha:0.3),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -312,13 +312,13 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppColors.islamicGreen.withOpacity(0.1),
-                AppColors.goldenYellow.withOpacity(0.1),
+                AppColors.islamicGreen.withValues(alpha:0.1),
+                AppColors.goldenYellow.withValues(alpha:0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(AppConstants.radiusL),
             border: Border.all(
-              color: AppColors.islamicGreen.withOpacity(0.2),
+              color: AppColors.islamicGreen.withValues(alpha:0.2),
             ),
           ),
           child: Row(
@@ -372,7 +372,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color, size: 24),
@@ -446,7 +446,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha:0.08),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -473,7 +473,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.islamicGreen.withOpacity(0.3),
+                            color: AppColors.islamicGreen.withValues(alpha:0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -509,7 +509,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: _getTypeColor(mosque.type).withOpacity(0.1),
+                              color: _getTypeColor(mosque.type).withValues(alpha:0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -532,10 +532,10 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: _getStatusColor(mosque.status).withOpacity(0.1),
+                        color: _getStatusColor(mosque.status).withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: _getStatusColor(mosque.status).withOpacity(0.3),
+                          color: _getStatusColor(mosque.status).withValues(alpha:0.3),
                         ),
                       ),
                       child: Icon(
@@ -617,8 +617,8 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppColors.islamicGreen.withOpacity(0.1),
-                        AppColors.goldenYellow.withOpacity(0.1),
+                        AppColors.islamicGreen.withValues(alpha:0.1),
+                        AppColors.goldenYellow.withValues(alpha:0.1),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(10),
@@ -669,7 +669,7 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Icon(icon, size: 16, color: color),
@@ -708,10 +708,10 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.success.withOpacity(0.1),
+        color: AppColors.success.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.success.withOpacity(0.3),
+          color: AppColors.success.withValues(alpha:0.3),
         ),
       ),
       child: Row(
@@ -740,13 +740,13 @@ class _MosquesScreenState extends ConsumerState<MobileMosquesScreen>
           Container(
             padding: const EdgeInsets.all(30),
             decoration: BoxDecoration(
-              color: AppColors.islamicGreen.withOpacity(0.1),
+              color: AppColors.islamicGreen.withValues(alpha:0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.mosque,
               size: 64,
-              color: AppColors.islamicGreen.withOpacity(0.5),
+              color: AppColors.islamicGreen.withValues(alpha:0.5),
             ),
           ),
           const SizedBox(height: 24),
@@ -986,7 +986,7 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.islamicGreen.withOpacity(0.3),
+                                color: AppColors.islamicGreen.withValues(alpha:0.3),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),
@@ -1019,8 +1019,8 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      AppColors.islamicGreen.withOpacity(0.2),
-                                      AppColors.goldenYellow.withOpacity(0.2),
+                                      AppColors.islamicGreen.withValues(alpha:0.2),
+                                      AppColors.goldenYellow.withValues(alpha:0.2),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(8),
@@ -1047,10 +1047,10 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.05),
+                          color: Colors.blue.withValues(alpha:0.05),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.blue.withValues(alpha:0.1),
                           ),
                         ),
                         child: Row(
@@ -1216,7 +1216,7 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: color, size: 20),
@@ -1259,7 +1259,7 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: AppColors.islamicGreen.withOpacity(0.1),
+              color: AppColors.islamicGreen.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
@@ -1305,11 +1305,11 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColors.success.withOpacity(0.3),
+          color: AppColors.success.withValues(alpha:0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.success.withOpacity(0.1),
+            color: AppColors.success.withValues(alpha:0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -1349,13 +1349,13 @@ class MosqueDetailsBottomSheet extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                color.withOpacity(0.1),
-                color.withOpacity(0.05),
+                color.withValues(alpha:0.1),
+                color.withValues(alpha:0.05),
               ],
             ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha:0.3),
             ),
           ),
           child: Row(

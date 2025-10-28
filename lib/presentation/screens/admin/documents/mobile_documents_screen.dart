@@ -51,7 +51,7 @@ class _DocumentsScreenState extends ConsumerState<MobileDocumentsScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -126,7 +126,7 @@ class _DocumentsScreenState extends ConsumerState<MobileDocumentsScreen> {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: AppColors.islamicGreen.withOpacity(0.1),
+            color: AppColors.islamicGreen.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: AppColors.islamicGreen),

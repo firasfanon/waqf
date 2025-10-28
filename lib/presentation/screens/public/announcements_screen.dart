@@ -88,7 +88,7 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
             _selectedPriority = selected ? priority : null;
           });
         },
-        selectedColor: AppConstants.islamicGreen.withOpacity(0.2),
+        selectedColor: AppConstants.islamicGreen.withValues(alpha:0.2),
         checkmarkColor: AppConstants.islamicGreen,
         side: BorderSide(
           color: isSelected ? AppConstants.islamicGreen : Colors.grey[300]!,
@@ -137,13 +137,13 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
         borderRadius: BorderRadius.circular(AppConstants.radiusM),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
-          color: _getPriorityColor(announcement.priority).withOpacity(0.3),
+          color: _getPriorityColor(announcement.priority).withValues(alpha:0.3),
           width: 2,
         ),
       ),
@@ -154,7 +154,7 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
           Container(
             padding: const EdgeInsets.all(AppConstants.paddingM),
             decoration: BoxDecoration(
-              color: _getPriorityColor(announcement.priority).withOpacity(0.1),
+              color: _getPriorityColor(announcement.priority).withValues(alpha:0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(AppConstants.radiusM),
                 topRight: Radius.circular(AppConstants.radiusM),
@@ -257,7 +257,7 @@ class _AnnouncementsScreenState extends ConsumerState<AnnouncementsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppConstants.islamicGreen.withOpacity(0.1),
+                        color: AppConstants.islamicGreen.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(

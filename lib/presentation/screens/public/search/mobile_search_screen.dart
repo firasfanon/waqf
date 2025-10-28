@@ -104,7 +104,7 @@ class _MobileSearchScreenState extends State<MobileSearchScreen> {
                         }
                       });
                     },
-                    selectedColor: AppColors.islamicGreen.withOpacity(0.2),
+                    selectedColor: AppColors.islamicGreen.withValues(alpha:0.2),
                     checkmarkColor: AppColors.islamicGreen,
                   ),
                 );
@@ -244,7 +244,7 @@ class _MobileSearchScreenState extends State<MobileSearchScreen> {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: _getCategoryColor(result.category).withOpacity(0.1),
+            color: _getCategoryColor(result.category).withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(24),
           ),
           child: Icon(
@@ -271,7 +271,7 @@ class _MobileSearchScreenState extends State<MobileSearchScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: _getCategoryColor(result.category).withOpacity(0.1),
+                color: _getCategoryColor(result.category).withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

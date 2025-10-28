@@ -146,7 +146,7 @@ class _HeroSliderManagementScreenState
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -364,9 +364,9 @@ class _HeroSliderManagementScreenState
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha:0.3)),
       ),
       child: Row(
         children: [
@@ -475,7 +475,7 @@ class _HeroSliderManagementScreenState
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.7),
+                          Colors.black.withValues(alpha:0.7),
                         ],
                       ),
                     ),
@@ -663,7 +663,7 @@ class _HeroSliderManagementScreenState
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppConstants.islamicGreen.withOpacity(0.1),
+                  color: AppConstants.islamicGreen.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
@@ -751,8 +751,8 @@ class _HeroSliderManagementScreenState
                     ),
                     decoration: BoxDecoration(
                       color: slide.isActive
-                          ? AppConstants.success.withOpacity(0.1)
-                          : Colors.grey.withOpacity(0.1),
+                          ? AppConstants.success.withValues(alpha:0.1)
+                          : Colors.grey.withValues(alpha:0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(

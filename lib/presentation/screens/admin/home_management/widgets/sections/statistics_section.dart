@@ -68,12 +68,12 @@ class _StatisticsSectionState extends ConsumerState<StatisticsSection> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.green.withOpacity(0.05),
-            Colors.green.withOpacity(0.02)
+            Colors.green.withValues(alpha:0.05),
+            Colors.green.withValues(alpha:0.02)
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.green.withOpacity(0.2)),
+        border: Border.all(color: Colors.green.withValues(alpha:0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class _StatisticsSectionState extends ConsumerState<StatisticsSection> {
                   setState(() => _showAnimated = v);
                   _pushChanges();
                 },
-                selectedColor: Colors.green.withOpacity(0.2),
+                selectedColor: Colors.green.withValues(alpha:0.2),
                 checkmarkColor: Colors.green,
               ),
               FilterChip(
@@ -105,7 +105,7 @@ class _StatisticsSectionState extends ConsumerState<StatisticsSection> {
                   setState(() => _showTargets = v);
                   _pushChanges();
                 },
-                selectedColor: Colors.green.withOpacity(0.2),
+                selectedColor: Colors.green.withValues(alpha:0.2),
                 checkmarkColor: Colors.green,
               ),
               FilterChip(
@@ -115,7 +115,7 @@ class _StatisticsSectionState extends ConsumerState<StatisticsSection> {
                   setState(() => _showProgress = v);
                   _pushChanges();
                 },
-                selectedColor: Colors.green.withOpacity(0.2),
+                selectedColor: Colors.green.withValues(alpha:0.2),
                 checkmarkColor: Colors.green,
               ),
             ],

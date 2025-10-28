@@ -185,10 +185,10 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusL),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -202,7 +202,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha:0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: color, size: 40),
@@ -381,7 +381,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppConstants.islamicGreen.withOpacity(0.1),
+                          color: AppConstants.islamicGreen.withValues(alpha:0.1),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -512,7 +512,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 // Avatar
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: AppConstants.islamicGreen.withOpacity(0.1),
+                  backgroundColor: AppConstants.islamicGreen.withValues(alpha:0.1),
                   backgroundImage: settings?.imageUrl.isNotEmpty == true
                       ? NetworkImage(settings!.imageUrl)
                       : null,
@@ -559,7 +559,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppConstants.islamicGreen.withOpacity(0.05),
+                      color: AppConstants.islamicGreen.withValues(alpha:0.05),
                       borderRadius: BorderRadius.circular(8),
                       border: Border(
                         right: BorderSide(
@@ -744,7 +744,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: AppConstants.islamicGreen.withOpacity(0.1),
+          color: AppConstants.islamicGreen.withValues(alpha:0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: AppConstants.islamicGreen, size: 20),
@@ -844,7 +844,7 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: AppConstants.islamicGreen.withOpacity(0.1),
+                  color: AppConstants.islamicGreen.withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: AppConstants.islamicGreen, size: 30),

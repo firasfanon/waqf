@@ -57,7 +57,7 @@ class AppFilterChip extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
         ),
         side: BorderSide(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.1),
+          color: isSelected ? Colors.white : Colors.white.withValues(alpha:0.1),
           width: isSelected ? 2 : 1.5,
         ),
         padding: const EdgeInsets.symmetric(
@@ -83,7 +83,7 @@ class AppFilterChip extends StatelessWidget {
         side: BorderSide(
           color: isSelected 
               ? AppConstants.islamicGreen 
-              : AppConstants.islamicGreen.withOpacity(0.3),
+              : AppConstants.islamicGreen.withValues(alpha:0.3),
           width: isSelected ? 2 : 1,
         ),
         padding: const EdgeInsets.symmetric(

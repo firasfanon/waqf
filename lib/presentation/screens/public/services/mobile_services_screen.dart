@@ -86,7 +86,7 @@ class _MobileServicesScreenState extends State<MobileServicesScreen> {
             _selectedCategory = selected ? category : null;
           });
         },
-        selectedColor: AppConstants.islamicGreen.withOpacity(0.2),
+        selectedColor: AppConstants.islamicGreen.withValues(alpha:0.2),
         checkmarkColor: AppConstants.islamicGreen,
         side: BorderSide(
           color: isSelected ? AppConstants.islamicGreen : Colors.grey[300]!,
@@ -137,7 +137,7 @@ class _MobileServicesScreenState extends State<MobileServicesScreen> {
           borderRadius: BorderRadius.circular(AppConstants.radiusM),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha:0.1),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -151,7 +151,7 @@ class _MobileServicesScreenState extends State<MobileServicesScreen> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: service.color.withOpacity(0.1),
+                color: service.color.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Icon(
@@ -200,7 +200,7 @@ class _MobileServicesScreenState extends State<MobileServicesScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppConstants.success.withOpacity(0.1),
+                  color: AppConstants.success.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(
@@ -216,7 +216,7 @@ class _MobileServicesScreenState extends State<MobileServicesScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppConstants.warning.withOpacity(0.1),
+                  color: AppConstants.warning.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(
@@ -554,7 +554,7 @@ class _EServicesScreenState extends State<EServicesScreen> {
                   Text(
                     'احصل على الخدمات الحكومية بطريقة سهلة وسريعة',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha:0.9),
                     ),
                   ),
                 ],
@@ -581,9 +581,9 @@ class _EServicesScreenState extends State<EServicesScreen> {
             Container(
               padding: const EdgeInsets.all(AppConstants.paddingL),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(AppConstants.radiusM),
-                border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                border: Border.all(color: Colors.blue.withValues(alpha:0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -657,7 +657,7 @@ class _EServicesScreenState extends State<EServicesScreen> {
         borderRadius: BorderRadius.circular(AppConstants.radiusM),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -669,7 +669,7 @@ class _EServicesScreenState extends State<EServicesScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: AppConstants.islamicGreen.withOpacity(0.1),
+            color: AppConstants.islamicGreen.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(25),
           ),
           child: Icon(
@@ -753,7 +753,7 @@ class _EServicesScreenState extends State<EServicesScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: Colors.orange.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(

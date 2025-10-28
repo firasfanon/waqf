@@ -81,7 +81,7 @@ class NewsCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppConstants.islamicGreen.withOpacity(0.1),
+                        color: AppConstants.islamicGreen.withValues(alpha:0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -208,7 +208,7 @@ class NewsCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppConstants.islamicGreen.withOpacity(0.1),
+                            color: AppConstants.islamicGreen.withValues(alpha:0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(

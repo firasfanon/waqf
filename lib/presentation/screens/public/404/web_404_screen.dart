@@ -33,7 +33,7 @@ class WebNotFoundScreen extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            AppConstants.islamicGreen.withOpacity(0.05),
+            AppConstants.islamicGreen.withValues(alpha:0.05),
             Colors.white,
           ],
         ),
@@ -56,8 +56,8 @@ class WebNotFoundScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [
-                          AppConstants.islamicGreen.withOpacity(0.1),
-                          AppColors.goldenYellow.withOpacity(0.1),
+                          AppConstants.islamicGreen.withValues(alpha:0.1),
+                          AppColors.goldenYellow.withValues(alpha:0.1),
                         ],
                       ),
                     ),
@@ -91,7 +91,7 @@ class WebNotFoundScreen extends StatelessWidget {
                   gradient: AppConstants.islamicGradient,
                   boxShadow: [
                     BoxShadow(
-                      color: AppConstants.islamicGreen.withOpacity(0.3),
+                      color: AppConstants.islamicGreen.withValues(alpha:0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -320,13 +320,13 @@ class WebNotFoundScreen extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       color,
-                      color.withOpacity(0.7),
+                      color.withValues(alpha:0.7),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: color.withOpacity(0.3),
+                      color: color.withValues(alpha:0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),

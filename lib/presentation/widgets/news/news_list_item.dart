@@ -87,7 +87,7 @@ class NewsListItem extends StatelessWidget {
             vertical: 4,
           ),
           decoration: BoxDecoration(
-            color: AppColors.islamicGreen.withOpacity(0.1),
+            color: AppColors.islamicGreen.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
@@ -106,7 +106,7 @@ class NewsListItem extends StatelessWidget {
               vertical: 4,
             ),
             decoration: BoxDecoration(
-              color: AppColors.goldenYellow.withOpacity(0.1),
+              color: AppColors.goldenYellow.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Row(

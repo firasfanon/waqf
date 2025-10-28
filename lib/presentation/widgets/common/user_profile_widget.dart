@@ -64,10 +64,10 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
         vertical: 6,
       ),
       decoration: BoxDecoration(
-        color: greetingColor.withOpacity(0.1),
+        color: greetingColor.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: greetingColor.withOpacity(0.3),
+          color: greetingColor.withValues(alpha:0.3),
         ),
       ),
       child: Row(
@@ -113,10 +113,10 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha:0.2),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha:0.3),
         ),
       ),
       child: Row(
@@ -180,7 +180,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: AppColors.goldenYellow.withOpacity(0.2),
+                    backgroundColor: AppColors.goldenYellow.withValues(alpha:0.2),
                     child: const Icon(
                       Icons.person_outline,
                       color: AppColors.goldenYellow,
@@ -236,7 +236,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: AppColors.islamicGreen.withOpacity(0.2),
+                    backgroundColor: AppColors.islamicGreen.withValues(alpha:0.2),
                     child: Text(
                       currentUser?.name?.substring(0, 1).toUpperCase() ?? 'A',
                       style: const TextStyle(

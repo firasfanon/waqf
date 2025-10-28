@@ -233,12 +233,12 @@ class NotificationBottomSheet extends StatelessWidget {
       decoration: BoxDecoration(
         color: isRead
             ? Colors.grey[50]
-            : AppColors.islamicGreen.withOpacity(0.1),
+            : AppColors.islamicGreen.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(AppConstants.radiusM),
         border: Border.all(
           color: isRead
               ? Colors.grey[200]!
-              : AppColors.islamicGreen.withOpacity(0.3),
+              : AppColors.islamicGreen.withValues(alpha:0.3),
         ),
       ),
       child: Row(
@@ -247,7 +247,7 @@ class NotificationBottomSheet extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.islamicGreen.withOpacity(0.2),
+              color: AppColors.islamicGreen.withValues(alpha:0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(
