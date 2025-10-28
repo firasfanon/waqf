@@ -16,6 +16,7 @@
         "firebase_messaging",
         "fl_chart",
         "flutter",
+        "flutter_dotenv",
         "flutter_local_notifications",
         "flutter_localizations",
         "flutter_riverpod",
@@ -609,6 +610,13 @@
         "meta",
         "riverpod",
         "state_notifier"
+      ]
+    },
+    {
+      "name": "smooth_page_indicator",
+      "version": "1.2.1",
+      "dependencies": [
+        "flutter"
       ]
     },
     {
@@ -2447,8 +2455,8 @@
       ]
     },
     {
-      "name": "smooth_page_indicator",
-      "version": "1.2.1",
+      "name": "flutter_dotenv",
+      "version": "5.2.1",
       "dependencies": [
         "flutter"
       ]

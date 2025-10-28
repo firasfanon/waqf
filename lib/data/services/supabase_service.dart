@@ -12,7 +12,7 @@ class SupabaseService {
   // Get the Supabase client with safety check
   SupabaseClient get client {
     try {
-      if (Supabase.instance.initialized) {
+      if (Supabase.instance.isInitialized) {
         return Supabase.instance.client;
       } else {
         throw Exception(
@@ -28,7 +28,7 @@ class SupabaseService {
   // Check if Supabase is properly initialized
   bool get isInitialized {
     try {
-      return Supabase.instance.initialized;
+      return Supabase.instance.isInitialized;
     } catch (e) {
       return false;
     }

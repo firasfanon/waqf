@@ -5,6 +5,7 @@ import 'package:palestinian_ministry_endowments/app/router.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
 import 'package:palestinian_ministry_endowments/data/models/homepage_section.dart';
 import 'package:palestinian_ministry_endowments/presentation/providers/homepage_settings_provider.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/home/breaking_news_slider.dart';
 import 'package:palestinian_ministry_endowments/presentation/widgets/home/hero_slider.dart';
 import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_app_bar.dart';
 import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_container.dart';
@@ -37,6 +38,8 @@ class _WebHomeScreenState extends ConsumerState<WebHomeScreen> {
           children: [
             // Hero Section - Fetches from hero_slides table
             _buildHeroSection(),
+
+            const BreakingNewsSlider(),
 
             // Stats Section - Fetches from homepage_sections table
             _buildStatsSection(statsState.settings),

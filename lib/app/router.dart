@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/breaking_news_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/hero_slider_management/hero_slider_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/homepage_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/login/login_screen.dart';
@@ -71,6 +72,8 @@ class AppRouter {
   static const String adminMosques = '/admin/mosques';
   static const String adminHomeManagement = '/admin/home-management';
   static const String adminHeroSlider = '/admin/hero-slider';
+  static const String adminBreakingNews = '/admin/breaking-news';
+
 
 
 
@@ -253,6 +256,18 @@ class AppRouter {
           ),
           settings: settings,
         );
+
+      case adminBreakingNews:
+        return MaterialPageRoute(
+          builder: (_) => const AuthGuardedRoute(
+            child: BreakingNewsManagementScreen(),
+          ),
+          settings: settings,
+        );
+
+
+
+
 
     // 404 - Route Not Found
       default:

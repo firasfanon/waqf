@@ -126,27 +126,24 @@ class _HeroSliderState extends ConsumerState<HeroSlider> {
   Widget _buildSlider(List<HeroSlide> slides) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return MouseRegion(
-      onEnter: (_) => _pauseAutoPlay(),
-      onExit: (_) => _resumeAutoPlay(),
-      child: SizedBox(
-        height: screenHeight * 0.6,
-        child: Stack(
-          children: [
-            PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                if (mounted) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                }
-              },
-              itemCount: slides.length,
-              itemBuilder: (context, index) {
-                return _buildSlide(slides[index], index);
-              },
-            ),
+    return SizedBox(
+      height: screenHeight * 0.5,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              if (mounted) {
+                setState(() {
+                  _currentPage = index;
+                });
+              }
+            },
+            itemCount: slides.length,
+            itemBuilder: (context, index) {
+              return _buildSlide(slides[index], index);
+            },
+          ),
 
           // Slider Indicators
           Positioned(

@@ -383,3 +383,94 @@ final announcementsSectionNotifierProvider = StateNotifierProvider<
   final repository = ref.watch(homepageRepositoryProvider);
   return AnnouncementsSectionNotifier(repository);
 });
+
+
+// ============================================
+// BREAKING NEWS SECTION NOTIFIER
+// ============================================
+
+class BreakingNewsSectionState {
+  final BreakingNewsSectionSettings? settings;
+  final bool isLoading;
+  final bool isSaving;
+  final String? error;
+  final bool hasUnsavedChanges;
+
+  const BreakingNewsSectionState({
+    this.settings,
+    this.isLoading = false,
+    this.isSaving = false,
+    this.error,
+    this.hasUnsavedChanges = false,
+  });
+
+  BreakingNewsSectionState copyWith({
+    BreakingNewsSectionSettings? settings,
+    bool? isLoading,
+    bool? isSaving,
+    String? error,
+    bool? hasUnsavedChanges,
+  }) {
+    return BreakingNewsSectionState(
+      settings: settings ?? this.settings,
+      isLoading: isLoading ?? this.isLoading,
+      isSaving: isSaving ?? this.isSaving,
+      error: error,
+      hasUnsavedChanges: hasUnsavedChanges ?? this.hasUnsavedChanges,
+    );
+  }
+}
+
+class BreakingNewsSectionNotifier extends StateNotifier<BreakingNewsSectionState> {
+  final HomepageRepository _repository;
+
+  BreakingNewsSectionNotifier(this._repository)
+      : super(const BreakingNewsSectionState()) {
+    loadSettings();
+  }
+
+  Future<void> loadSettings() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final settings = await _repository.fetchBreakingNewsSettings();
+      state = state.copyWith(settings: settings, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  void updateSettings(BreakingNewsSectionSettings settings) {
+    state = state.copyWith(settings: settings, hasUnsavedChanges: true);
+  }
+
+  Future<bool> saveSettings() async {
+    if (state.settings == null) return false;
+
+    state = state.copyWith(isSaving: true, error: null);
+    try {
+      await _repository.updateBreakingNewsSection(state.settings!);
+      state = state.copyWith(isSaving: false, hasUnsavedChanges: false);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isSaving: false, error: e.toString());
+      return false;
+    }
+  }
+
+  void resetChanges() {
+    loadSettings();
+  }
+}
+
+final breakingNewsSectionNotifierProvider = StateNotifierProvider<
+    BreakingNewsSectionNotifier, BreakingNewsSectionState>((ref) {
+  final repository = ref.watch(homepageRepositoryProvider);
+  return BreakingNewsSectionNotifier(repository);
+});
+
+// Provider for active breaking news items
+final activeBreakingNewsProvider =
+FutureProvider<List<BreakingNewsItem>>((ref) async {
+  final repository = ref.watch(homepageRepositoryProvider);
+  return repository.fetchActiveBreakingNews();
+});
