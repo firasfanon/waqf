@@ -164,6 +164,7 @@ class _WebLoginScreenState extends ConsumerState<WebLoginScreen> {
                               controller: _passwordController,
                               label: 'كلمة المرور',
                               hint: 'أدخل كلمة المرور',
+                              onFieldSubmitted: (_) => _handleLogin(),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'كلمة المرور مطلوبة';
@@ -199,31 +200,64 @@ class _WebLoginScreenState extends ConsumerState<WebLoginScreen> {
 
                             const SizedBox(height: 32),
 
-                            // Login Button
+                            // Login Button - Enhanced with gradient and shadow
                             SizedBox(
                               height: 56,
-                              child: ElevatedButton(
-                                onPressed: _isLoading ? null : _handleLogin,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppConstants.islamicGreen,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      AppConstants.islamicGreen,
+                                      Color(0xFF16A34A),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppConstants.islamicGreen.withValues(alpha: 0.4),
+                                      blurRadius: 12,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
-                                child: _isLoading
-                                    ? const SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
+                                child: ElevatedButton(
+                                  onPressed: _isLoading ? null : _handleLogin,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
-                                )
-                                    : const Text(
-                                  'تسجيل الدخول',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                  child: _isLoading
+                                      ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                      : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        'تسجيل الدخول',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      const Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

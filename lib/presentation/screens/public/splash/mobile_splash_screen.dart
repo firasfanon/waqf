@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // ← ADD THIS
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
 import '../../../widgets/common/loading_widget.dart';
-import '../../../providers/auth_provider.dart'; // ← ADD THIS
+import '../../../providers/auth_provider.dart';
+import '../../../providers/homepage_settings_provider.dart';
 import '../../../widgets/home/hero_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -110,6 +111,17 @@ class _SplashScreenState extends ConsumerState<MobileSplashScreen> // ← ADD Co
     } catch (e) {
       // Continue even if preloading fails
       debugPrint('Error preloading hero slides: $e');
+    }
+
+    if (!mounted) return;
+
+    // ✨ PRELOAD BREAKING NEWS - Ensures smooth display without jump cuts
+    try {
+      await ref.read(activeBreakingNewsProvider.future);
+      await ref.read(breakingNewsSectionNotifierProvider.notifier).loadSettings();
+    } catch (e) {
+      // Continue even if preloading fails
+      debugPrint('Error preloading breaking news: $e');
     }
 
     if (!mounted) return;
