@@ -319,7 +319,7 @@ class _BreakingNewsSectionState extends ConsumerState<BreakingNewsSection> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.red,
+            activeThumbColor: Colors.red,
           ),
         ],
       ),

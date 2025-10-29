@@ -1,4 +1,5 @@
 /// Test fixtures and sample data for unit and widget tests
+library;
 
 // Sample News Article Data
 const Map<String, dynamic> sampleNewsArticleJson = {

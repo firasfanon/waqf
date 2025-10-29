@@ -106,7 +106,7 @@ class _NewsSectionState extends ConsumerState<NewsSection> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<int>(
-                      value: _showCount,
+                      initialValue: _showCount,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -135,7 +135,7 @@ class _NewsSectionState extends ConsumerState<NewsSection> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _layout,
+                      initialValue: _layout,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,

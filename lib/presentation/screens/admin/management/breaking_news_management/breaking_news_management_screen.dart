@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/constants/app_constants.dart';
-import '../../../data/models/homepage_section.dart';
-import '../../../data/repositories/homepage_repository.dart';
-import '../../widgets/web/web_container.dart';
-import '../../widgets/web/web_sidebar.dart';
+import '../../../../../core/constants/app_constants.dart';
+import '../../../../../data/models/homepage_section.dart';
+import '../../../../../data/repositories/homepage_repository.dart';
+import '../../../../widgets/web/web_container.dart';
+import '../../../../widgets/web/web_sidebar.dart';
 
 // =====================================================
 // PROVIDERS
@@ -979,7 +979,7 @@ class _ItemFormDialogState extends State<_ItemFormDialog> {
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<String>(
-                        value: _priority,
+                        initialValue: _priority,
                         decoration: const InputDecoration(
                           labelText: 'الأولوية',
                           border: OutlineInputBorder(),
@@ -997,7 +997,7 @@ class _ItemFormDialogState extends State<_ItemFormDialog> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: DropdownButtonFormField<int>(
-                        value: _displayOrder,
+                        initialValue: _displayOrder,
                         decoration: const InputDecoration(
                           labelText: 'الترتيب',
                           border: OutlineInputBorder(),

@@ -170,7 +170,7 @@ class _SlideFormDialogState extends State<SlideFormDialog> {
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<int>(
-                        value: _displayOrder,
+                        initialValue: _displayOrder,
                         decoration: const InputDecoration(
                           labelText: 'الترتيب',
                           border: OutlineInputBorder(),

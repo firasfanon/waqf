@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/presentation/providers/header_settings_provider.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/common/section_header.dart';
 import '../common/settings_text_field.dart';
-import '../common/page_header.dart';
 
 class HeaderSettingsSection extends ConsumerStatefulWidget {
   const HeaderSettingsSection({super.key});

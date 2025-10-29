@@ -25,7 +25,7 @@ class MobileNotFoundScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              '404',
+              'not found',
               style: TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,

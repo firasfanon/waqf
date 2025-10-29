@@ -15,7 +15,6 @@ class AppTheme {
         secondary: AppColors.goldenYellow,
         tertiary: AppColors.sageGreen,
         surface: AppColors.surface,
-        background: AppColors.background,
         error: AppColors.error,
       ),
 

@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/data/models/homepage_section.dart';
+import 'package:palestinian_ministry_endowments/data/repositories/homepage_repository.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_container.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_sidebar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../../core/constants/app_constants.dart';
-import '../../../../data/models/homepage_section.dart';
-import '../../../../data/repositories/homepage_repository.dart';
-import '../../../widgets/web/web_container.dart';
-import '../../../widgets/web/web_sidebar.dart';
 
 // =====================================================
 // PROVIDERS

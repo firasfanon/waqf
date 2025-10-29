@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/common/page_header.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/common/unsaved_changes_banner.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/footer_settings_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/header_settings_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/hero_slider_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/minister_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/news_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/statistics_section.dart';
-import '../../../../core/constants/app_constants.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/widgets/sections/breaking_news_section.dart';
-import '../../../providers/homepage_settings_provider.dart';
-import '../../../providers/header_settings_provider.dart';
-import '../../../providers/footer_settings_provider.dart';
-import '../../../widgets/home/announcements_section.dart';
-import '../../../widgets/web/web_sidebar.dart';
-import '../hero_slider_management/hero_slider_management_screen.dart';
+import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
+import 'package:palestinian_ministry_endowments/presentation/providers/footer_settings_provider.dart';
+import 'package:palestinian_ministry_endowments/presentation/providers/header_settings_provider.dart';
+import 'package:palestinian_ministry_endowments/presentation/providers/homepage_settings_provider.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/home/announcements_section.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/home/services_section.dart';
+import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_sidebar.dart';
+
+import 'widgets/common/page_header.dart';
+import 'widgets/common/unsaved_changes_banner.dart';
+import 'widgets/sections/breaking_news_section.dart';
+import 'widgets/sections/footer_settings_section.dart';
+import 'widgets/sections/header_settings_section.dart';
+import 'widgets/sections/hero_slider_section.dart';
+import 'widgets/sections/minister_section.dart';
+import 'widgets/sections/statistics_section.dart';
+
+
 
 
 

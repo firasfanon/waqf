@@ -125,7 +125,7 @@ class _StatisticsSectionState extends ConsumerState<StatisticsSection> {
             children: [
               Expanded(
                 child: DropdownButtonFormField<String>(
-                  value: _layout,
+                  initialValue: _layout,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,

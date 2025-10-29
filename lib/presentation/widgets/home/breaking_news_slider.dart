@@ -19,7 +19,7 @@ class _BreakingNewsSliderState extends ConsumerState<BreakingNewsSlider>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _isHovered = false;
-  double _scrollVelocity = 50.0; // Pixels per second (increased for faster scroll)
+  final double _scrollVelocity = 50.0; // Pixels per second (increased for faster scroll)
 
   @override
   void initState() {

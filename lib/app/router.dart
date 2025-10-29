@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/breaking_news_management_screen.dart';
+import 'package:palestinian_ministry_endowments/presentation/screens/admin/management/breaking_news_management/breaking_news_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/hero_slider_management/hero_slider_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/homepage_management_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/admin/login/login_screen.dart';
@@ -10,8 +10,8 @@ import 'package:palestinian_ministry_endowments/presentation/screens/admin/profi
 import 'package:palestinian_ministry_endowments/presentation/screens/public/mosques/mosques_screen.dart';
 import 'package:palestinian_ministry_endowments/presentation/screens/public/news/news_screen.dart';
 import '../presentation/screens/admin/activities/activities_management_screen.dart';
-import '../presentation/screens/public/404/404_screen.dart';
 import '../presentation/screens/public/home/home_screen.dart';
+import '../presentation/screens/public/not found/not_found_screen.dart';
 import '../presentation/screens/public/services/services_screen.dart';
 import '../presentation/screens/public/splash/splash_screen.dart';
 import '../presentation/screens/public/news_details/news_detail_screen.dart';
@@ -51,7 +51,7 @@ class AppRouter {
   static const String formerMinisters = '/former-ministers';
   static const String contact = '/contact';
   static const String search = '/search';
-  static const String notFound = '/404-not-found';
+  static const String notFound = '/not found-not-found';
   static const String fridaySermon = '/friday-sermon';
   static const String organizationalStructure = '/organizational-structure';
   static const String previousMinisters = '/previous-ministers';
@@ -269,7 +269,7 @@ class AppRouter {
 
 
 
-    // 404 - Route Not Found
+    // not found - Route Not Found
       default:
         return MaterialPageRoute(
           builder: (_) => const NotFoundScreen(),
