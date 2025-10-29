@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final void Function(String?)? onSaved;
+  final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
   final bool enabled;
   final bool readOnly;
@@ -39,6 +40,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onSaved,
+    this.onFieldSubmitted,
     this.onTap,
     this.enabled = true,
     this.readOnly = false,
@@ -72,6 +74,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       onSaved: onSaved,
+      onFieldSubmitted: onFieldSubmitted,
       onTap: onTap,
       enabled: enabled,
       readOnly: readOnly,
@@ -89,6 +92,7 @@ class PasswordTextField extends StatefulWidget {
   final String? hint;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final TextInputAction? textInputAction;
 
   const PasswordTextField({
@@ -98,6 +102,7 @@ class PasswordTextField extends StatefulWidget {
     this.hint,
     this.validator,
     this.onChanged,
+    this.onFieldSubmitted,
     this.textInputAction,
   });
 
@@ -122,7 +127,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       ),
       validator: widget.validator,
       onChanged: widget.onChanged,
-      textInputAction: widget.textInputAction,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      textInputAction: widget.textInputAction ?? TextInputAction.done,
     );
   }
 }

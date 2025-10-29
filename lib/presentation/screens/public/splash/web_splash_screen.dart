@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../app/router.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../providers/homepage_settings_provider.dart';
 import '../../../widgets/home/hero_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -75,6 +76,17 @@ class _WebSplashScreenState extends ConsumerState<WebSplashScreen>
     } catch (e) {
       // Continue even if preloading fails
       debugPrint('Error preloading hero slides: $e');
+    }
+
+    if (!mounted) return;
+
+    // ✨ PRELOAD BREAKING NEWS - Ensures smooth display without jump cuts
+    try {
+      await ref.read(activeBreakingNewsProvider.future);
+      await ref.read(breakingNewsSectionNotifierProvider.notifier).loadSettings();
+    } catch (e) {
+      // Continue even if preloading fails
+      debugPrint('Error preloading breaking news: $e');
     }
 
     if (!mounted) return;
