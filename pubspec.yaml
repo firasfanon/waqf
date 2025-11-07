@@ -15,7 +15,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
 
   # State Management
-  flutter_riverpod: ^3.0.1
+  flutter_riverpod: ^2.5.0
 
   # Backend & Database
   supabase_flutter: ^2.0.0
@@ -27,22 +27,22 @@ dependencies:
 
   # Maps & Location
   google_maps_flutter: ^2.5.0
-  location: ^8.0.1
-  geocoding: ^4.0.0
+  location: ^7.0.0
+  geocoding: ^3.0.0
 
   # Media & Files
   image_picker: ^1.0.4
-  file_picker: ^10.3.3
+  file_picker: ^8.0.0
   cached_network_image: ^3.3.0
   photo_view: ^0.15.0
   video_player: ^2.8.1
 
   # Charts & Analytics
   fl_chart: ^0.69.0
-  syncfusion_flutter_charts: ^31.1.21
+
 
   # Notifications
-  flutter_local_notifications: ^19.4.2
+  flutter_local_notifications: ^17.0.0
 
   # Storage & Caching
   shared_preferences: ^2.2.2
@@ -51,14 +51,14 @@ dependencies:
 
   # Networking
   dio: ^5.4.0
-  connectivity_plus: ^7.0.0
+  connectivity_plus: ^6.0.0
 
   # Utils
   uuid: ^4.2.1
   path_provider: ^2.1.1
-  permission_handler: ^12.0.1
+  permission_handler: ^11.0.0
   url_launcher: ^6.2.2
-  share_plus: ^12.0.0
+  share_plus: ^10.0.0
   flutter_dotenv: ^5.1.0
 
   # PDF & Documents
@@ -77,19 +77,21 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Date & Time
-  timezone: ^0.10.1
+  timezone: ^0.9.0
 
   freezed_annotation: ^2.4.4
 
   http: any
-  firebase_core: ^4.1.1
-  firebase_messaging: ^16.0.2
+  firebase_core: ^3.0.0
+  firebase_messaging: ^15.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # Linting
   flutter_lints: ^5.0.0
+
   # Code Generation
   build_runner: ^2.4.7
   json_serializable: ^6.7.1
