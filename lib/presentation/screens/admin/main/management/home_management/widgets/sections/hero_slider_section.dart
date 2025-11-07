@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:waqf/core/constants/app_constants.dart';
 import 'package:waqf/data/models/homepage_section.dart';
-import 'package:waqf/presentation/screens/admin/management/home_management/widgets/common/section_header.dart';
-import '../../../hero_slider_management/hero_slider_management_screen.dart';
-import '../forms/slide_form_dialog.dart';
+import 'package:waqf/presentation/screens/admin/main/management/hero_slider_management/hero_slider_management_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/management/home_management/widgets/common/section_header.dart';
+import 'package:waqf/presentation/screens/admin/main/management/home_management/widgets/forms/slide_form_dialog.dart';
+
 
 class HeroSliderSection extends ConsumerStatefulWidget {
   const HeroSliderSection({super.key});

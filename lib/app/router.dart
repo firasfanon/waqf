@@ -1,15 +1,19 @@
 // lib/app/router.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/management/breaking_news_management/breaking_news_management_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/hero_slider_management/hero_slider_management_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/home_management/homepage_management_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/login/login_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/admin/profile/profile_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/public/mosques/mosques_screen.dart';
-import 'package:palestinian_ministry_endowments/presentation/screens/public/news/news_screen.dart';
-import '../presentation/screens/admin/activities/activities_management_screen.dart';
+import 'package:waqf/core/constants/app_constants.dart';
+import 'package:waqf/presentation/screens/admin/auth/login/login_screen.dart';
+import 'package:waqf/presentation/screens/admin/auth/profile/profile_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/dashboard/dashboard_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/management/activities_management/activities_management_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/management/breaking_news_management/breaking_news_management_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/management/hero_slider_management/hero_slider_management_screen.dart';
+import 'package:waqf/presentation/screens/admin/main/management/home_management/homepage_management_screen.dart';
+import 'package:waqf/presentation/screens/admin/systems/cases/cases_screen.dart';
+import 'package:waqf/presentation/screens/admin/systems/documents/documents_screen.dart';
+import 'package:waqf/presentation/screens/admin/systems/waqf_lands/waqf_lands_screen.dart';
+import 'package:waqf/presentation/screens/public/mosques/mosques_screen.dart';
+import 'package:waqf/presentation/screens/public/news/news_screen.dart';
 import '../presentation/screens/public/home/home_screen.dart';
 import '../presentation/screens/public/not found/not_found_screen.dart';
 import '../presentation/screens/public/services/services_screen.dart';
@@ -25,12 +29,9 @@ import '../presentation/screens/public/structure_screen.dart';
 import '../presentation/screens/public/former_ministers_screen.dart';
 import '../presentation/screens/public/contact/contact_screen.dart';
 import '../presentation/screens/public/search/search_screen.dart';
-import '../presentation/screens/admin/dashboard/dashboard_screen.dart';
-import '../presentation/screens/admin/waqf_lands/waqf_lands_screen.dart';
-import '../presentation/screens/admin/cases/cases_screen.dart';
-import '../presentation/screens/admin/documents/documents_screen.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../data/models/news_article.dart';
+
 
 class AppRouter {
   // Public Routes

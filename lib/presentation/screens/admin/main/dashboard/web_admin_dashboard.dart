@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../../../app/router.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../providers/auth_provider.dart';
-import '../../../widgets/web/web_sidebar.dart';
+import 'package:waqf/app/router.dart';
+import 'package:waqf/core/constants/app_constants.dart';
+import 'package:waqf/presentation/providers/auth_provider.dart';
+import 'package:waqf/presentation/widgets/web/web_sidebar.dart';
+
 
 class WebAdminDashboard extends ConsumerStatefulWidget {
   const WebAdminDashboard({super.key});

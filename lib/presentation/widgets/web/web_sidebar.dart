@@ -90,70 +90,15 @@ class WebSidebar extends ConsumerWidget {
                     context,
                     icon: Icons.dashboard,
                     label: 'لوحة التحكم',
-                    route: AppRouter.adminHomeManagement,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.gavel,
-                    label: 'القضايا',
-                    route: AppRouter.adminCases,
-                    badge: 45,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.landscape,
-                    label: 'الأراضي الوقفية',
-                    route: AppRouter.adminWaqfLands,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.folder,
-                    label: 'الوثائق',
-                    route: AppRouter.adminDocuments,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.mosque,
-                    label: 'المساجد',
-                    route: AppRouter.adminMosques,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildSidebarSection('المحتوى'),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.article,
-                    label: 'الأخبار',
-                    route: AppRouter.adminNews,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.campaign,
-                    label: 'الإعلانات',
-                    route: AppRouter.adminAnnouncements,
-                    badge: 8,
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.event,
-                    label: 'الفعاليات',
-                    route: AppRouter.adminActivities,
+                    route: AppRouter.adminDashboard,
                   ),
 
-                  const SizedBox(height: 16),
 
-                  _buildSidebarSection('الإدارة'),
                   _buildNavItem(
                     context,
                     icon: Icons.home_filled,
-                    label:'الصفحة الرئيسية',
+                    label:'إعدادات الموقع',
                     route: AppRouter.adminHomeManagement,
-                  ),
-
-                  _buildNavItem(
-                    context,
-                    icon: Icons.people,
-                    label: 'المستخدمون',
-                    route: AppRouter.adminUsers,
                   ),
                   _buildNavItem(
                     context,
@@ -163,9 +108,53 @@ class WebSidebar extends ConsumerWidget {
                   ),
                   _buildNavItem(
                     context,
+                    icon: Icons.people,
+                    label: 'المستخدمون',
+                    route: AppRouter.adminUsers,
+                  ),
+
+                  _buildNavItem(
+                    context,
                     icon: Icons.bar_chart,
                     label: 'التقارير',
                     route: AppRouter.adminReports,
+                  ),
+
+
+
+
+
+
+                  _buildSidebarSection('الأنظمة الإدارية'),
+
+
+                  _buildNavItem(
+                    context,
+                    icon: Icons.landscape,
+                    label: 'نظام الأراضي الوقفية',
+                    route: AppRouter.adminWaqfLands,
+                  ),
+
+                  _buildNavItem(
+                    context,
+                    icon: Icons.mosque,
+                    label: 'نظام المساجد',
+                    route: AppRouter.adminMosques,
+                  ),
+
+                  _buildNavItem(
+                    context,
+                    icon: Icons.gavel,
+                    label: 'نظام القضايا',
+                    route: AppRouter.adminCases,
+                    badge: 45,
+                  ),
+
+                  _buildNavItem(
+                    context,
+                    icon: Icons.folder,
+                    label: 'نظام الوثائق',
+                    route: AppRouter.adminDocuments,
                   ),
 
 

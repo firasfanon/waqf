@@ -1490,7 +1490,7 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "palestinian_ministry_endowments",
+      "name": "waqf",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.1"

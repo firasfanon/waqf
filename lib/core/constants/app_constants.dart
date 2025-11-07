@@ -50,50 +50,37 @@ class AppConstants {
     end: Alignment.bottomRight,
   );
 
-  // API Endpoints - Read from environment variables for security
-  // Fallback to hardcoded values only for development if .env is missing
-  static String get baseUrl {
-    try {
-      return dotenv.env['SUPABASE_URL'] ?? 'https://lyeryfsrhrxuepuqepgi.supabase.co';
-    } catch (e) {
-      return 'https://lyeryfsrhrxuepuqepgi.supabase.co';
+  // ENVIRONMENT VARIABLES - NO HARDCODED FALLBACKS
+  static String get baseUrl => _getRequiredEnv('SUPABASE_URL');
+  static String get apiKey => _getRequiredEnv('SUPABASE_ANON_KEY');
+  static String get googleMapsApiKey => _getRequiredEnv('GOOGLE_MAPS_API_KEY');
+  static String get firebaseProjectId => _getRequiredEnv('FIREBASE_PROJECT_ID');
+
+  // Optional environment variables with safe defaults
+  static String get environment => _getEnv('ENVIRONMENT', 'development');
+  static String get prayerTimesApiUrl => _getEnv(
+    'PRAYER_TIMES_API_URL',
+    'https://api.aladhan.com/v1/timings',
+  );
+
+  // Helper: Get required environment variable or throw
+  static String _getRequiredEnv(String key) {
+    final value = dotenv.env[key];
+    if (value == null || value.isEmpty) {
+      throw EnvironmentException(
+        'Required environment variable "$key" is not set in .env file',
+      );
     }
+    return value;
   }
 
-  static String get apiKey {
-    try {
-      return dotenv.env['SUPABASE_ANON_KEY'] ??
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
-    } catch (e) {
-      return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5ZXJ5ZnNyaHJ4dWVwdXFlcGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTIzNDAsImV4cCI6MjA3NTI4ODM0MH0.KYXunDN4p1lALeclNLvGLu2m56wvMhqidDoZKH6npvI';
+  // Helper: Get optional environment variable with default
+  static String _getEnv(String key, String defaultValue) {
+    final value = dotenv.env[key];
+    if (value == null || value.isEmpty) {
+      return defaultValue;
     }
-  }
-
-  // Google Maps API Key
-  static String get googleMapsApiKey {
-    try {
-      return dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  // Firebase Project ID
-  static String get firebaseProjectId {
-    try {
-      return dotenv.env['FIREBASE_PROJECT_ID'] ?? '';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  // Environment (development, staging, production)
-  static String get environment {
-    try {
-      return dotenv.env['ENVIRONMENT'] ?? 'development';
-    } catch (e) {
-      return 'development';
-    }
+    return value;
   }
 
   // Service Categories
@@ -186,9 +173,6 @@ class AppConstants {
   static const int maxDocumentsPerUpload = 3;
   static const double maxImageSizeMB = 5.0;
   static const double maxDocumentSizeMB = 10.0;
-
-  // Prayer Times API
-  static const String prayerTimesApiUrl = 'https://api.aladhan.com/v1/timings';
 
   // Islamic Calendar
   static const List<String> islamicMonths = [
@@ -288,6 +272,16 @@ class AppConstants {
   static const int sessionTimeoutMinutes = 30;
   static const int maxLoginAttempts = 5;
   static const int lockoutDurationMinutes = 15;
+}
+
+// Custom Exception for Environment Variables
+class EnvironmentException implements Exception {
+  final String message;
+
+  EnvironmentException(this.message);
+
+  @override
+  String toString() => 'EnvironmentException: $message';
 }
 
 // Color Scheme

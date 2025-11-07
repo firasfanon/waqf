@@ -1,15 +1,15 @@
 // lib/presentation/screens/public/web_home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:palestinian_ministry_endowments/app/router.dart';
-import 'package:palestinian_ministry_endowments/core/constants/app_constants.dart';
-import 'package:palestinian_ministry_endowments/data/models/homepage_section.dart';
-import 'package:palestinian_ministry_endowments/presentation/providers/homepage_settings_provider.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/home/breaking_news_slider.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/home/hero_slider.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_app_bar.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_container.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/web/web_footer.dart';
+import 'package:waqf/app/router.dart';
+import 'package:waqf/core/constants/app_constants.dart';
+import 'package:waqf/data/models/homepage_section.dart';
+import 'package:waqf/presentation/providers/homepage_settings_provider.dart';
+import 'package:waqf/presentation/widgets/home/breaking_news_slider.dart';
+import 'package:waqf/presentation/widgets/home/hero_slider.dart';
+import 'package:waqf/presentation/widgets/web/web_app_bar.dart';
+import 'package:waqf/presentation/widgets/web/web_container.dart';
+import 'package:waqf/presentation/widgets/web/web_footer.dart';
 
 
 

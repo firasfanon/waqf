@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:palestinian_ministry_endowments/presentation/widgets/common/admin_app_bar.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../app/router.dart';
-import '../../../providers/auth_provider.dart';
+import 'package:waqf/app/router.dart';
+import 'package:waqf/core/constants/app_constants.dart';
+import 'package:waqf/presentation/providers/auth_provider.dart';
+import 'package:waqf/presentation/widgets/common/admin_app_bar.dart';
+
 
 class MobileAdminDashboard extends ConsumerStatefulWidget {
   const MobileAdminDashboard({super.key});

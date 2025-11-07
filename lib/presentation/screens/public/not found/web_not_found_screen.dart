@@ -64,7 +64,7 @@ class WebNotFoundScreen extends StatelessWidget {
                   ),
                   // 404 Text
                   Text(
-                    'not found',
+                    '404',
                     style: TextStyle(
                       fontSize: 120,
                       fontWeight: FontWeight.bold,

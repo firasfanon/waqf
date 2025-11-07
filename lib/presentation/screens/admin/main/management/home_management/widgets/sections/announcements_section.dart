@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:waqf/data/models/homepage_section.dart';
 import 'package:waqf/presentation/providers/homepage_settings_provider.dart';
-import 'package:waqf/presentation/screens/admin/management/home_management/widgets/common/section_header.dart';
+import 'package:waqf/presentation/screens/admin/main/management/home_management/widgets/common/section_header.dart';
 
 
 class AnnouncementsSection extends ConsumerStatefulWidget {

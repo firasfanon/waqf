@@ -129,8 +129,7 @@ class MinisterSectionNotifier extends StateNotifier<MinisterSectionState> {
   }
 }
 
-final ministerSectionNotifierProvider =
-StateNotifierProvider<MinisterSectionNotifier, MinisterSectionState>((ref) {
+final ministerSectionNotifierProvider = StateNotifierProvider<MinisterSectionNotifier, MinisterSectionState>((ref) {
   final repository = ref.watch(homepageRepositoryProvider);
   return MinisterSectionNotifier(repository);
 });
@@ -294,8 +293,7 @@ class NewsSectionNotifier extends StateNotifier<NewsSectionState> {
   }
 }
 
-final newsSectionNotifierProvider =
-StateNotifierProvider<NewsSectionNotifier, NewsSectionState>((ref) {
+final newsSectionNotifierProvider = StateNotifierProvider<NewsSectionNotifier, NewsSectionState>((ref) {
   final repository = ref.watch(homepageRepositoryProvider);
   return NewsSectionNotifier(repository);
 });
@@ -336,8 +334,7 @@ class AnnouncementsSectionState {
   }
 }
 
-class AnnouncementsSectionNotifier
-    extends StateNotifier<AnnouncementsSectionState> {
+class AnnouncementsSectionNotifier extends StateNotifier<AnnouncementsSectionState> {
   final HomepageRepository _repository;
 
   AnnouncementsSectionNotifier(this._repository)
@@ -378,8 +375,7 @@ class AnnouncementsSectionNotifier
   }
 }
 
-final announcementsSectionNotifierProvider = StateNotifierProvider<
-    AnnouncementsSectionNotifier, AnnouncementsSectionState>((ref) {
+final announcementsSectionNotifierProvider = StateNotifierProvider<AnnouncementsSectionNotifier, AnnouncementsSectionState>((ref) {
   final repository = ref.watch(homepageRepositoryProvider);
   return AnnouncementsSectionNotifier(repository);
 });
@@ -462,15 +458,13 @@ class BreakingNewsSectionNotifier extends StateNotifier<BreakingNewsSectionState
   }
 }
 
-final breakingNewsSectionNotifierProvider = StateNotifierProvider<
-    BreakingNewsSectionNotifier, BreakingNewsSectionState>((ref) {
+final breakingNewsSectionNotifierProvider = StateNotifierProvider<BreakingNewsSectionNotifier, BreakingNewsSectionState>((ref) {
   final repository = ref.watch(homepageRepositoryProvider);
   return BreakingNewsSectionNotifier(repository);
 });
 
 // Provider for active breaking news items
-final activeBreakingNewsProvider =
-FutureProvider<List<BreakingNewsItem>>((ref) async {
+final activeBreakingNewsProvider = FutureProvider<List<BreakingNewsItem>>((ref) async {
   final repository = ref.watch(homepageRepositoryProvider);
   return repository.fetchActiveBreakingNews();
 });

@@ -13,7 +13,7 @@ class MosqueRepository {
     try {
       // Add debug logging
       dev.log('Attempting to fetch mosques from Supabase...', name: 'MosqueRepository');
-      dev.log('Supabase client initialized: ${_supabaseService.client != null}', name: 'MosqueRepository');
+      dev.log('Supabase client initialized: ${_supabaseService.client}', name: 'MosqueRepository');
 
       final response = await _supabaseService.client
           .from('mosques')

@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../../../core/constants/app_constants.dart';
-import '../../../../../data/models/homepage_section.dart';
-import '../../../../../data/repositories/homepage_repository.dart';
-import '../../../../widgets/web/web_container.dart';
-import '../../../../widgets/web/web_sidebar.dart';
+import 'package:waqf/core/constants/app_constants.dart';
+import 'package:waqf/data/models/homepage_section.dart';
+import 'package:waqf/data/repositories/homepage_repository.dart';
+import 'package:waqf/presentation/widgets/web/web_container.dart';
+import 'package:waqf/presentation/widgets/web/web_sidebar.dart';
+
 
 // =====================================================
 // PROVIDERS

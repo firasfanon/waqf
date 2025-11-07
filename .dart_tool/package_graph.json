@@ -1,10 +1,10 @@
 {
   "roots": [
-    "palestinian_ministry_endowments"
+    "waqf"
   ],
   "packages": [
     {
-      "name": "palestinian_ministry_endowments",
+      "name": "waqf",
       "version": "1.0.0+1",
       "dependencies": [
         "cached_network_image",
