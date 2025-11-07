@@ -68,7 +68,7 @@ dependencies:
   open_file: ^3.3.2
 
   # Forms & Validation
-  reactive_forms: ^18.1.1
+  reactive_forms: ^17.0.0
 
   # Animation
   lottie: ^3.1.0
