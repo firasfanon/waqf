@@ -23,7 +23,6 @@ dependencies:
   # UI & Design
   flutter_localizations:
     sdk: flutter
-  intl: ^0.20.2
   google_fonts: ^6.1.0
 
   # Maps & Location
