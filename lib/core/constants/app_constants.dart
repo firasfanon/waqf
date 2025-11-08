@@ -63,24 +63,50 @@ class AppConstants {
     'https://api.aladhan.com/v1/timings',
   );
 
-  // Helper: Get required environment variable or throw
+// Helper: Get required environment variable or throw
   static String _getRequiredEnv(String key) {
-    final value = dotenv.env[key];
-    if (value == null || value.isEmpty) {
-      throw EnvironmentException(
-        'Required environment variable "$key" is not set in .env file',
-      );
+    // Try dotenv first (for local development)
+    try {
+      final value = dotenv.env[key];
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    } catch (e) {
+      // dotenv not initialized, that's ok
     }
-    return value;
+
+    // Fallback to compile-time environment variables (for Vercel)
+    final value = String.fromEnvironment(key);
+    if (value.isNotEmpty) {
+      return value;
+    }
+
+    // If both fail, throw exception
+    throw EnvironmentException(
+      'Required environment variable "$key" is not set',
+    );
   }
 
-  // Helper: Get optional environment variable with default
+// Helper: Get optional environment variable with default
   static String _getEnv(String key, String defaultValue) {
-    final value = dotenv.env[key];
-    if (value == null || value.isEmpty) {
-      return defaultValue;
+    // Try dotenv first
+    try {
+      final value = dotenv.env[key];
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    } catch (e) {
+      // dotenv not initialized, that's ok
     }
-    return value;
+
+    // Try compile-time environment variables
+    final value = String.fromEnvironment(key);
+    if (value.isNotEmpty) {
+      return value;
+    }
+
+    // Return default
+    return defaultValue;
   }
 
   // Service Categories
