@@ -50,21 +50,31 @@ class AppConstants {
     end: Alignment.bottomRight,
   );
 
+  // COMPILE-TIME ENVIRONMENT VARIABLES (for Vercel with --dart-define)
+  // These are populated at build time when using: flutter build web --dart-define=SUPABASE_URL=...
+  static const String _supabaseUrlFromEnv = String.fromEnvironment('SUPABASE_URL');
+  static const String _supabaseAnonKeyFromEnv = String.fromEnvironment('SUPABASE_ANON_KEY');
+  static const String _googleMapsApiKeyFromEnv = String.fromEnvironment('GOOGLE_MAPS_API_KEY');
+  static const String _firebaseProjectIdFromEnv = String.fromEnvironment('FIREBASE_PROJECT_ID');
+  static const String _environmentFromEnv = String.fromEnvironment('ENVIRONMENT');
+  static const String _prayerTimesApiUrlFromEnv = String.fromEnvironment('PRAYER_TIMES_API_URL');
+
   // ENVIRONMENT VARIABLES - NO HARDCODED FALLBACKS
-  static String get baseUrl => _getRequiredEnv('SUPABASE_URL');
-  static String get apiKey => _getRequiredEnv('SUPABASE_ANON_KEY');
-  static String get googleMapsApiKey => _getRequiredEnv('GOOGLE_MAPS_API_KEY');
-  static String get firebaseProjectId => _getRequiredEnv('FIREBASE_PROJECT_ID');
+  static String get baseUrl => _getRequiredEnv('SUPABASE_URL', _supabaseUrlFromEnv);
+  static String get apiKey => _getRequiredEnv('SUPABASE_ANON_KEY', _supabaseAnonKeyFromEnv);
+  static String get googleMapsApiKey => _getRequiredEnv('GOOGLE_MAPS_API_KEY', _googleMapsApiKeyFromEnv);
+  static String get firebaseProjectId => _getRequiredEnv('FIREBASE_PROJECT_ID', _firebaseProjectIdFromEnv);
 
   // Optional environment variables with safe defaults
-  static String get environment => _getEnv('ENVIRONMENT', 'development');
+  static String get environment => _getEnv('ENVIRONMENT', _environmentFromEnv, 'development');
   static String get prayerTimesApiUrl => _getEnv(
     'PRAYER_TIMES_API_URL',
+    _prayerTimesApiUrlFromEnv,
     'https://api.aladhan.com/v1/timings',
   );
 
-// Helper: Get required environment variable or throw
-  static String _getRequiredEnv(String key) {
+  // Helper: Get required environment variable or throw
+  static String _getRequiredEnv(String key, String compileTimeValue) {
     // Try dotenv first (for local development)
     try {
       final value = dotenv.env[key];
@@ -75,20 +85,21 @@ class AppConstants {
       // dotenv not initialized, that's ok
     }
 
-    // Fallback to compile-time environment variables (for Vercel)
-    final value = String.fromEnvironment(key);
-    if (value.isNotEmpty) {
-      return value;
+    // Use compile-time environment variable (for Vercel/web builds)
+    if (compileTimeValue.isNotEmpty) {
+      return compileTimeValue;
     }
 
     // If both fail, throw exception
     throw EnvironmentException(
-      'Required environment variable "$key" is not set',
+      'Required environment variable "$key" is not set.\n'
+      'For local development: ensure .env file exists with $key\n'
+      'For web builds: use --dart-define=$key=your_value',
     );
   }
 
-// Helper: Get optional environment variable with default
-  static String _getEnv(String key, String defaultValue) {
+  // Helper: Get optional environment variable with default
+  static String _getEnv(String key, String compileTimeValue, String defaultValue) {
     // Try dotenv first
     try {
       final value = dotenv.env[key];
@@ -99,10 +110,9 @@ class AppConstants {
       // dotenv not initialized, that's ok
     }
 
-    // Try compile-time environment variables
-    final value = String.fromEnvironment(key);
-    if (value.isNotEmpty) {
-      return value;
+    // Try compile-time environment variable
+    if (compileTimeValue.isNotEmpty) {
+      return compileTimeValue;
     }
 
     // Return default
