@@ -9,7 +9,7 @@
     },
     {
       "name": "_flutterfire_internals",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/_flutterfire_internals-1.3.62",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/_flutterfire_internals-1.3.59",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -81,15 +81,15 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build-3.1.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build-2.5.4",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_config",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_config-1.2.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_config-1.1.2",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_daemon",
@@ -99,19 +99,19 @@
     },
     {
       "name": "build_resolvers",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_resolvers-3.0.3",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_resolvers-2.5.4",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner-2.7.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner-2.5.4",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner_core-9.3.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner_core-9.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -164,12 +164,6 @@
       "languageVersion": "3.8"
     },
     {
-      "name": "cli_config",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/cli_config-0.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
       "name": "clock",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.2",
       "packageUri": "lib/",
@@ -189,7 +183,7 @@
     },
     {
       "name": "connectivity_plus",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-7.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-6.1.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -202,12 +196,6 @@
     {
       "name": "convert",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/convert-3.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "coverage",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/coverage-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -279,7 +267,7 @@
     },
     {
       "name": "file_picker",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-10.3.3",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-8.3.7",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -309,7 +297,7 @@
     },
     {
       "name": "firebase_core",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core-4.1.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core-3.15.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -321,25 +309,25 @@
     },
     {
       "name": "firebase_core_web",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_web-3.1.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_web-2.24.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_messaging",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging-16.0.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging-15.2.10",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_messaging_platform_interface",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging_platform_interface-4.7.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging_platform_interface-4.6.10",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_messaging_web",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging_web-4.0.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_messaging_web-3.10.10",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -351,9 +339,9 @@
     },
     {
       "name": "fl_chart",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-1.1.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.69.2",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter",
@@ -381,33 +369,27 @@
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-6.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-5.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.5"
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications-19.4.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications-17.2.4",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_local_notifications_linux",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_linux-6.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_linux-4.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_local_notifications_platform_interface",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_platform_interface-9.1.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_platform_interface-7.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "flutter_local_notifications_windows",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_localizations",
@@ -423,9 +405,9 @@
     },
     {
       "name": "flutter_riverpod",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-3.0.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-2.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_staggered_animations",
@@ -447,13 +429,13 @@
     },
     {
       "name": "freezed",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/freezed-3.2.3",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/freezed-2.5.8",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.0"
     },
     {
       "name": "freezed_annotation",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/freezed_annotation-3.1.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/freezed_annotation-2.4.4",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -477,15 +459,15 @@
     },
     {
       "name": "geocoding",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding-4.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "2.17"
     },
     {
       "name": "geocoding_android",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_android-4.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_android-3.3.1",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "2.17"
     },
     {
       "name": "geocoding_ios",
@@ -675,9 +657,9 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.7",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "2.19"
     },
     {
       "name": "json_annotation",
@@ -687,9 +669,9 @@
     },
     {
       "name": "json_serializable",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.11.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.9.5",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.6"
     },
     {
       "name": "jwt_decode",
@@ -717,27 +699,27 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/lints-6.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/lints-5.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.6"
     },
     {
       "name": "location",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location-8.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location-7.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.4"
     },
     {
       "name": "location_platform_interface",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location_platform_interface-6.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location_platform_interface-5.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.4"
     },
     {
       "name": "location_web",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location_web-6.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/location_web-5.0.4",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.4"
     },
     {
       "name": "logging",
@@ -777,19 +759,13 @@
     },
     {
       "name": "mockito",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/mockito-5.5.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/mockito-5.4.6",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "nm",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/nm-0.5.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "node_preamble",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -915,13 +891,13 @@
     },
     {
       "name": "permission_handler",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler-12.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler-11.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
       "name": "permission_handler_android",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_android-13.0.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_android-12.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -1023,9 +999,9 @@
     },
     {
       "name": "reactive_forms",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/reactive_forms-18.1.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/reactive_forms-17.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "3.2"
     },
     {
       "name": "realtime_client",
@@ -1041,9 +1017,9 @@
     },
     {
       "name": "riverpod",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-3.0.2",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-2.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "2.17"
     },
     {
       "name": "rxdart",
@@ -1059,13 +1035,13 @@
     },
     {
       "name": "share_plus",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-12.0.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-10.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "share_plus_platform_interface",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus_platform_interface-6.1.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus_platform_interface-5.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -1118,18 +1094,6 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "shelf_packages_handler",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
-      "name": "shelf_static",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_static-1.1.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
       "name": "shelf_web_socket",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-3.0.0",
       "packageUri": "lib/",
@@ -1149,27 +1113,15 @@
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-3.1.0",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-2.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "3.6"
     },
     {
       "name": "source_helper",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.8",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.7",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
-    },
-    {
-      "name": "source_map_stack_trace",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "source_maps",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/source_maps-0.10.13",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.6"
     },
     {
       "name": "source_span",
@@ -1268,18 +1220,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "syncfusion_flutter_charts",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_charts-31.1.23",
-      "packageUri": "lib/",
-      "languageVersion": "3.7"
-    },
-    {
-      "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-31.1.23",
-      "packageUri": "lib/",
-      "languageVersion": "3.7"
-    },
-    {
       "name": "synchronized",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/synchronized-3.4.0",
       "packageUri": "lib/",
@@ -1292,26 +1232,14 @@
       "languageVersion": "3.1"
     },
     {
-      "name": "test",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/test-1.26.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "test_api",
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.6",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
-      "name": "test_core",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/test_core-0.6.11",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "timezone",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.10.1",
+      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.9.4",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -1452,12 +1380,6 @@
       "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/webdriver-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
-    },
-    {
-      "name": "webkit_inspection_protocol",
-      "rootUri": "file:///C:/Users/Firas/AppData/Local/Pub/Cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "win32",

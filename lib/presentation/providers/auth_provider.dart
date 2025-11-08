@@ -1,6 +1,5 @@
 // lib/presentation/providers/auth_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import '../../data/repositories/auth_repository.dart';
 import '../../data/models/admin_user.dart';

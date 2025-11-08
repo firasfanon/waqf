@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/models/footer_settings.dart';
 import '../../data/repositories/footer_repository.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 
 // Repository Provider

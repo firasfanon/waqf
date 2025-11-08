@@ -1,7 +1,6 @@
 // lib/presentation/providers/homepage_settings_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import '../../data/models/homepage_section.dart';
 import '../../data/repositories/homepage_repository.dart';
 
