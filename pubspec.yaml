@@ -112,7 +112,6 @@ flutter:
     - assets/animations/
     - assets/data/
     - assets/fonts/
-    - .env
 
   # Fonts
   fonts:
