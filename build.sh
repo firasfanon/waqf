@@ -19,5 +19,12 @@ flutter --version
 # Get dependencies
 flutter pub get
 
-# Build web
-flutter build web --release
+# Build web with environment variables passed as dart-define
+# Vercel automatically provides environment variables set in the dashboard
+echo "Building with environment variables..."
+flutter build web --release \
+  --dart-define=SUPABASE_URL="${SUPABASE_URL}" \
+  --dart-define=SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY}" \
+  --dart-define=GOOGLE_MAPS_API_KEY="${GOOGLE_MAPS_API_KEY:-}" \
+  --dart-define=FIREBASE_PROJECT_ID="${FIREBASE_PROJECT_ID:-}" \
+  --dart-define=ENVIRONMENT="${ENVIRONMENT:-production}"
